@@ -1021,9 +1021,9 @@ var PagesCollection = {
 };
 var config_default = defineConfig({
   branch,
-  clientId: "ec80bfa2-69ad-4167-af8a-964c9609c8bf",
+  clientId: "3b825dc5-4151-4675-bb81-6fd0f5fc695a",
   // Get this from tina.io
-  token: "dd362ccf58b166176f0b818999c405cd90b8d1fb",
+  token: "56752bb211c5d68649992e2b83523c1713d37fa5",
   // Get this from tina.io
   build: {
     outputFolder: "admin",
