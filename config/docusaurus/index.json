@@ -87,5 +87,6 @@
     ],
     "copyright": "My Project, Inc. Built with Docusaurus."
   },
-  "url": "https://tinasaurus.vercel.app/"
+  "url": "https://tinasaurus.vercel.app/",
+  "tagline": "Test"
 }
