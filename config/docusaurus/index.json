@@ -2,7 +2,7 @@
   "label": "Settings",
   "navbar": [
     {
-      "label": "Docs",
+      "label": "Notlar",
       "link": "doc",
       "docLink": "docs/intro.mdx",
       "position": "left"
@@ -33,10 +33,10 @@
     }
   ],
   "logo": {
-    "alt": "Tina",
-    "src": "/img/tina-icon.svg"
+    "alt": "notlar.im",
+    "src": "/img/notlar.im blog logosu.png"
   },
-  "title": "Tinasaurus",
+  "title": "notlar.im",
   "footer": {
     "style": "dark",
     "links": [
@@ -87,6 +87,6 @@
     ],
     "copyright": "My Project, Inc. Built with Docusaurus."
   },
-  "url": "https://tinasaurus.vercel.app/",
-  "tagline": "Test"
+  "url": "https://notlar.im",
+  "tagline": "Yazılım, bilgisayar, bisiklet, gezi gibi çeşitli konularda tuttuğum notlarım ve yer imlerim"
 }

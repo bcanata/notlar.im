@@ -48,7 +48,7 @@ const RestartWarning = () => {
 
 const PostCollection = {
   name: "post",
-  label: "Posts",
+  label: "Yazılar",
   path: "blog",
   format: "mdx",
   ui: {
@@ -133,24 +133,24 @@ const PostCollection = {
 
 const DocsCollection = {
   name: "doc",
-  label: "Docs",
+  label: "Notlar",
   path: "docs",
   format: "mdx",
   fields: [
     {
       type: "string",
       name: "title",
-      label: "Title",
+      label: "Başlık",
       isTitle: true,
       required: true,
     },
     {
       type: "string",
       name: "description",
-      label: "Description",
+      label: "Açıklama",
     },
     {
-      label: "Tags",
+      label: "Etiketler",
       name: "tags",
       type: "string",
       list: true,
@@ -161,7 +161,7 @@ const DocsCollection = {
     {
       type: "rich-text",
       name: "body",
-      label: "Body",
+      label: "Gövde",
       isBody: true,
       templates: [...MDXTemplates],
     },
@@ -170,7 +170,7 @@ const DocsCollection = {
 
 const DocLinkTemplate = {
   name: "doc",
-  label: "Doc Link",
+  label: "Not Linki",
   ui: {
     itemProps: (item) => {
       return {
@@ -184,7 +184,7 @@ const DocLinkTemplate = {
   },
   fields: [
     {
-      label: "Document",
+      label: "Not",
       name: "document",
       type: "reference",
       collections: ["doc"],
@@ -193,7 +193,7 @@ const DocLinkTemplate = {
     },
     {
       name: "label",
-      label: "Label",
+      label: "Etiket",
       description: "By default this is the document title",
       type: "string",
     },
@@ -202,7 +202,7 @@ const DocLinkTemplate = {
 
 const ExternalLinkTemplate = {
   name: "link",
-  label: "External Link",
+  label: "Harici Link",
   ui: {
     itemProps: (item) => {
       return {
@@ -213,7 +213,7 @@ const ExternalLinkTemplate = {
   fields: [
     {
       name: "title",
-      label: "Label",
+      label: "Etiket",
       type: "string",
       isTitle: true,
       required: true,
@@ -347,7 +347,7 @@ const SidebarItemsField = {
 
 const SidebarCollection = {
   name: "sidebar",
-  label: "Docs Sidebar",
+  label: "Notlar Kenar Çubuğu",
   path: "config/sidebar",
   format: "json",
   ui: {
@@ -369,7 +369,7 @@ const SidebarCollection = {
     },
     {
       type: "string",
-      label: "Label",
+      label: "Etiket",
       name: "label",
       required: true,
       isTitle: true,
@@ -384,7 +384,7 @@ const SidebarCollection = {
 const NavbarItemFields = [
   {
     name: "label",
-    label: "Label",
+    label: "Etiket",
     type: "string",
     isTitle: true,
     required: true,
@@ -524,7 +524,7 @@ const NavbarSubitemProps = {
 };
 
 const SettingsCollection = {
-  label: "Settings",
+  label: "Ayarlar",
   name: "settings",
   path: "config/docusaurus",
   format: "json",
@@ -547,7 +547,7 @@ const SettingsCollection = {
     },
     {
       type: "string",
-      label: "Label",
+      label: "Etiket",
       name: "label",
       required: true,
       isTitle: true,
@@ -672,7 +672,7 @@ const SettingsCollection = {
                   fields: [
                     {
                       type: "string",
-                      label: "Label",
+                      label: "Etiket",
                       name: "label",
                     },
                     {
@@ -697,7 +697,7 @@ const SettingsCollection = {
                   fields: [
                     {
                       type: "string",
-                      label: "Label",
+                      label: "Etiket",
                       name: "label",
                     },
                   ],
@@ -713,7 +713,7 @@ const SettingsCollection = {
                   fields: [
                     {
                       type: "string",
-                      label: "Label",
+                      label: "Etiket",
                       name: "label",
                     },
                     {
@@ -739,7 +739,7 @@ const SettingsCollection = {
 
 const HomepageCollection = {
   name: "homepage",
-  label: "Homepage",
+  label: "Ana Sayfa",
   description:
     "To see settings changes reflected on your site, you must restart the Tina CLI after saving changes (local development only).",
   path: "config/homepage",
@@ -762,7 +762,7 @@ const HomepageCollection = {
     },
     {
       type: "string",
-      label: "Label",
+      label: "Etiket",
       name: "label",
       required: true,
       isTitle: true,
@@ -792,7 +792,7 @@ const HomepageCollection = {
 
 const PagesCollection = {
   name: "pages",
-  label: "Pages",
+  label: "Sayfalar",
   path: "src/pages",
   format: "mdx",
   fields: [
@@ -841,5 +841,13 @@ export default defineConfig({
       SidebarCollection,
       SettingsCollection,
     ],
+  },
+  search: {
+    tina: {
+      indexerToken: 'f9946d0efd78da2698f050e3683b485ccd881c89',
+      stopwordLanguages: ['tur']
+    },
+    indexBatchSize: 100,
+    maxSearchIndexFieldLength: 100
   },
 });
