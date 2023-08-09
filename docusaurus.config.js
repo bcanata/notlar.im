@@ -126,16 +126,6 @@ const config = {
 
   plugins: [
     process.env.NODE_ENV === 'production' && '@docusaurus/plugin-debug',
-    [
-      '@docusaurus/plugin-ideal-image',
-      /** @type {import('@docusaurus/plugin-ideal-image').PluginOptions} */
-      ({
-        max: 1600,
-        min: 400,
-        // Use false to debug, but it incurs huge perf costs
-        disableInDev: true,
-      }),
-    ],
   ].filter(Boolean),
   
 
