@@ -109,10 +109,13 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl: docusaurusData.url + "/admin/#/collections/doc",
+          routeBasePath: "/notlar",
         },
         blog: {
           showReadingTime: true,
           editUrl: docusaurusData.url + "/admin/#/collections/post",
+          blogSidebarTitle: 'Tüm Yazılar',
+          blogSidebarCount: 'ALL',
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
@@ -120,6 +123,21 @@ const config = {
       }),
     ],
   ],
+
+  plugins: [
+    process.env.NODE_ENV === 'production' && '@docusaurus/plugin-debug',
+    [
+      '@docusaurus/plugin-ideal-image',
+      /** @type {import('@docusaurus/plugin-ideal-image').PluginOptions} */
+      ({
+        max: 1600,
+        min: 400,
+        // Use false to debug, but it incurs huge perf costs
+        disableInDev: true,
+      }),
+    ],
+  ].filter(Boolean),
+  
 
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */

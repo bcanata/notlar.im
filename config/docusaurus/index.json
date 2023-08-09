@@ -4,7 +4,8 @@
     {
       "label": "Notlar",
       "link": "doc",
-      "docLink": "docs/intro.mdx",
+      "docLink": "notlar/anasayfa.mdx",
+      "pageLink": "notlar/anasayfa.mdx",
       "position": "left"
     },
     {
@@ -13,22 +14,23 @@
       "position": "left"
     },
     {
-      "label": "MDX Page",
+      "label": "Yer İmlerim",
       "link": "page",
-      "docLink": "src/pages/Test-MDX-Page.mdx",
-      "pageLink": "src/pages/Test-MDX-Page.mdx",
+      "docLink": "src/pages/yer-imlerim.mdx",
+      "pageLink": "src/pages/yer-imlerim.mdx",
       "position": "left"
     },
     {
-      "label": "Docusaurus GitHub",
-      "link": "external",
-      "externalLink": "https://github.com/facebook/docusaurus",
+      "label": "Hakkımda",
+      "link": "page",
+      "pageLink": "src/pages/hakkimda.mdx",
+      "externalLink": "https://tina.io/",
       "position": "right"
     },
     {
-      "label": "Tina",
+      "label": "GitHub",
       "link": "external",
-      "externalLink": "https://tina.io/",
+      "externalLink": "https://github.com/bcanata/notlar.im",
       "position": "right"
     }
   ],
@@ -41,51 +43,66 @@
     "style": "dark",
     "links": [
       {
-        "title": "Docs",
+        "title": "notlar.im",
         "items": [
           {
-            "label": "Introduction",
-            "to": "docs/intro.mdx",
+            "label": "Notlar",
+            "to": "docs/anasayfa.mdx",
             "_template": "internal"
-          }
-        ]
-      },
-      {
-        "title": "Community",
-        "items": [
-          {
-            "label": "Stack Overflow",
-            "href": "https://stackoverflow.com/questions/tagged/docusaurus",
-            "_template": "external"
           },
-          {
-            "label": "Discord",
-            "href": "https://discordapp.com/invite/docusaurus",
-            "_template": "external"
-          },
-          {
-            "label": "Twitter",
-            "href": "https://twitter.com/docusaurus",
-            "_template": "external"
-          }
-        ]
-      },
-      {
-        "title": "More",
-        "items": [
           {
             "label": "Blog",
             "_template": "blog"
           },
           {
+            "label": "Etiketler",
+            "href": "/blog/tags",
+            "_template": "external"
+          }
+        ]
+      },
+      {
+        "title": "Bağlantılarım",
+        "items": [
+          {
+            "label": "Özgeçmiş (İngilizce)",
+            "href": "https://bugracanata.com.tr",
+            "_template": "external"
+          },
+          {
             "label": "GitHub",
-            "href": "https://github.com/facebook/docusaurus",
+            "href": "https://github.com/bcanata",
+            "_template": "external"
+          },
+          {
+            "label": "YouTube (Buğra Hoca)",
+            "href": "https://www.youtube.com/channel/UCAhzhgIOmzY317fisHEsPXg",
+            "_template": "external"
+          },
+          {
+            "label": "LinkedIn",
+            "href": "https://www.linkedin.com/in/canata/",
+            "_template": "external"
+          },
+          {
+            "label": "Twitter",
+            "href": "https://twitter.com/bugrateacher",
+            "_template": "external"
+          },
+          {
+            "label": "Facebook",
+            "href": "https://www.facebook.com/canata",
+            "_template": "external"
+          },
+          {
+            "label": "Instagram",
+            "href": "https://www.instagram.com/bugracanata/",
             "_template": "external"
           }
         ]
       }
     ],
-    "copyright": "My Project, Inc. Built with Docusaurus."
+    "copyright": "Buğra CANATA. Docusaurus ile hazırlandı"
   },
   "url": "https://notlar.im",
   "tagline": "Yazılım, bilgisayar, bisiklet, gezi gibi çeşitli konularda tuttuğum notlarım ve yer imlerim"
