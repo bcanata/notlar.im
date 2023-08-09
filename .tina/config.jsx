@@ -134,7 +134,7 @@ const PostCollection = {
 const DocsCollection = {
   name: "doc",
   label: "Notlar",
-  path: "docs",
+  path: "notlar",
   format: "mdx",
   fields: [
     {

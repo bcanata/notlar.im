@@ -378,7 +378,7 @@ var PostCollection = {
 var DocsCollection = {
   name: "doc",
   label: "Notlar",
-  path: "docs",
+  path: "notlar",
   format: "mdx",
   fields: [
     {

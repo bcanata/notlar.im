@@ -47,7 +47,7 @@
         "items": [
           {
             "label": "Notlar",
-            "to": "docs/anasayfa.mdx",
+            "to": "notlar/anasayfa.mdx",
             "_template": "internal"
           },
           {
