@@ -107,6 +107,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          path: 'notlar',
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl: docusaurusData.url + "/admin/#/collections/doc",
           routeBasePath: "/notlar",

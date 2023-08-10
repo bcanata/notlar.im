@@ -2,6 +2,30 @@
   "label": "Docs Sidebar",
   "items": [
     {
+      "title": "Gezi",
+      "link": "generated",
+      "items": [
+        {
+          "title": "Türkiye",
+          "link": "generated",
+          "items": [
+            {
+              "title": "Muğla",
+              "link": "generated",
+              "items": [
+                {
+                  "_template": "doc"
+                }
+              ],
+              "_template": "category"
+            }
+          ],
+          "_template": "category"
+        }
+      ],
+      "_template": "category"
+    },
+    {
       "document": "notlar/anasayfa.mdx",
       "_template": "doc"
     },
@@ -18,6 +42,17 @@
           "title": "amatortelsizcilik.com.tr",
           "href": "https://amatortelsizcilik.com.tr",
           "_template": "link"
+        }
+      ],
+      "_template": "category"
+    },
+    {
+      "title": "Bisiklet",
+      "link": "none",
+      "items": [
+        {
+          "document": "notlar/bisiklet-uygulamalari.mdx",
+          "_template": "doc"
         }
       ],
       "_template": "category"
