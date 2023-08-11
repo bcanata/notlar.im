@@ -158,7 +158,7 @@ const config = {
           return formatFooterItem(item);
         }),
         copyright:
-          `Copyright © ${new Date().getFullYear()} ` +
+          `Telif Hakkı © ${new Date().getFullYear()} ` +
           (docusaurusData.footer?.copyright || docusaurusData.title),
       },
       prism: {
@@ -167,12 +167,12 @@ const config = {
       },
       algolia: {
         // The application ID provided by Algolia
-        appId: APP_ID,
+        appId: process.env.APP_ID,
   
         // Public API key: it is safe to commit it
-        apiKey: SEARCH_API_KEY,
+        apiKey: process.env.SEARCH_API_KEY,
   
-        indexName: INDEX_NAME,
+        indexName: process.env.INDEX_NAME,
   
         // Optional: see doc section below
         contextualSearch: true,
