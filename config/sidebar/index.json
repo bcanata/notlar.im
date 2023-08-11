@@ -56,6 +56,10 @@
         }
       ],
       "_template": "category"
+    },
+    {
+      "document": "notlar/taslak.mdx",
+      "_template": "doc"
     }
   ]
 }
