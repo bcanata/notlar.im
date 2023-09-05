@@ -34,6 +34,14 @@
       "link": "generated",
       "items": [
         {
+          "document": "notlar/Quansheng-UV-K5.mdx",
+          "_template": "doc"
+        },
+        {
+          "document": "notlar/TA2KB-Rle-Listesi.mdx",
+          "_template": "doc"
+        },
+        {
           "title": "Amatör Telsiz Telegram Bot",
           "href": "https://t.me/telsizbot",
           "_template": "link"
