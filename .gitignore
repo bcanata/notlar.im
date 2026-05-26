@@ -1,0 +1,27 @@
+# Astro
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+.idea
+.DS_Store
+
+# Wrangler
+.wrangler/
+
+# Environment
+.env
+.env.local
+.env.*.local

@@ -1,0 +1,82 @@
+---
+import Page from '../../layouts/Page.astro';
+import { getCollection } from 'astro:content';
+import { tagSlug } from '../../lib/tags';
+
+export async function getStaticPaths() {
+    const blog = await getCollection('blog');
+    const notlar = await getCollection('notlar');
+    const all = [
+        ...blog.map((p) => ({ collection: 'blog' as const, post: p })),
+        ...notlar.map((p) => ({ collection: 'notlar' as const, post: p })),
+    ];
+
+    // Group every entry under each of its tags' slugified form, preserving
+    // the original tag string so we can render it pretty on the page.
+    const byTag = new Map<
+        string,
+        { displayName: string; entries: typeof all }
+    >();
+    for (const item of all) {
+        if (item.post.data.draft) continue;
+        for (const t of item.post.data.tags) {
+            const slug = tagSlug(t);
+            if (!byTag.has(slug)) byTag.set(slug, { displayName: t, entries: [] });
+            byTag.get(slug)!.entries.push(item);
+        }
+    }
+
+    return Array.from(byTag.entries()).map(([slug, { displayName, entries }]) => ({
+        params: { tag: slug },
+        props: {
+            displayName,
+            entries: entries.sort(
+                (a, b) =>
+                    b.post.data.date.getTime() - a.post.data.date.getTime(),
+            ),
+        },
+    }));
+}
+
+const { displayName, entries } = Astro.props;
+const dateFmt = new Intl.DateTimeFormat('tr-TR', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+});
+---
+
+<Page
+    title={`#${displayName}`}
+    description={`${displayName} etiketli yazılar ve notlar`}
+>
+    <section class="mb-8">
+        <p class="text-sm uppercase tracking-wider text-[var(--color-ink-mute)]">Etiket</p>
+        <h1 class="mt-1 text-2xl font-semibold tracking-tight">#{displayName}</h1>
+        <p class="mt-2 text-sm text-[var(--color-ink-soft)]">
+            {entries.length} {entries.length === 1 ? 'gönderi' : 'gönderi'}
+        </p>
+    </section>
+
+    <ul class="divide-y divide-[var(--color-rule)]">
+        {
+            entries.map(({ collection, post }) => (
+                <li class="py-4">
+                    <h2 class="text-lg font-semibold leading-snug">
+                        <a
+                            href={`/${collection}/${post.id}`}
+                            class="hover:underline"
+                        >
+                            {post.data.title}
+                        </a>
+                    </h2>
+                    <div class="mt-1 text-sm text-[var(--color-ink-mute)]">
+                        <time datetime={post.data.date.toISOString()}>
+                            {dateFmt.format(post.data.date)}
+                        </time>
+                    </div>
+                </li>
+            ))
+        }
+    </ul>
+</Page>

@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "notlar-im",
+  "compatibility_date": "2026-05-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "account_id": "6bce1ffb042bcfffe0c35b914b969a26",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+  /*
+   * To flip notlar.im DNS to this Worker, uncomment the routes block below
+   * and re-deploy. The existing notlar.im DNS currently points to the old
+   * Docusaurus site host — claiming the custom_domain will repoint the
+   * apex + www to this Worker on the next deploy.
+   *
+   * "routes": [
+   *   { "pattern": "notlar.im",     "custom_domain": true },
+   *   { "pattern": "www.notlar.im", "custom_domain": true }
+   * ]
+   */
+}

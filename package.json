@@ -1,0 +1,32 @@
+{
+  "name": "notlar.im",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "deploy": "pnpm run build && wrangler deploy",
+    "deploy:dry": "pnpm run build && wrangler deploy --dry-run",
+    "import": "node scripts/import-from-docusaurus.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/mdx": "^4.3.6",
+    "@astrojs/rss": "^4.0.13",
+    "@astrojs/sitemap": "^3.6.0",
+    "@tailwindcss/vite": "^4.1.12",
+    "astro": "^5.16.4",
+    "gray-matter": "^4.0.3",
+    "reading-time": "^1.5.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.94.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

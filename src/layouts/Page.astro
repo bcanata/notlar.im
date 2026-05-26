@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+
+interface Props {
+    title: string;
+    description?: string;
+    canonical?: string;
+    ogType?: 'website' | 'article';
+}
+
+const { title, description, canonical, ogType = 'website' } = Astro.props;
+const siteTitle = 'notlar.im';
+const fullTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
+const canonicalURL =
+    canonical ?? new URL(Astro.url.pathname, Astro.site ?? 'https://notlar.im').toString();
+---
+
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:title" content={fullTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={siteTitle} />
+    <link rel="alternate" type="application/rss+xml" title={siteTitle} href="/rss.xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="generator" content={Astro.generator} />
+</head>
+<body>
+    <div class="mx-auto max-w-2xl px-5 py-8 sm:py-12">
+        <header class="mb-10">
+            <nav class="flex flex-wrap items-baseline gap-x-6 gap-y-2 text-sm">
+                <a href="/" class="text-base font-semibold tracking-tight text-[var(--color-ink)] hover:underline">notlar.im</a>
+                <span class="text-[var(--color-ink-mute)]">·</span>
+                <a href="/notlar" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">Notlar</a>
+                <a href="/blog" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">Blog</a>
+                <a href="/hakkinda" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">Hakkında</a>
+                <a href="/rss.xml" class="ml-auto text-[var(--color-ink-mute)] hover:text-[var(--color-ink)] hover:underline">RSS</a>
+            </nav>
+        </header>
+
+        <main>
+            <slot />
+        </main>
+
+        <footer class="mt-20 border-t border-[var(--color-rule)] pt-6 text-sm text-[var(--color-ink-mute)]">
+            <p>
+                <a href="https://canata.dev" class="hover:text-[var(--color-ink)] hover:underline">Buğra Canata</a>
+                ·
+                <a href="/rss.xml" class="hover:text-[var(--color-ink)] hover:underline">RSS</a>
+                ·
+                <a href="https://github.com/bcanata/notlar.im" class="hover:text-[var(--color-ink)] hover:underline">GitHub</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
