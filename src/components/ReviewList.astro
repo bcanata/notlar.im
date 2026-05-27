@@ -1,0 +1,162 @@
+---
+/*
+ * Reviewed-places list + client-side search. Mirrors BookGrid's instant
+ * filter (a diacritic-folded haystack in data-search, no network). Each card
+ * shows the place, star rating, the review text (clamped), the date, a link
+ * to the review on Google Maps, and a "show on map" button that focuses the
+ * matching marker via the window.focusReview bridge in ReviewsMap.
+ */
+import type { ReviewWithMeta } from '../lib/reviews';
+import { t, type Lang } from '../lib/i18n';
+
+interface Props {
+    reviews: ReviewWithMeta[];
+    lang: Lang;
+    searchPlaceholder: string;
+    countLabel: string; // template containing {n}
+    noResultsLabel: string;
+    mapLabel: string; // "show on map"
+    viewLabel: string; // "view on Google Maps"
+}
+const { reviews, lang, searchPlaceholder, countLabel, noResultsLabel, mapLabel, viewLabel } =
+    Astro.props;
+
+const locale = t(lang, 'date_locale');
+function fmtDate(iso: string | null): string {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime())
+        ? ''
+        : d.toLocaleDateString(locale, { year: 'numeric', month: 'short' });
+}
+function clampRating(n: number): number {
+    return Math.max(0, Math.min(5, Math.round(n || 0)));
+}
+---
+
+<div class="mb-8">
+    <label class="relative block">
+        <span class="sr-only">{searchPlaceholder}</span>
+        <input
+            type="search"
+            id="review-search"
+            placeholder={searchPlaceholder}
+            autocomplete="off"
+            class="w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-4 py-2.5 text-base text-[var(--color-ink)] placeholder:text-[var(--color-ink-mute)] focus:border-[var(--color-ink-soft)] focus:outline-none"
+        />
+    </label>
+    <p id="review-search-count" class="mt-2 text-sm text-[var(--color-ink-mute)]" data-count-label={countLabel} aria-live="polite"></p>
+</div>
+
+<ul id="review-grid" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+        reviews.map((r) => {
+            const rating = clampRating(r.rating);
+            const date = fmtDate(r.date);
+            return (
+                <li class="review-card" data-search={r.search} data-id={r.id}>
+                    <article class="flex h-full flex-col rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-soft)] p-4 sm:p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <h3 class="display-title text-base leading-snug">{r.place}</h3>
+                            {rating > 0 && (
+                                <span class="shrink-0 text-sm leading-none" role="img" aria-label={`${rating}/5`}>
+                                    <span class="text-[var(--color-accent)]">{'★'.repeat(rating)}</span>
+                                    <span class="text-[var(--color-ink-mute)] opacity-40">{'★'.repeat(5 - rating)}</span>
+                                </span>
+                            )}
+                        </div>
+                        {r.address && (
+                            <p class="mt-0.5 text-xs text-[var(--color-ink-mute)] line-clamp-1">{r.address}</p>
+                        )}
+                        <p class="mt-3 text-sm leading-relaxed text-[var(--color-ink-soft)] line-clamp-5">{r.text}</p>
+                        <div class="mt-auto flex items-center justify-between gap-3 pt-4 text-xs text-[var(--color-ink-mute)]">
+                            {date ? <time datetime={r.date ?? undefined}>{date}</time> : <span />}
+                            <div class="flex items-center gap-3">
+                                {r.lat != null && r.lng != null && (
+                                    <button type="button" class="review-map-btn hover:text-[var(--color-ink)] hover:underline" data-id={r.id}>
+                                        {mapLabel}
+                                    </button>
+                                )}
+                                {r.url && (
+                                    <a href={r.url} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:underline">
+                                        {viewLabel}
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+                    </article>
+                </li>
+            );
+        })
+    }
+</ul>
+
+<p id="review-no-results" class="hidden py-8 text-center text-[var(--color-ink-soft)]">{noResultsLabel}</p>
+
+<script>
+    function foldTr(s: string): string {
+        return s
+            .toLocaleLowerCase('tr')
+            .replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i')
+            .replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's')
+            .replace(/ü/g, 'u');
+    }
+
+    const input = document.getElementById('review-search') as HTMLInputElement | null;
+    const grid = document.getElementById('review-grid');
+    const countEl = document.getElementById('review-search-count');
+    const noResults = document.getElementById('review-no-results');
+
+    if (input && grid && countEl) {
+        const cards = Array.from(grid.querySelectorAll<HTMLLIElement>('.review-card'));
+        const total = cards.length;
+        const template = countEl.dataset.countLabel || '{n}';
+
+        function render(visible: number) {
+            countEl!.textContent = template.replace('{n}', String(visible));
+            noResults?.classList.toggle('hidden', visible !== 0);
+        }
+
+        function filter() {
+            const q = foldTr(input!.value.trim());
+            if (!q) {
+                cards.forEach((c) => (c.style.display = ''));
+                render(total);
+                return;
+            }
+            let visible = 0;
+            for (const c of cards) {
+                const match = (c.dataset.search || '').includes(q);
+                c.style.display = match ? '' : 'none';
+                if (match) visible++;
+            }
+            render(visible);
+        }
+
+        input.addEventListener('input', filter);
+        render(total);
+        const urlQ = new URLSearchParams(location.search).get('q');
+        if (urlQ) {
+            input.value = urlQ;
+            filter();
+        }
+    }
+
+    // "Show on map" — focus the matching marker (bridge exposed by ReviewsMap).
+    grid?.querySelectorAll<HTMLButtonElement>('.review-map-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.id;
+            if (id) (window as unknown as { focusReview?: (id: string) => void }).focusReview?.(id);
+        });
+    });
+</script>
+
+<style is:global>
+    .line-clamp-1, .line-clamp-5 {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .line-clamp-1 { -webkit-line-clamp: 1; }
+    .line-clamp-5 { -webkit-line-clamp: 5; }
+</style>

@@ -1,0 +1,123 @@
+---
+/*
+ * Theme toggle. Three states: auto (follow system), light, dark.
+ *
+ * The icon always reflects the THEME CURRENTLY APPLIED on this page —
+ * not the user's preference setting. In auto, that means we resolve via
+ * `matchMedia('(prefers-color-scheme: dark)')` and show the system's view.
+ * A short label next to the icon ("Otomatik" / "Açık" / "Koyu") shows the
+ * actual preference state, so the cycle is unambiguous.
+ *
+ * Clicking cycles auto → light → dark → auto. Persisted in localStorage.
+ */
+import type { Lang } from '../lib/i18n';
+import { t } from '../lib/i18n';
+
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<button
+    type="button"
+    id="theme-toggle"
+    class="theme-toggle text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]"
+    aria-label={t(lang, 'theme_label')}
+    data-lang={lang}
+    data-tr-auto={t('tr', 'theme_auto')}
+    data-tr-light={t('tr', 'theme_light')}
+    data-tr-dark={t('tr', 'theme_dark')}
+    data-en-auto={t('en', 'theme_auto')}
+    data-en-light={t('en', 'theme_light')}
+    data-en-dark={t('en', 'theme_dark')}
+>
+    <span class="theme-toggle__icon" aria-hidden="true">◐</span>
+    <span class="theme-toggle__label">{t(lang, 'theme_auto')}</span>
+</button>
+
+<script>
+    type ThemePref = 'auto' | 'light' | 'dark';
+    function applyTheme(pref: ThemePref) {
+        const html = document.documentElement;
+        if (pref === 'auto') html.removeAttribute('data-theme');
+        else html.setAttribute('data-theme', pref);
+    }
+    function nextPref(p: ThemePref): ThemePref {
+        return p === 'auto' ? 'light' : p === 'light' ? 'dark' : 'auto';
+    }
+
+    /** Icon for the *currently applied* theme (not the preference). */
+    function appliedIcon(pref: ThemePref): string {
+        const effective =
+            pref === 'auto'
+                ? window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? 'dark'
+                    : 'light'
+                : pref;
+        return effective === 'dark' ? '☾' : '☀';
+    }
+
+    const btn = document.getElementById('theme-toggle') as HTMLButtonElement | null;
+    if (btn) {
+        const lang = (btn.dataset.lang as 'tr' | 'en') || 'tr';
+        const iconEl = btn.querySelector<HTMLElement>('.theme-toggle__icon');
+        const labelEl = btn.querySelector<HTMLElement>('.theme-toggle__label');
+
+        function refresh() {
+            const pref = (localStorage.getItem('theme') as ThemePref | null) ?? 'auto';
+            if (iconEl) iconEl.textContent = appliedIcon(pref);
+            if (labelEl) {
+                const key = `data-${lang}-${pref}` as const;
+                labelEl.textContent = btn!.getAttribute(key) ?? pref;
+            }
+        }
+        refresh();
+
+        btn.addEventListener('click', () => {
+            const current = (localStorage.getItem('theme') as ThemePref | null) ?? 'auto';
+            const next = nextPref(current);
+            if (next === 'auto') localStorage.removeItem('theme');
+            else localStorage.setItem('theme', next);
+            applyTheme(next);
+            refresh();
+        });
+
+        // When in auto mode, follow live changes to system preference.
+        window
+            .matchMedia('(prefers-color-scheme: dark)')
+            .addEventListener('change', () => {
+                const pref = (localStorage.getItem('theme') as ThemePref | null) ?? 'auto';
+                if (pref === 'auto') refresh();
+            });
+    }
+</script>
+
+<style is:global>
+    .theme-toggle {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0.4em;
+        background: none;
+        border: 0;
+        font: inherit;
+        cursor: pointer;
+        padding: 0;
+    }
+    .theme-toggle__icon {
+        font-size: 1.05em;
+        line-height: 1;
+    }
+    /* Label hidden on small screens to keep the action cluster compact. */
+    .theme-toggle__label {
+        font-size: 0.875rem;
+    }
+    @media (max-width: 639.98px) {
+        .theme-toggle__label {
+            display: none;
+        }
+    }
+    .theme-toggle:hover {
+        text-decoration: underline;
+    }
+</style>

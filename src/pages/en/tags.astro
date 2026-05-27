@@ -1,0 +1,58 @@
+---
+import Page from '../../layouts/Page.astro';
+import { getCollection } from 'astro:content';
+import { t } from '../../lib/i18n';
+import { tagSlug } from '../../lib/tags';
+
+const lang = 'en' as const;
+const posts = (await getCollection('blog')).filter(
+    (p) => !p.data.draft && p.data.lang === lang,
+);
+
+const byTag = new Map<string, { displayName: string; count: number }>();
+for (const post of posts) {
+    for (const tag of post.data.tags) {
+        const slug = tagSlug(tag);
+        const e = byTag.get(slug);
+        if (e) e.count++;
+        else byTag.set(slug, { displayName: tag, count: 1 });
+    }
+}
+
+const tagEntries = [...byTag.entries()].sort(([, a], [, b]) => {
+    if (b.count !== a.count) return b.count - a.count;
+    return a.displayName.localeCompare(b.displayName, 'en');
+});
+---
+
+<Page
+    title={t(lang, 'tags_index_title')}
+    description={t(lang, 'tags_index_tagline')}
+    lang={lang}
+    altLangUrl="/etiketler"
+>
+    <section class="mb-10">
+        <h1 class="display-title text-3xl">{t(lang, 'tags_index_title')}</h1>
+        <p class="mt-2 text-[var(--color-ink-soft)]">{t(lang, 'tags_index_tagline')}</p>
+    </section>
+
+    <ul class="flex flex-wrap items-baseline gap-x-5 gap-y-3">
+        {
+            tagEntries.map(([slug, { displayName, count }]) => {
+                const size = 0.95 + Math.min(count, 12) * 0.05;
+                return (
+                    <li>
+                        <a
+                            href={`/en/t/${slug}`}
+                            style={`font-size:${size}rem`}
+                            class="inline-flex items-baseline gap-1.5 text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]"
+                        >
+                            <span class="font-semibold">#{displayName.replace(/\s+/g, '-')}</span>
+                            <span class="text-xs text-[var(--color-ink-mute)] tabular-nums">{count}</span>
+                        </a>
+                    </li>
+                );
+            })
+        }
+    </ul>
+</Page>

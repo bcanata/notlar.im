@@ -1,0 +1,157 @@
+---
+import Page from '../../layouts/Page.astro';
+import type { GetStaticPaths, GetStaticPathsOptions } from 'astro';
+import youtube from '../../data/youtube.json';
+import { t } from '../../lib/i18n';
+
+interface Video {
+    id: string;
+    title: string;
+    url: string;
+    timestamp: number | null;
+    uploadDate: string | null;
+    duration: number | null;
+    thumbnail: string;
+}
+
+interface Channel {
+    title: string;
+    handle: string;
+    url: string;
+}
+
+export const getStaticPaths: GetStaticPaths = ({ paginate }: GetStaticPathsOptions) => {
+    const videos = (youtube.videos as Video[]).slice();
+    return paginate(videos, { pageSize: 12 });
+};
+
+const { page } = Astro.props as { page: import('astro').Page<Video> };
+const channel = youtube.channel as Channel;
+const lang = 'tr' as const;
+
+const dateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+});
+
+function fmtDuration(seconds: number | null): string | null {
+    if (!seconds || seconds <= 0) return null;
+    const s = Math.floor(seconds);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    return `${m}:${String(sec).padStart(2, '0')}`;
+}
+
+const pageTitle =
+    page.currentPage > 1
+        ? `${t(lang, 'videos_title')} · sayfa ${page.currentPage}`
+        : t(lang, 'videos_title');
+const altLang = page.currentPage > 1 ? `/en/videolar/${page.currentPage}` : '/en/videolar';
+---
+
+<Page
+    title={pageTitle}
+    description={t(lang, 'videos_intro', {
+        channel: channel.handle,
+        total: page.total,
+        start: page.start + 1,
+        end: page.end + 1,
+    })}
+    lang={lang}
+    altLangUrl={altLang}
+>
+    <section class="mb-8">
+        <h1 class="text-2xl font-semibold tracking-tight">{t(lang, 'videos_title')}</h1>
+        <p class="mt-2 text-[var(--color-ink-soft)]">
+            <a
+                href={channel.url}
+                class="underline decoration-1 underline-offset-2 hover:text-[var(--color-ink)]"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                youtube.com/{channel.handle}
+            </a>{' '}
+            {t(lang, 'videos_intro', {
+                channel: '',
+                total: page.total,
+                start: page.start + 1,
+                end: page.end + 1,
+            }).replace(/^\s+/, '')}
+        </p>
+    </section>
+
+    <ul class="divide-y divide-[var(--color-rule)]">
+        {
+            page.data.map((v) => {
+                const dur = fmtDuration(v.duration);
+                const dateStr = v.uploadDate ? dateFmt.format(new Date(v.uploadDate)) : null;
+                return (
+                    <li class="py-5">
+                        <article class="flex flex-col gap-4 sm:flex-row">
+                            <a
+                                href={v.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="relative block shrink-0 sm:w-56"
+                            >
+                                <img
+                                    src={v.thumbnail}
+                                    alt=""
+                                    loading="lazy"
+                                    width="480"
+                                    height="360"
+                                    class="aspect-video w-full rounded-md object-cover"
+                                />
+                                {dur && (
+                                    <span class="absolute bottom-1.5 right-1.5 rounded bg-black/80 px-1.5 py-0.5 text-xs font-medium text-white tabular-nums">
+                                        {dur}
+                                    </span>
+                                )}
+                            </a>
+                            <div class="min-w-0 flex-1">
+                                <h2 class="text-lg font-semibold leading-snug">
+                                    <a
+                                        href={v.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="hover:underline"
+                                    >
+                                        {v.title}
+                                    </a>
+                                </h2>
+                                {dateStr && (
+                                    <div class="mt-1 text-sm text-[var(--color-ink-mute)]">
+                                        <time datetime={v.uploadDate ?? undefined}>{dateStr}</time>
+                                    </div>
+                                )}
+                            </div>
+                        </article>
+                    </li>
+                );
+            })
+        }
+    </ul>
+
+    {
+        page.lastPage > 1 && (
+            <nav class="mt-10 flex items-center justify-between border-t border-[var(--color-rule)] pt-6 text-sm" aria-label="Sayfalar">
+                {page.url.prev ? (
+                    <a href={page.url.prev} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'pagination_prev')}</a>
+                ) : (
+                    <span class="text-[var(--color-ink-mute)]">{t(lang, 'pagination_prev')}</span>
+                )}
+                <span class="text-[var(--color-ink-mute)]">
+                    {t(lang, 'pagination_summary', { current: page.currentPage, total: page.lastPage })}
+                </span>
+                {page.url.next ? (
+                    <a href={page.url.next} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'pagination_next')}</a>
+                ) : (
+                    <span class="text-[var(--color-ink-mute)]">{t(lang, 'pagination_next')}</span>
+                )}
+            </nav>
+        )
+    }
+</Page>

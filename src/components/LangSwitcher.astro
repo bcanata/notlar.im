@@ -1,0 +1,37 @@
+---
+/*
+ * Toggle the current page between Turkish and English.
+ *
+ * Resolution order, given the current page's lang:
+ *   1. If a `targetUrl` prop is passed (eg the post's paired translation
+ *      URL), use it directly.
+ *   2. Otherwise, replace/insert the /en prefix on the current path.
+ *      For TR-only or EN-only pages without a counterpart, this falls
+ *      back to the other language's homepage so the user is not stuck.
+ *
+ * Display: the OTHER language's name is shown — TR pages show "English",
+ * EN pages show "Türkçe".
+ */
+import type { Lang } from '../lib/i18n';
+import { stripLangPrefix, langName, t } from '../lib/i18n';
+
+interface Props {
+    lang: Lang;
+    targetUrl?: string;
+}
+const { lang, targetUrl } = Astro.props;
+
+const other: Lang = lang === 'tr' ? 'en' : 'tr';
+const fallback = other === 'tr' ? stripLangPrefix(Astro.url.pathname) : '/en';
+const href = targetUrl ?? fallback;
+const label = other === 'tr' ? t(lang, 'switch_to_turkish') : t(lang, 'switch_to_english');
+---
+
+<a
+    href={href}
+    hreflang={other}
+    class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline"
+    title={langName(other)}
+>
+    {label}
+</a>

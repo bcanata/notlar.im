@@ -1,0 +1,131 @@
+---
+/*
+ * Reusable Pagefind search box. Mounts PagefindUI into `#search-{id}` and
+ * filters results to a single language via the `data-pagefind-filter`
+ * attribute baked into each post's <article>.
+ *
+ * The `pagefind` directory is generated post-build (see package.json `build`
+ * script) and lives at /pagefind/ in the deployed site. In `astro dev`
+ * the directory doesn't exist yet, so the search UI gracefully shows
+ * "loading" until a real build runs.
+ */
+import type { Lang } from '../lib/i18n';
+import { t } from '../lib/i18n';
+
+interface Props {
+    lang: Lang;
+    /** DOM id suffix to allow multiple boxes on one page (modal + page). */
+    id?: string;
+    autofocus?: boolean;
+}
+const { lang, id = 'default', autofocus = false } = Astro.props;
+const mountId = `search-${id}`;
+---
+
+<div
+    id={mountId}
+    class="pagefind-mount"
+    data-pagefind-lang={lang}
+    data-autofocus={autofocus ? '1' : '0'}
+></div>
+
+<script>
+    /*
+     * Initialise every PagefindUI mount on the page. We lazy-load the UI JS
+     * from the static /pagefind directory so each entry point bundles only
+     * the small DOM glue.
+     */
+    type PagefindUIOptions = Record<string, unknown>;
+    interface PagefindUIConstructor {
+        new (options: PagefindUIOptions): unknown;
+    }
+    declare global {
+        interface Window {
+            PagefindUI?: PagefindUIConstructor;
+        }
+    }
+
+    async function loadPagefindUI(): Promise<PagefindUIConstructor | null> {
+        if (window.PagefindUI) return window.PagefindUI;
+        // The Pagefind script attaches `PagefindUI` to `window` on load.
+        await new Promise<void>((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = '/pagefind/pagefind-ui.js';
+            s.onload = () => resolve();
+            s.onerror = () => reject(new Error('pagefind not built'));
+            document.head.appendChild(s);
+            // Pagefind ships its own CSS too.
+            const css = document.createElement('link');
+            css.rel = 'stylesheet';
+            css.href = '/pagefind/pagefind-ui.css';
+            document.head.appendChild(css);
+        });
+        return window.PagefindUI ?? null;
+    }
+
+    const mounts = document.querySelectorAll<HTMLDivElement>('.pagefind-mount');
+    if (mounts.length > 0) {
+        loadPagefindUI()
+            .then((UI) => {
+                if (!UI) return;
+                mounts.forEach((el) => {
+                    if (el.dataset.pagefindMounted === '1') return;
+                    el.dataset.pagefindMounted = '1';
+                    const lang = el.dataset.pagefindLang || 'tr';
+                    new UI({
+                        element: '#' + el.id,
+                        showImages: false,
+                        showSubResults: true,
+                        excerptLength: 16,
+                        autofocus: el.dataset.autofocus === '1',
+                        translations: lang === 'tr'
+                            ? {
+                                  placeholder: 'notlar.im içinde ara…',
+                                  clear_search: 'Temizle',
+                                  load_more: 'Daha fazla sonuç',
+                                  search_label: 'Sitede ara',
+                                  filters_label: 'Süzgeçler',
+                                  zero_results: '"[SEARCH_TERM]" için sonuç yok',
+                                  many_results: '"[SEARCH_TERM]" için [COUNT] sonuç',
+                                  one_result: '"[SEARCH_TERM]" için [COUNT] sonuç',
+                                  alt_search:
+                                      '"[SEARCH_TERM]" için sonuç yok. Yerine "[DIFFERENT_TERM]":',
+                                  search_suggestion:
+                                      '"[SEARCH_TERM]" için sonuç yok. Şunlardan birini deneyin:',
+                                  searching: '"[SEARCH_TERM]" aranıyor…',
+                              }
+                            : undefined,
+                        filters: { lang: [lang] },
+                    });
+                });
+            })
+            .catch(() => {
+                mounts.forEach((el) => {
+                    el.innerHTML =
+                        '<p style="color:var(--color-ink-mute);font-size:.875rem">Arama dizini henüz oluşturulmadı. <code>pnpm build</code> sonrası kullanılabilir. / Search index not built yet — available after <code>pnpm build</code>.</p>';
+                });
+            });
+    }
+</script>
+
+<style is:global>
+    /*
+     * Pagefind UI overrides. We override its CSS variables to inherit the
+     * site palette + dark mode automatically.
+     */
+    .pagefind-ui {
+        --pagefind-ui-scale: 0.85;
+        --pagefind-ui-primary: var(--color-accent);
+        --pagefind-ui-text: var(--color-ink);
+        --pagefind-ui-background: var(--color-paper);
+        --pagefind-ui-border: var(--color-rule);
+        --pagefind-ui-tag: var(--color-rule);
+        --pagefind-ui-border-width: 1px;
+        --pagefind-ui-border-radius: 6px;
+        --pagefind-ui-font: var(--font-sans);
+    }
+    .pagefind-ui .pagefind-ui__search-input {
+        background: var(--color-paper);
+        color: var(--color-ink);
+    }
+</style>

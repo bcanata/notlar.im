@@ -1,0 +1,133 @@
+---
+title: 'Renovating Three Personal Sites in One Night'
+date: '2026-05-26T13:00:00.000Z'
+tags:
+  - meta
+  - cloudflare
+  - astro
+  - 3d-portfolio
+description: A retrospective on the overnight rebuild of canata.dev (Henry Heffernan's open-source 3D office, customised), notlar.im (Astro from a Docusaurus base), and the contact-form Worker that ties them together.
+lang: en
+ai: true
+translationKey: personal-sites-renovation
+---
+
+This post is the meta-log — the same evening I wrote it, I tore down and rebuilt three of my personal sites. If you're here from one of those sites and wondering what just changed, this is the catalogue.
+
+The three sites:
+
+- **canata.dev** — my developer portfolio. Was running an Astro + Tailwind landing page. Replaced with a fork of [Henry Heffernan's open-source 3D portfolio](https://github.com/henryjeff/portfolio-website) — the one where you walk around a 3D office and a CRT monitor iframes a "desktop OS" site full of mini-apps.
+- **notlar.im** — my Turkish personal blog. Was a 2-year-stale Docusaurus install. Rebuilt from scratch on Astro Content Collections with a [tuhat.net](https://tuhat.net)-inspired minimal feed layout.
+- **canata.com.tr** — the email / contact backbone. Got a Cloudflare Email Service-backed `/api/contact` endpoint that the desktop-OS site iframes into.
+
+All three deployed on **Cloudflare Workers Static Assets**, same account. The whole exercise took about an evening, which is the part worth writing down.
+
+## What got rebuilt
+
+### canata.dev — the 3D office
+
+The original Astro+Tailwind version was a quick build (literally the static site you'd get from any framework template, just with my content). It was fine. But it was generic. Henry Heffernan's portfolio has been making the rounds for a couple of years and his repos have been open-source the entire time — so I forked them, kept the look, and replaced every visible piece of Heffernan-isms with Canata-isms.
+
+That meant editing in two repos, because Henry's setup is intentionally two parts:
+
+- The **outer 3D scene** ([github.com/henryjeff/portfolio-website](https://github.com/henryjeff/portfolio-website)) — Three.js room, computer model, GLSL shaders for steam coming off a coffee cup, BIOS-style loading screen.
+- The **inner desktop OS** ([github.com/henryjeff/portfolio-inner-site](https://github.com/henryjeff/portfolio-inner-site)) — Create-React-App that renders a Windows-95-ish desktop with apps (Doom emulator, Wordle clone, the actual portfolio content). The outer scene iframes this site into the CRT monitor's screen surface.
+
+That two-repo split is structurally elegant — the 3D part doesn't need to know about React state, and the OS part doesn't need to know about WebGL. They communicate via `postMessage`. Forking both gave me independent deploy units; the inner site lives at `os.canata.dev` and the outer iframes it.
+
+What I changed in the outer scene:
+
+- **BIOS branding**. Heffernan's loading screen has a BIOS-style "Heffernan, Henry Inc." vendor banner and "HHBIOS (C)2000". Edited the React component to read "Canata, Buğra Inc." / "BCBIOS (C)2026" / "CSP TA1JS 2008-2026". Kept the date format and the typed-text animation, since those are aesthetic and not branding.
+- **Computer model branding**. This was the hard one — Henry had baked his branding into the 3D model's texture atlas. The texture is a 4096×4096 JPEG (`baked_computer.jpg`) with UV-mapped Heffernan / henry inc labels on the monitor bezel, keyboard plaque, and two product-info stickers. I wrote a Python+Pillow script that samples the surrounding bezel colour, paints over the original labels, and renders new Canata / buğra inc text in italic Georgia at the same UV positions. Not perfect, but indistinguishable at scene-render scale.
+- **InfoOverlay**. The small typed-text panel that hovers over the 3D scene (name + title + clock). Edited to type "Buğra Canata" / "Freelance Developer · TA1JS".
+- **MonitorScreen iframe routing**. Hardcoded `https://os.henryheffernan.com/` swapped for a smart resolver: localhost / LAN hostnames auto-route to `http://localhost:3001/`, the deployed site uses `https://canata-dev-inner.bugra.workers.dev/`. The `?dev` query flag still works as an explicit override. New `?os=<url>` flag lets you point the monitor at any URL temporarily.
+- **TypeScript config**. The repo's `tsconfig.json` had `target: ES6`, which broke on modern Node because the code uses `Object.entries`. Bumped to `ES2017`.
+- **Page meta**. Title, description, OG, Twitter cards all rewritten. Google Analytics tag (Henry's `G-4FJBF6WF60`) stripped — I'll add my own if I ever want analytics.
+
+What I changed in the inner OS site:
+
+- **The actual portfolio pages**. Home, About, Experience, Projects/Software, Contact — all rewritten with my data (freelance since 2008, AI work via Handshake AI and Outlier, FRC mentor at G.O.A.T. #8092, military service interpreter background). The Music and Art project routes were Henry-specific and got removed; the projects hub now collapses to a single Software route listing the things I actually built (amatortelsizcilik.com.tr, n10yilama.com Netflix Turkey, PitOS, ARC web infra, 8092.tr, turkcesozl.uk, Etiketle! Bluesky labeler, ham-radio Telegram bots).
+- **Henordle → Bugrdle**. Henry's Wordle clone with the puzzle word "HENRY". Now solves to "BUGRA". Had to add `bugra` to the validated wordlist or the input wouldn't accept it.
+- **Turkish glyph rendering**. The inner site's `<h1>` was set to Adobe Typekit's `gastromond`, which doesn't ship Turkish glyphs. "Buğra" rendered as "Buğra" with the ğ showing as a missing-glyph box. Tried the unicode-range shim trick to override only the non-ASCII range — Typekit's font kept winning. Gave up and switched the h1 family to `Georgia, serif`, which has full Turkish coverage and is on every OS. The bitmap fonts (Millennium, MillenniumBold, MSSerif, Terminal — Henry's whole Win95-aesthetic font stack) now have `unicode-range: U+0020-007F` so they only claim ASCII and Turkish characters cascade to Times New Roman / serif.
+- **Tab title** and PWA manifest. Said "Henry Heffernan - OS" in the browser tab. Trivial but it's the kind of thing you notice constantly.
+- **Contact form endpoint**. Henry's form posted to Express + Nodemailer + Gmail SMTP on the same Node server that served the assets. Cloudflare Workers Static Assets doesn't run Express, so I rewrote the endpoint as a Worker route on canata.dev and made the inner site POST to `https://canata.dev/api/contact` cross-origin.
+
+### canata.dev/api/contact — a small Worker
+
+The contact-form Worker is the only piece of dynamic code on canata.dev. It validates `{name, email, message}`, generates a multipart HTML+text email, and calls **Cloudflare Email Service** via the `send_email` binding to deliver it to `bugra@canata.com.tr`. The whole thing is about 180 lines including CORS allow-list, input validation, and graceful handling of unconfigured state.
+
+Things that worked smoothly:
+
+- The `send_email` binding with `"remote": true` Just Worked once the binding was declared in `wrangler.jsonc`. No npm package to install, no MIME library, just `await env.EMAIL.send({ to, from, subject, text, html })`.
+- Cloudflare's `assets.run_worker_first` flag means I can intercept `/api/*` routes in the Worker and let everything else fall through to the static assets binding. Single domain, single Worker, zero routing complexity.
+- The `compatibility_date` field in `wrangler.jsonc` has to be in UTC past, not local-time past. Bit me once because my Mac's clock was a few hours ahead of UTC's midnight rollover.
+
+Things that didn't:
+
+- The Worker needs a `CONTACT_FROM` secret pointing at a verified Cloudflare Email Service sender. Until that's set (you do this in the dashboard, separately from the Worker config), the endpoint gracefully returns a 501 with `{ error: "email_service_not_configured" }`. The inner site's contact form respects this and falls back to a `mailto:` link in the error state.
+
+### notlar.im — Astro Content Collections from scratch
+
+The old notlar.im was Docusaurus. I had stopped writing on it about two years ago because *editing* on Docusaurus is hostile — every post wants you to think about `sidebars.js`, the docs/blog plugin split, the MDX gotchas, the eject-or-fork dance when you want a slightly different layout. I'd even tried bolting TinaCMS onto it in 2024 (there's still a `.tina/` directory in the old repo) and it didn't stick.
+
+So I rebuilt from scratch:
+
+- **Astro 5 + Tailwind v4 + MDX**. Same stack as the rest of my Cloudflare-deployed sites. Posts are `.md` or `.mdx` files in `src/content/blog/` and `src/content/notlar/`. Frontmatter is a Zod schema, type-checked at build.
+- **Visual direction**: cloned from [tuhat.net](https://tuhat.net). Single-column reverse-chronological feed. System fonts (`ui-sans-serif, system-ui`). Title + date + hashtag tags. No excerpts on the homepage. White background, dark text. No CMS, no admin UI — open the file, type, commit.
+- **Importer**. Wrote a one-shot Node script that walked the Docusaurus repo, parsed each MDX file with `gray-matter`, normalised the frontmatter to the new schema, and wrote the result into the new content folders. Handled a bunch of Docusaurus-isms: `<!--truncate-->` excerpt markers, `date_published: 1970-01-01T00:00:00.000Z` (the sentinel value the theme used for "unpublished drafts"), the `⚠️ Taslak` title prefix on the scratch notes page.
+- **Slug preservation**. The Docusaurus URLs (e.g., `/notlar/TA2KB-Rle-Listesi/`) had to keep their exact casing — that page is the top GSC-traffic URL across the site and Cloudflare Workers serves URLs case-sensitively. Astro 5's `glob` loader has a `generateId` option that lets you override the auto-lowercased ID. Used that to preserve filenames verbatim.
+
+### /videolar — auto-fetched YouTube channel listing
+
+The notlar.im rebuild also got a Videos page. I wanted it to auto-populate from my [@bugra-hoca YouTube channel](https://www.youtube.com/@bugra-hoca) without me having to maintain a list manually. Two options:
+
+- YouTube Data API v3 — requires an API key + GCP project + quota management. Worth doing for a real product, overkill for 33 videos.
+- yt-dlp scraping at build time — no API key, but yt-dlp is a heavy dependency to drag into a CI/deploy pipeline.
+
+Compromise: yt-dlp runs locally in a `pnpm refresh-yt` script that writes `src/data/youtube.json`. That JSON is committed to git. Build reads from the file. The deploy environment never needs yt-dlp; the developer machine does. To refresh after a new upload, run the script, commit the JSON, deploy.
+
+Listing all 33 videos forced pagination: 12 per page, three pages, `/videolar/`, `/videolar/2/`, `/videolar/3/`. Used Astro's built-in `paginate()` helper. Each entry has thumbnail (with a duration badge overlaid bottom-right), title, and upload date in Turkish locale formatting.
+
+### YZ / AI provenance label
+
+This morning's last addition before the bilingual switch: an explicit `ai: true` frontmatter flag on posts produced or substantially assisted by AI. Renders as a small bordered badge — **YZ** on Turkish pages, **AI** on English — next to the post title both in the feed and on the detail page. Distinct from tags (different element, different styling) so the provenance can't be confused with a topic label.
+
+Both this post and the Ender 3 / Klipper migration post are flagged `ai: true`. The technical content is mine; the prose was drafted by Claude based on my notes and edited.
+
+## Architecture summary
+
+```
+canata.dev          → 3D office scene (Three.js + WebGL + React 17)
+                      Worker handles /api/contact via Cloudflare Email Service
+                      Static assets bound to ./public
+                      Custom domain on Cloudflare Workers
+
+canata-dev-inner    → desktop-OS site (React 17 / CRA)
+  .bugra.workers.dev  Iframed by the outer scene's CRT monitor
+                      Static assets only (no Worker code)
+
+notlar.im           → personal blog (Astro 5 / Tailwind v4 / MDX)
+                      Bilingual TR/EN
+                      Static assets only
+
+canata.com.tr       → email destination
+                      Cloudflare Email Routing forwards to my inbox
+```
+
+Three sites, three audiences:
+
+- **canata.dev** — developers, recruiters. Leads with the freelance-since-2008 + AI / Cloudflare narrative.
+- **bugracanata.com.tr** — Turkish educators / school audience. Still on the old stack; that one's the next rebuild.
+- **notlar.im** — personal blog, both languages.
+
+Each Cloudflare Worker config is a single `wrangler.jsonc`. No GitHub Actions, no CI; deploys happen from my laptop with `pnpm deploy`. The whole thing is small enough that adding pipelines would slow me down more than help.
+
+## What this evening's exercise was actually about
+
+Two things, mostly.
+
+The first: **letting the editing experience drive the architecture instead of the other way around.** I'd been off notlar.im for two years because the editor's friction was too high — and that was a Docusaurus-shaped problem, not a "I have nothing to say" problem. Switching to flat markdown files in a familiar Astro project re-enabled writing in a literal afternoon. The lesson generalises: if you're not using a tool you built for yourself, the cause is probably the tool, not you.
+
+The second: **build-time vs. runtime is a knob, not a religion.** The YouTube page could have been a runtime fetch with caching. The Cloudflare Email Service binding could have been a third-party SMTP API. Each runtime dependency you add is a new failure mode to monitor. The Cloudflare Workers model — static assets first, Worker code only for the few actually-dynamic endpoints — keeps the surface area small. After this evening I have one Worker endpoint to monitor (the contact form), three static deploys that can fail only at build time, and a YouTube list that refreshes when I tell it to.
+
+That feels like the right amount of complexity for a personal site.

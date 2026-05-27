@@ -1,32 +1,79 @@
 @import "tailwindcss";
 
 /*
- * Theme tokens. Keep this small and semantic so post HTML auto-inherits the
- * right typography without manually classing every <p>/<h2>/<ul>.
- *
- * Variables defined at :root override the matching Tailwind v4 theme defaults
- * via @theme inline, which keeps the utility class output normal-sized while
- * tweaking colour and spacing to taste.
+ * Fraunces — variable serif used for headlines + wordmark. Loaded with
+ * Latin-Extended subset so Turkish glyphs (ğ ş ı İ ç ö ü) render. Body
+ * stays on the system sans stack.
+ */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..700,30..100&display=swap&subset=latin-ext");
+
+/*
+ * Theme tokens. Warm paper palette — cream + warm charcoal + rust accent —
+ * chosen to give the site a personal/print feel instead of clinical pure
+ * white. Tailwind v4 reads these as @theme inline so utility classes
+ * (text-[var(--color-ink)] etc.) still work, and the same tokens flip in
+ * dark mode below.
  */
 @theme inline {
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", Times, serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 
-  --color-ink: #111;
-  --color-ink-soft: #555;
-  --color-ink-mute: #888;
-  --color-rule: #e5e5e5;
-  --color-paper: #fff;
-  --color-accent: #0a66c2;
+  --color-ink: #1a1612;
+  --color-ink-soft: #5a5145;
+  --color-ink-mute: #908676;
+  --color-rule: #e5dfd3;
+  --color-paper: #fbf8f2;
+  --color-paper-soft: #f5f1e8;
+  --color-code-bg: #f1ece0;
+  --color-accent: #a8442d;
+}
+
+/*
+ * Dark palette. Activated by:
+ *   - `html[data-theme="dark"]`  (manual user override via ThemeToggle), OR
+ *   - `prefers-color-scheme: dark` when no manual override is set.
+ *
+ * The manual override is set in the inline boot script in <Page>, before
+ * paint, so there's no flash. The system fallback uses :root:not([data-theme]).
+ */
+/*
+ * Dark variant — warm-stained paper at night. Not blue-black. The accent
+ * lightens to a desaturated rust so it remains legible against dark paper
+ * without going neon.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-ink: #e8e1d2;
+    --color-ink-soft: #b8af9d;
+    --color-ink-mute: #80785f;
+    --color-rule: #2e2820;
+    --color-paper: #1a1612;
+    --color-paper-soft: #221e17;
+    --color-code-bg: #221e17;
+    --color-accent: #d97651;
+  }
+}
+:root[data-theme="dark"] {
+  --color-ink: #e8e1d2;
+  --color-ink-soft: #b8af9d;
+  --color-ink-mute: #80785f;
+  --color-rule: #2e2820;
+  --color-paper: #1a1612;
+  --color-paper-soft: #221e17;
+  --color-code-bg: #221e17;
+  --color-accent: #d97651;
 }
 
 html {
-  color-scheme: light;
+  color-scheme: light dark;
 }
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="dark"]  { color-scheme: dark; }
 
 body {
   font-family: var(--font-sans);
@@ -35,6 +82,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /*
+   * Honour iOS safe-area-inset-bottom so the footer never sits behind
+   * the home indicator. Pairs with the layout's pb-* utilities.
+   */
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 /*
@@ -50,17 +102,29 @@ body {
 .prose > * + * {
   margin-top: 1.1em;
 }
+.prose h2,
+.prose h3,
+.prose h4 {
+  /*
+   * Break-balanced headings — the browser reflows the line breaks to
+   * produce visually balanced wraps instead of orphan single words.
+   * Same applies to article H1s via the layout (see h1.post-title below).
+   */
+  text-wrap: balance;
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
 .prose h2 {
-  font-size: 1.375rem;
+  font-size: 1.625rem;
   font-weight: 600;
   margin-top: 2em;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 .prose h3 {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   margin-top: 1.6em;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 .prose a {
   color: var(--color-accent);
@@ -98,7 +162,8 @@ body {
   margin-top: 0.35em;
 }
 .prose pre {
-  background: #f6f8fa;
+  position: relative;
+  background: var(--color-code-bg);
   border-radius: 6px;
   padding: 0.85em 1em;
   overflow-x: auto;
@@ -108,9 +173,32 @@ body {
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.9em;
-  background: #f6f8fa;
+  background: var(--color-code-bg);
   padding: 0.1em 0.35em;
   border-radius: 3px;
+}
+
+/*
+ * Shiki dual-theme support — the light/dark code-block themes are emitted
+ * inline by rehype-pretty-code/shiki integration; we just toggle which
+ * codeStyle is visible based on the active theme.
+ */
+.astro-code,
+.astro-code span {
+  background: var(--shiki-light-bg, var(--color-code-bg)) !important;
+  color: var(--shiki-light) !important;
+}
+:root[data-theme="dark"] .astro-code,
+:root[data-theme="dark"] .astro-code span {
+  background: var(--shiki-dark-bg, var(--color-code-bg)) !important;
+  color: var(--shiki-dark) !important;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .astro-code,
+  :root:not([data-theme]) .astro-code span {
+    background: var(--shiki-dark-bg, var(--color-code-bg)) !important;
+    color: var(--shiki-dark) !important;
+  }
 }
 .prose pre code {
   background: none;
@@ -132,4 +220,134 @@ body {
   border-bottom: 1px solid var(--color-rule);
   padding: 0.5em 0.75em;
   text-align: left;
+}
+
+/*
+ * Heading anchors generated by rehype-autolink-headings. The "#" sits to the
+ * right of the heading and fades in on hover. Clicking copies the URL.
+ */
+.prose h2,
+.prose h3,
+.prose h4 {
+  scroll-margin-top: 2rem;
+}
+.prose h2 .anchor-link,
+.prose h3 .anchor-link,
+.prose h4 .anchor-link {
+  margin-left: 0.4em;
+  color: var(--color-ink-mute);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  font-weight: 400;
+}
+/*
+ * The visible `#` is generated content — keeping it out of DOM textContent
+ * so Pagefind sub-result titles don't end with stray hashes.
+ */
+.prose h2 .anchor-link::after,
+.prose h3 .anchor-link::after,
+.prose h4 .anchor-link::after {
+  content: '#';
+}
+.prose h2:hover .anchor-link,
+.prose h3:hover .anchor-link,
+.prose h4:hover .anchor-link,
+.prose h2 .anchor-link:focus,
+.prose h3 .anchor-link:focus,
+.prose h4 .anchor-link:focus {
+  opacity: 1;
+}
+.prose .anchor-link:hover {
+  color: var(--color-accent);
+}
+
+/*
+ * Code-block copy buttons — injected client-side by the script in <Page>.
+ * Positioned absolute inside each .prose pre.
+ */
+.code-copy-btn {
+  position: absolute;
+  top: 0.4em;
+  right: 0.4em;
+  background: var(--color-paper);
+  color: var(--color-ink-soft);
+  border: 1px solid var(--color-rule);
+  border-radius: 4px;
+  padding: 0.15em 0.5em;
+  font-size: 0.7rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.prose pre:hover .code-copy-btn,
+.code-copy-btn:focus,
+.code-copy-btn.is-copied {
+  opacity: 1;
+}
+.code-copy-btn:hover {
+  color: var(--color-ink);
+  border-color: var(--color-ink-soft);
+}
+.code-copy-btn.is-copied {
+  color: var(--color-accent);
+}
+
+/*
+ * Responsive 16:9 wrappers for the YouTube iframes that came in via the
+ * Ghost importer. The wrapper sets aspect-ratio; the iframe fills it.
+ */
+.video-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 1.5em 0;
+  background: var(--color-code-bg);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/*
+ * Site-wide typography hooks. Page-template H1s use the same display serif
+ * + balance treatment as in-post headings. Apply via class .post-title or
+ * .display-title.
+ */
+h1.post-title,
+.display-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  font-optical-sizing: auto;
+}
+
+/*
+ * Site wordmark. Uses Fraunces with a slightly tighter optical-size for the
+ * compact heights it usually appears at.
+ */
+.wordmark {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01" on;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+/* Visually hidden until focused/hovered — used by the theme-toggle label. */
+.sr-only-hover {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

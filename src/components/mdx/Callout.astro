@@ -1,0 +1,60 @@
+---
+/*
+ * Shared base for MDX callouts. <Note>, <Warning>, and <Tip> wrap this with
+ * a hard-coded `variant` prop. Each variant inherits the site's CSS
+ * variables so it adapts to dark mode automatically.
+ */
+interface Props {
+    title?: string;
+    variant: 'note' | 'warning' | 'tip';
+}
+const { title, variant } = Astro.props;
+const palette = {
+    note: { border: 'var(--color-rule)', bg: 'transparent', icon: '✱', accent: 'var(--color-ink-soft)' },
+    warning: { border: '#d97706', bg: 'rgba(217, 119, 6, 0.08)', icon: '!', accent: '#b45309' },
+    tip: { border: '#059669', bg: 'rgba(5, 150, 105, 0.08)', icon: '✓', accent: '#047857' },
+}[variant];
+---
+
+<aside
+    class="callout"
+    style={`--callout-border:${palette.border};--callout-bg:${palette.bg};--callout-accent:${palette.accent};`}
+    role="note"
+>
+    <div class="callout__head">
+        <span class="callout__icon" aria-hidden="true">{palette.icon}</span>
+        {title && <strong class="callout__title">{title}</strong>}
+    </div>
+    <div class="callout__body">
+        <slot />
+    </div>
+</aside>
+
+<style is:global>
+    .callout {
+        border-left: 3px solid var(--callout-border);
+        background: var(--callout-bg);
+        padding: 0.85em 1em;
+        margin: 1.5em 0;
+        border-radius: 0 6px 6px 0;
+        font-size: 0.95em;
+    }
+    .callout__head {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5em;
+        margin-bottom: 0.35em;
+    }
+    .callout__icon {
+        color: var(--callout-accent);
+        font-weight: 700;
+    }
+    .callout__title {
+        color: var(--callout-accent);
+        font-size: 0.85em;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .callout__body > :first-child { margin-top: 0; }
+    .callout__body > :last-child { margin-bottom: 0; }
+</style>

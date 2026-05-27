@@ -1,0 +1,88 @@
+---
+title: Quansheng UV-K5
+date: '2023-09-05T22:09:36.000Z'
+updated: '2024-03-11T00:00:00.000Z'
+tags:
+  - amatör telsiz
+  - telsiz
+description: >-
+  Quansheng'in ürettiği, UV-K5 modeli telsiz ile ilgili Türkçe bilgi ve
+  kaynaklar — alış, yazılım yükleme, kütük yükleme, modlu yazılımlar, sık
+  sorulan sorular.
+translationKey: quansheng-uv-k5
+ai: true
+---
+
+Quansheng'in bu aralar amatör telsizcilik camiasında popüler olan telsizi.
+
+Telsize 2023'ün Şubat–Mart aylarında YouTube'da denk geldim. O aylarda Amazon US üzerinde satışı mevcuttu. Daha sonra o kanaldan satışı bitti. 29 Mayıs'ta [Aliexpress üzerinden](https://www.aliexpress.com/item/1005005442225028.html) sipariş verdim. Peşin alınan vergisi ile beraber 854 TL tuttu. 5 Haziran'da kapıma teslim edildi.
+
+Daha sonra Amazon ABD'den de eşime sipariş verdim. Şu anlarda Aliexpress, hatta Hepsiburada üzerinden yurtdışı satış ile kolayda, 1200–1300 TL bandında bulunabiliyor.
+
+Telsizin en önemli avantajı, içindeki yazılımın şifresi bulunduğu için çözülmesi ve tekrar oluşturulabilmesi. Böylelikle telsizin yazılımı üzerine açık kaynak çalışma yapan birçok kişi, telsize farklı özellikler ekleyecek yazılımlar geliştirebiliyor.
+
+Cihazla ilgili çeşitli yabancı topluluklar vardı ancak pek Türkçe içerik yoktu. Bu içerikleri toplamak amacı ile [t.me/quansheng_uvk5_tr](https://t.me/quansheng_uvk5_tr) adresinde bir Telegram kanalı oluşturdum. Orada da oluşturduğumuz metinleri, buraya toplayacağım.
+
+## Yararlı kaynaklar
+
+Cihaz hakkında tüm bilgileri toplayan wiki sayfası: [ludwich66/Quansheng_UV-K5_Wiki](https://github.com/ludwich66/Quansheng_UV-K5_Wiki/wiki).
+
+## Yazılım yükleme
+
+Bunun için üç seçenek var:
+
+a. Doğrudan Chrome üzerinden atmak: [egzumer.github.io/uvtools](https://egzumer.github.io/uvtools/)
+b. [OneOfEleven/k5prog-win](https://github.com/OneOfEleven/k5prog-win) kullanmak.
+c. [Kendi yazılımını](http://www.qsfj.com/support/downloads/3002) kullanmak (modlu yazılımlarda çalışmaz).
+
+### Yazılım yükleme modu
+
+- **Programlama kablosunu bağlamadan**, cihazı PTT (mandal) tuşuna basarak açın.
+- Cihazın üst kısmındaki fener yanacak, ekranında hiçbir şey görünmeyecek.
+- Programlama kablosunu cihaza bağlayın.
+- Daha sonra yukarıdaki yazılım yükleme yöntemlerinden birini seçerek yazılımı yükleyin.
+- Yükleme işlemi yapılırken fener yanıp sönecek. Bu aşamada kesinlikle işlemi yarıda kesmeyin.
+
+**İşlemi yaptım ancak bilgisayar cihaza bağlanmıyor.** Kablonun telsize giren tarafını kontrol edin, iyice bastırın. Bu kısım yerine oturmamıştır.
+
+## Kütük (kanal listesi) yükleme
+
+Bunun için iki seçenek var:
+
+a. [Chirp](https://chirp.danplanet.com/projects/chirp/wiki/Home)
+b. [Kendi yazılımı](http://www.qsfj.com/support/downloads/3002) (CPS)
+
+İşlem:
+
+- Kütük (kanal listesi) atarken **programlama moduna almayın**.
+- Cihazı normal şekilde açın, kabloyu takın ve yukarıdaki kütük yükleme yöntemlerinden birini seçerek kütük yükleyin.
+- Kütük yükleme yapmadan önce, telsizin üzerindeki bilgileri "içe aktar" diyerek bilgisayara aktarın ve o şekilde düzenleme yapın.
+
+## Sık sorulan sorular
+
+**Telsizi programlamak/kütük yüklemek için ne yapmam lazım?**
+
+Cihazın üzerindeki USB bağlantısı **sadece şarj içindir**. Buradan yazılım atamazsınız. Piyasada satılan Baofeng markalı yan yana bir küçük/bir büyük kulaklık girişi şeklindeki kablolar programlama için uygundur. Cihazı satın alırken yanında kablo da satın almanızı öneririm.
+
+**Hangi yazılımı tavsiye edersiniz? Ne yükleyelim?**
+
+Eğer ilk kez telsiz kullanacaksanız bir süre kendi orijinal yazılımı ile kullanmanızı ve telsizin temellerini kavramanızı öneririm.
+
+Modlu yazılımlardan en çok tercih edilen `egzumer` takma adlı kullanıcının hazırladığı yazılımdır.
+
+- [Özellik karşılaştırması (Google Sheets)](https://docs.google.com/spreadsheets/d/1JL78yCZExEy20okb6y3ihEceRgeTKy6p0dsICnIvgqY/)
+- [Hangi yazılımda ne özellik var (Telegram)](https://t.me/quansheng_uvk5_tr/499/6819)
+
+Ancak bu yazılımları belirleyecek şey sizin neye ihtiyacınız olduğudur. Yukarıdaki konuları detaylıca okuyarak kendi ihtiyacınızı belirleyin.
+
+**Yazılım yükleyeceğim, ne yapmam lazım?**
+
+Yükleyeceğiniz yazılımın `.bin` dosyasını indirin. Telsizi PTT/mandal tuşuna basarak açın. Telsizin ışığı yanar konumdayken, aşağıdaki yöntemlerden birisi ile yükleme yapın:
+
+a. Doğrudan Chrome üzerinden atmak: [egzumer.github.io/uvtools](https://egzumer.github.io/uvtools/)
+b. [k5prog-win](https://github.com/OneOfEleven/k5prog-win/raw/main/k5prog_win.exe) kullanmak.
+c. [Kendi yazılımını](https://t.me/quansheng_uvk5_tr/496/619) kullanmak (modlu yazılımlarda çalışmaz).
+
+**Kanal listesi/kütük yüklemek istiyorum, ne yapmam lazım?**
+
+Kütük atarken programlama moduna almayın. Telsizi açın, telsizin normal ekranı geldikten sonra programlama kablosunu bağlayın. Daha sonra yukarıdaki kütük yükleme yöntemlerinden birini seçin. Kütük yükleme yapmadan önce, telsizin üzerindeki bilgileri "içe aktar" diyerek bilgisayara aktarın ve o şekilde düzenleme yapın.

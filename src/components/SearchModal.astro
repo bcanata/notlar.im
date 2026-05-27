@@ -1,0 +1,125 @@
+---
+/*
+ * Site-wide search overlay. Mounted once inside <Page>, hidden by default,
+ * opened by ⌘K (Mac) or Ctrl+K (Windows/Linux), closed by Esc or
+ * overlay-click. Uses <SearchBox> which lazy-loads PagefindUI on first
+ * mount.
+ */
+import SearchBox from './SearchBox.astro';
+import type { Lang } from '../lib/i18n';
+import { t } from '../lib/i18n';
+
+interface Props {
+    lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<dialog id="search-modal" class="search-modal" aria-label={t(lang, 'search_title')}>
+    <div class="search-modal__panel" data-search-panel>
+        <div class="search-modal__header">
+            <strong>{t(lang, 'search_title')}</strong>
+            <button type="button" class="search-modal__close" aria-label={t(lang, 'search_close')}>
+                ✕
+            </button>
+        </div>
+        <SearchBox lang={lang} id="modal" autofocus />
+        <p class="search-modal__hint">{t(lang, 'search_kbd_hint')}</p>
+    </div>
+</dialog>
+
+<script>
+    const modal = document.getElementById('search-modal') as HTMLDialogElement | null;
+    const closeBtn = modal?.querySelector<HTMLButtonElement>('.search-modal__close');
+    const panel = modal?.querySelector<HTMLElement>('[data-search-panel]');
+
+    function open() {
+        if (!modal) return;
+        if (typeof modal.showModal === 'function') modal.showModal();
+        else modal.setAttribute('open', '');
+        // Try to focus the search input after PagefindUI mounts. The UI is
+        // lazy-loaded so we retry once after a frame if not present yet.
+        const tryFocus = (attemptsLeft = 5) => {
+            const input = modal.querySelector<HTMLInputElement>(
+                'input.pagefind-ui__search-input',
+            );
+            if (input) input.focus();
+            else if (attemptsLeft > 0) requestAnimationFrame(() => tryFocus(attemptsLeft - 1));
+        };
+        requestAnimationFrame(() => tryFocus());
+    }
+    function close() {
+        if (!modal) return;
+        if (typeof modal.close === 'function') modal.close();
+        else modal.removeAttribute('open');
+    }
+
+    // ⌘K / Ctrl+K opens the modal from anywhere; Esc closes.
+    document.addEventListener('keydown', (e) => {
+        const k = e.key;
+        if ((e.metaKey || e.ctrlKey) && (k === 'k' || k === 'K')) {
+            e.preventDefault();
+            if (modal?.open) close();
+            else open();
+        } else if (k === 'Escape' && modal?.open) {
+            // Native dialog already handles Esc but be defensive.
+            close();
+        }
+    });
+
+    // Overlay click closes; panel click does not.
+    modal?.addEventListener('click', (e) => {
+        if (e.target === modal) close();
+    });
+    closeBtn?.addEventListener('click', () => close());
+
+    // Expose a global hook so anchor links can open the modal too.
+    (window as unknown as Record<string, unknown>).openSearchModal = open;
+</script>
+
+<style is:global>
+    .search-modal {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        max-width: min(640px, 92vw);
+        width: 100%;
+        margin: 8vh auto auto;
+        color: var(--color-ink);
+    }
+    .search-modal::backdrop {
+        background: color-mix(in oklab, var(--color-paper) 70%, transparent);
+        backdrop-filter: blur(6px);
+    }
+    .search-modal__panel {
+        background: var(--color-paper);
+        border: 1px solid var(--color-rule);
+        border-radius: 12px;
+        padding: 1.25rem 1.25rem 1rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    }
+    .search-modal__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.75rem;
+    }
+    .search-modal__close {
+        background: none;
+        border: 0;
+        font-size: 1rem;
+        cursor: pointer;
+        color: var(--color-ink-mute);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+    }
+    .search-modal__close:hover {
+        color: var(--color-ink);
+        background: var(--color-rule);
+    }
+    .search-modal__hint {
+        margin-top: 0.75rem;
+        font-size: 0.75rem;
+        color: var(--color-ink-mute);
+    }
+</style>

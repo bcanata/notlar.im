@@ -1,0 +1,27 @@
+---
+title: RTL-SDR Usage Guide
+date: '2021-04-20T00:00:00.000Z'
+updated: '2021-04-20T01:58:13.000Z'
+tags:
+  - amateur-radio
+draft: true
+lang: en
+translationKey: rtl-sdr-guide
+---
+A review of the RTL-SDR, a device commonly used in amateur radio.
+
+# Introduction
+
+Let's start by defining SDR (software-defined radio):
+
+In the traditional **radio** sense, operations like frequency-shifting, modulation/demodulation, and filtering were usually done in **hardware**. In 1992, Joseph Mitola published work opening the path for these operations to be done in software instead of hardware.
+
+These days, a tool you can use for many purposes — primarily for studying antennas, radio frequencies, and learning hands-on — is the **RTL-SDR**. The **RTL** part of the name traces back to Eric Fry's discovery that cheap USB TV receivers built on the RTL2832U chipset could be modified to be used as SDRs across a wide frequency range. As the trend grew, Carl Laufer — who also wrote *The Hobbyist's Guide to the RTL-SDR* — designed and started selling modules under the **RTL-SDR Blog** brand specifically for this purpose. The SDR I picked up during my amateur-radio journey is the **RTL-SDR V3** that they sell.
+
+> ⚠️ While reading this guide, having basic knowledge about antennas and similar topics will be helpful.
+
+First, the RTL-SDR is a device that lets you listen between 500 kHz and 1.75 GHz, has mostly free or open-source software resources, and lets you receive radio signals in your area without needing internet.
+
+If you want to buy one, you have two options. There are RTL2832U-chipset, plastic-cased USB TV receivers in the market. These are cheaper but can have some chronic problems and can run hot. The RTL-SDR V3 is built specifically as an SDR and addresses those chronic problems.
+
+You can buy it via [Amazon.com](http://amazon.com) (no stock when I wrote this) or [Aliexpress.com](http://aliexpress.com). They also sell an antenna kit, and it ships bundled with the antenna for $35. I initially thought "I'll get my own antenna" and ordered the RTL-SDR alone — but later I ordered the antenna kit too and can say it's been quite useful.

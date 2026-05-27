@@ -2,16 +2,13 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 /*
- * Two collections. Same shape, different intent:
- *   - blog: dated, chronological writing.
- *   - notlar: evergreen notes that may be updated forever.
+ * Single `blog` content collection — formerly split into blog + notlar, then
+ * merged into one URL namespace at /blog/<slug>. Old /notlar/<slug> URLs are
+ * 301-redirected via astro.config.mjs.
  *
- * `slug` is intentionally part of the schema so the importer can pin URLs
- * from the old Docusaurus site verbatim and we don't break inbound links.
- * Astro derives the URL slug from the filename, so to preserve a specific
- * slug we name the file the slug itself (importer does this) and the
- * `slug` frontmatter field becomes the source of truth in the rendered
- * page metadata.
+ * URL slugs are taken verbatim from the filename (preserved by the
+ * `generateId` override below). Some posts use SEO-sensitive casing like
+ * `Quansheng-UV-K5.mdx` and `TA2KB-Rle-Listesi.mdx`; do not rename them.
  */
 const sharedFields = {
     title: z.string(),
@@ -23,6 +20,25 @@ const sharedFields = {
     draft: z.boolean().default(false),
     canonical: z.string().url().optional(),
     cover: z.string().optional(),
+    /*
+     * Set `ai: true` on any post that was produced or substantially assisted
+     * by AI. Renders as an explicit "YZ" badge near the title (separate from
+     * tags) so readers can see the provenance at a glance.
+     */
+    ai: z.boolean().default(false),
+    /*
+     * Language of this post's body. Default is 'tr' so the existing TR
+     * archive doesn't need touching.
+     */
+    lang: z.enum(['tr', 'en']).default('tr'),
+    /*
+     * Shared identifier across language versions of the same post.
+     * Example: an Ender 3 post might have two files —
+     *   ender-3-klipper-gecisi.md   (lang: tr, translationKey: ender3-klipper)
+     *   ender-3-klipper-migration.md (lang: en, translationKey: ender3-klipper)
+     * The language toggle uses this to jump between counterparts.
+     */
+    translationKey: z.string().optional(),
 };
 
 /*
@@ -43,13 +59,4 @@ const blog = defineCollection({
     schema: z.object(sharedFields),
 });
 
-const notlar = defineCollection({
-    loader: glob({
-        pattern: '**/*.{md,mdx}',
-        base: './src/content/notlar',
-        generateId: preserveFilenameId,
-    }),
-    schema: z.object(sharedFields),
-});
-
-export const collections = { blog, notlar };
+export const collections = { blog };

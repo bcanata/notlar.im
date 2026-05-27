@@ -1,0 +1,123 @@
+---
+import Page from '../../layouts/Page.astro';
+import AiBadge from '../../components/AiBadge.astro';
+import { buildFeed } from '../../lib/feed';
+import { t } from '../../lib/i18n';
+import { tagSlug } from '../../lib/tags';
+
+const lang = 'en' as const;
+const feed = await buildFeed(lang);
+const [lead, ...rest] = feed;
+const dateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+});
+---
+
+<Page
+    title={t(lang, 'site_title')}
+    description={t(lang, 'site_tagline')}
+    lang={lang}
+    altLangUrl="/"
+>
+    <section class="mb-14 mt-2 sm:mt-6">
+        <p class="mb-3 text-xs uppercase tracking-[0.2em] text-[var(--color-ink-mute)]">{t(lang, 'home_kicker')}</p>
+        <h1 class="display-title max-w-[18ch] text-3xl leading-[1.08] sm:text-5xl">{t(lang, 'home_hero')}</h1>
+    </section>
+
+    {feed.length === 0 ? (
+        <p class="text-[var(--color-ink-soft)]">
+            English translations of the archive are coming. For now most posts are Turkish-only — see <a href="/" class="underline">the Turkish home</a>.
+        </p>
+    ) : (
+        <>
+            {lead && (
+                <section class="mb-10 border-b border-[var(--color-rule)] pb-8">
+                    <p class="mb-2 text-xs uppercase tracking-[0.18em] text-[var(--color-ink-mute)]">Latest</p>
+                    <h2 class="display-title text-3xl leading-tight sm:text-4xl">
+                        <a href={lead.href} class="hover:text-[var(--color-accent)]">{lead.title}</a>
+                        {lead.ai && (
+                            <>
+                                {' '}
+                                <AiBadge label="AI" title={t(lang, 'meta_ai_long')} />
+                            </>
+                        )}
+                    </h2>
+                    {lead.description && (
+                        <p class="mt-4 max-w-prose text-base leading-relaxed text-[var(--color-ink-soft)] sm:text-lg">
+                            {lead.description}
+                        </p>
+                    )}
+                    <div class="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm text-[var(--color-ink-mute)]">
+                        <time datetime={lead.date.toISOString()}>
+                            {dateFmt.format(lead.date)}
+                        </time>
+                        {lead.tags.length > 0 && (
+                            <>
+                                <span aria-hidden="true">·</span>
+                                <ul class="flex flex-wrap gap-x-3">
+                                    {lead.tags.map((tag) => (
+                                        <li>
+                                            <a
+                                                href={`/en/t/${tagSlug(tag)}`}
+                                                class="hover:text-[var(--color-ink-soft)] hover:underline"
+                                            >
+                                                #{tag.replace(/\s+/g, '-')}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </>
+                        )}
+                    </div>
+                </section>
+            )}
+
+            <ul class="divide-y divide-[var(--color-rule)]">
+                {rest.map((entry) => (
+                    <li class="py-5">
+                        <article>
+                            <h2 class="display-title text-xl leading-snug">
+                                <a href={entry.href} class="hover:text-[var(--color-accent)]">{entry.title}</a>
+                                {entry.ai && (
+                                    <>
+                                        {' '}
+                                        <AiBadge label="AI" title={t(lang, 'meta_ai_long')} />
+                                    </>
+                                )}
+                            </h2>
+                            {entry.description && (
+                                <p class="mt-1.5 text-[var(--color-ink-soft)] leading-snug">
+                                    {entry.description}
+                                </p>
+                            )}
+                            <div class="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-sm text-[var(--color-ink-mute)]">
+                                <time datetime={entry.date.toISOString()}>
+                                    {dateFmt.format(entry.date)}
+                                </time>
+                                {entry.tags.length > 0 && (
+                                    <>
+                                        <span aria-hidden="true">·</span>
+                                        <ul class="flex flex-wrap gap-x-3">
+                                            {entry.tags.map((tag) => (
+                                                <li>
+                                                    <a
+                                                        href={`/en/t/${tagSlug(tag)}`}
+                                                        class="hover:text-[var(--color-ink-soft)] hover:underline"
+                                                    >
+                                                        #{tag.replace(/\s+/g, '-')}
+                                                    </a>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </>
+                                )}
+                            </div>
+                        </article>
+                    </li>
+                ))}
+            </ul>
+        </>
+    )}
+</Page>

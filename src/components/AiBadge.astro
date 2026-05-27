@@ -1,0 +1,27 @@
+---
+/*
+ * Visible badge marking a post as AI-assisted. Used near titles on the
+ * feed and on post detail pages. Intentionally distinct from #tags so
+ * provenance is unmistakable.
+ *
+ *   <AiBadge />            → renders "YZ"
+ *   <AiBadge label="AI" /> → renders "AI"
+ *
+ * The element is announced to screen readers with a long-form label so
+ * sighted users see "YZ" but assistive tech reads "Yapay zekâ ile üretildi".
+ */
+interface Props {
+    label?: 'YZ' | 'AI';
+    title?: string;
+}
+const { label = 'YZ', title = 'Yapay zekâ ile üretildi' } = Astro.props;
+---
+
+<span
+    class="inline-flex items-center rounded border border-[var(--color-rule)] px-1.5 py-0.5 align-middle text-[0.65rem] font-medium uppercase tracking-wider text-[var(--color-ink-soft)]"
+    title={title}
+    aria-label={title}
+    data-pagefind-ignore
+>
+    {label}
+</span>

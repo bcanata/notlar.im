@@ -1,0 +1,133 @@
+---
+title: 'Bir Gecede Üç Kişisel Sitenin Yenilenmesi'
+date: '2026-05-26T13:00:00.000Z'
+tags:
+  - meta
+  - cloudflare
+  - astro
+  - 3d-portfolio
+description: canata.dev'i Henry Heffernan'ın açık kaynak 3D ofisinin bir fork'una, notlar.im'i ise sıfırdan Astro'ya taşıma sürecim ve hepsini birbirine bağlayan iletişim Worker'ını yazmam üzerine bir gecelik değerlendirme yazısı.
+lang: tr
+ai: true
+translationKey: personal-sites-renovation
+---
+
+Bu yazı bir meta-log niteliğinde. Yazıyı kaleme aldığım akşam, üç kişisel sitemi de baştan aşağı yeniledim. Eğer o sitelerden birinden buraya geldiyseniz ve "az önce ne değişti?" diye merak ediyorsanız, işte yapılanların bir özeti.
+
+Üç site:
+
+- **canata.dev** — geliştirici portfolyom. Eskiden Astro + Tailwind tabanlı basit bir açılış sayfası kullanıyordu. Bunu [Henry Heffernan'ın açık kaynak 3D portfolyosunun](https://github.com/henryjeff/portfolio-website) bir fork'u ile değiştirdim. Hani şu 3D bir ofiste dolaştığınız ve içindeki CRT monitörün iframe aracılığıyla mini uygulamalar barındıran bir "desktop OS" (masaüstü işletim sistemi) gösterdiği sitelerden.
+- **notlar.im** — Türkçe kişisel blogum. İki yıldır güncellenmeyen bir Docusaurus kurulumuydu. Astro Content Collections mimarisiyle sıfırdan, [tuhat.net](https://tuhat.net) sitesinden ilham alan minimal bir akış (feed) düzeniyle yeniden inşa ettim.
+- **canata.com.tr** — e-posta ve iletişim omurgası. Desktop-OS sitesinin iframe ile bağlandığı, **Cloudflare Email Service** destekli bir `/api/contact` endpoint'ine kavuştu.
+
+Üçü de aynı hesapta, **Cloudflare Workers Static Assets** üzerinde barındırılıyor. Tüm bu yenileme süreci yaklaşık bir akşamımı aldı, işin yazmaya değer kısmı da tam olarak bu.
+
+## Neler Yeniden İnşa Edildi?
+
+### canata.dev — 3D Ofis
+
+Orijinal Astro+Tailwind versiyonu hızlıca ayağa kaldırdığım bir yapıydı (herhangi bir framework şablonundan çıkabilecek, sadece içeriği bana ait olan standart bir statik site). Fena değildi ama çok sıradandı. Henry Heffernan'ın portfolyosu son birkaç yıldır internette dolaşıyor ve repoları da bu süre zarfında açık kaynaktı. Ben de bunları fork'ladım, genel görünümü korudum ve gözle görülen, Heffernan'a özgü her detayı kendime uyarladım.
+
+İki farklı repo kullanmak mimari açıdan oldukça zarif bir çözüm:
+
+- **Dış 3D sahne** ([github.com/henryjeff/portfolio-website](https://github.com/henryjeff/portfolio-website)) — Three.js ile hazırlanmış oda, bilgisayar modeli, kahve fincanından yükselen buharın GLSL shader'ları ve BIOS tarzı açılış ekranı.
+- **İç desktop OS** ([github.com/henryjeff/portfolio-inner-site](https://github.com/henryjeff/portfolio-inner-site)) — Create-React-App ile yazılmış Windows-95 tarzı bir masaüstü (içinde Doom emülatörü, Wordle klonu ve asıl portfolyo içeriği var). Dış sahne, bu siteyi CRT monitörün ekran yüzeyine iframe aracılığıyla yansıtıyor.
+
+Bu yapı sayesinde 3D kısmının React state'iyle, OS kısmının da WebGL ile ilgilenmesine gerek kalmıyor; birbirleriyle `postMessage` üzerinden haberleşiyorlar. İkisini ayrı ayrı fork'lamak bana bağımsız olarak deploy edebileceğim iki ayrı yapı sundu; iç site `os.canata.dev` adresinde çalışırken, dış sahne bu siteyi iframe ile ekrana çekiyor.
+
+Dış sahnede yaptığım değişiklikler:
+
+- **BIOS markası**. Heffernan'ın açılış ekranında BIOS tarzı "Heffernan, Henry Inc." üretici logosu ve "HHBIOS (C)2000" yazıyordu. Bu React bileşenini "Canata, Buğra Inc." / "BCBIOS (C)2026" / "CSP TA1JS 2008-2026" gösterecek şekilde düzenledim. Tarih formatını ve daktilo animasyonunu olduğu gibi bıraktım; çünkü bunlar markadan ziyade işin estetik kısmı.
+- **Bilgisayar modelinin markası**. İşin zor kısmı buydu. Henry kendi markasını 3D modelin texture haritasına gömmüştü (bake). Monitör çerçevesinde, klavye plakasında ve iki ürün bilgi etiketinde "Heffernan / henry inc" yazıları, UV haritalı 4096×4096 piksellik bir JPEG görselindeydi (`baked_computer.jpg`). Çerçeve rengini örnekleyip orijinal etiketlerin üzerini boyayan ve aynı UV koordinatlarına italik Georgia fontuyla yeni "Canata / buğra inc" yazılarını işleyen (render) bir Python+Pillow betiği yazdım. Kusursuz olmadı ama sahnenin render ölçeğinde hiç belli olmuyor.
+- **InfoOverlay**. 3D sahnenin üzerinde duran küçük daktilo yazılı bilgi paneli. "Buğra Canata" / "Freelance Developer · TA1JS" yazacak şekilde güncelledim.
+- **MonitorScreen iframe yönlendirmesi**. Orijinal kodda yer alan `https://os.henryheffernan.com/` hardcoded adresi, akıllı bir çözümleyici (resolver) ile değiştirildi: localhost veya yerel ağdaki (LAN) cihazlar otomatik olarak `http://localhost:3001/` adresine yönleniyor, yayındaki site ise `https://canata-dev-inner.bugra.workers.dev/` adresini kullanıyor. Geliştirme süreci için eklediğim `?dev` parametresi hâlâ manuel olarak bu adresi ezebiliyor (override). Yeni eklediğim `?os=<url>` parametresi ise monitörü geçici olarak herhangi bir URL'e bağlamaya olanak tanıyor.
+- **TypeScript yapılandırması**. Reponun `tsconfig.json` dosyasında hedef (target) `ES6` olarak ayarlıydı. Bu durum modern Node.js sürümlerinde sorun yaratıyor çünkü kod içerisinde `Object.entries` kullanılmış. Hedefi `ES2017` olarak güncelledim.
+- **Sayfa meta etiketleri**. Title, description, OG ve Twitter card ayarları baştan yazıldı. Google Analytics etiketi (Henry'nin `G-4FJBF6WF60` ID'si) tamamen kaldırıldı. İleride analytics kullanmak istersem kendi etiketimi eklerim.
+
+İç OS sitesinde yaptığım değişiklikler:
+
+- **Asıl portfolyo sayfaları**. Home, About, Experience, Projects/Software ve Contact sayfalarının hepsini kendi bilgilerimle güncelledim (2008'den beri freelance geçmişim, Handshake AI ve Outlier üzerinden yürüttüğüm yapay zeka çalışmaları, G.O.A.T. #8092 FRC takımındaki mentorluğum, askerlik dönemindeki tercümanlık tecrübem). Henry'ye özel olan Music ve Art proje kısımları kaldırıldı; projelerin bulunduğu bölüm artık tek bir 'Software' (Yazılım) rotasına indirgendi. Burada gerçekten geliştirdiğim projeleri listeliyorum (amatortelsizcilik.com.tr, n10yilama.com Netflix Türkiye, PitOS, ARC web altyapısı, 8092.tr, turkcesozl.uk, Etiketle! Bluesky labeler, amatör telsiz Telegram botları).
+- **Henordle → Bugrdle**. Cevabı "HENRY" olan Wordle klonunu "BUGRA" olacak şekilde değiştirdim. Tabi geçerli kelimeler listesine "bugra" kelimesini de eklemem gerekti, aksi takdirde girdiyi kabul etmiyordu.
+- **Türkçe karakter desteği**. İç sitenin ana başlığı (`<h1>`) Adobe Typekit'in `gastromond` fontunu kullanıyordu ve bu fontta Türkçe karakter desteği yok. "Buğra" yazdığımda, "ğ" harfi desteklenmediği için eksik karakter kutusu (missing glyph) şeklinde çıkıyordu. unicode-range özelliği ile sadece ASCII dışı karakterleri farklı bir fonta yönlendirmeyi denedim ama Typekit'in fontu bu kuralı ezmeye devam etti. Sonunda pes ettim ve h1'in font ailesini her işletim sisteminde bulunan ve tam Türkçe desteği sunan `Georgia, serif` olarak değiştirdim. Henry'nin Windows 95 estetiğini yansıtan bitmap fontları (Millennium, MillenniumBold, MSSerif, Terminal) artık `unicode-range: U+0020-007F` değerine sahip. Yani sadece ASCII karakterlerini üstleniyorlar; Türkçe karakterler ise otomatik olarak Times New Roman veya genel serif fontlarına düşüyor (cascade).
+- **Tarayıcı sekmesi başlığı** ve PWA manifest. Tarayıcı sekmesinde hâlâ "Henry Heffernan - OS" yazıyordu. Küçük bir detay ama sürekli göze batıyordu, düzelttim.
+- **İletişim formu API'ı**. Orijinal form, verileri Express + Nodemailer + Gmail SMTP kullanan ve aynı Node sunucusunda çalışan bir backend'e gönderiyordu. Cloudflare Workers Static Assets, Express uygulamalarını desteklemediği için bu endpoint'i canata.dev üzerinde bir Worker rotası olarak baştan yazdım ve iç sitenin formu bu yeni `https://canata.dev/api/contact` adresine (cross-origin olarak) gönderecek şekilde ayarladım.
+
+### canata.dev/api/contact — Küçük Bir Worker
+
+İletişim formu için yazdığım Worker, canata.dev üzerindeki tek dinamik kod parçası. İletilen ad, e-posta ve mesaj içeriklerini doğruluyor, çok parçalı (multipart) bir HTML+metin e-postası oluşturuyor ve `send_email` bağlantısı üzerinden **Cloudflare Email Service**'i kullanarak `bugra@canata.com.tr` adresine iletiyor. CORS izin listesi, girdi doğrulamaları ve eksik yapılandırma (konfigürasyon) yönetimi dahil tüm bu işlemler yaklaşık 180 satır kod tuttu.
+
+Sorunsuz İlerleyen Kısımlar:
+
+- `send_email` özelliği, `wrangler.jsonc` dosyasına `"remote": true` ayarıyla eklendiği an tek seferde sorunsuzca çalıştı (Just Worked). Ekstra NPM paketi veya MIME kütüphanesi kurmaya gerek kalmadı; sadece `await env.EMAIL.send({ to, from, subject, text, html })` fonksiyonunu çağırmak yeterli oldu.
+- Cloudflare'in `assets.run_worker_first` bayrağı sayesinde `/api/*` rotalarını Worker ile yakalayıp, geri kalan her isteğin statik dosyalara (static asset) yönlendirilmesini sağlayabiliyorum. Tek domain, tek Worker ve sıfır yönlendirme (routing) karmaşası.
+- `wrangler.jsonc` içindeki `compatibility_date` alanının, yerel saat diliminde değil, UTC'ye göre geçmiş bir tarih olması gerekiyor. Bu durum bir anlığına başımı ağrıttı, çünkü Mac'imin yerel saati UTC'nin gece yarısını geçişinden birkaç saat ilerideydi.
+
+Uğraştıran Kısımlar:
+
+- Worker'ın çalışabilmesi için Cloudflare Email Service üzerinde doğrulanmış bir gönderici adresine (`CONTACT_FROM`) ihtiyacı var. Bu ayar Worker yapılandırmasından bağımsız olarak Cloudflare panelinden yapılıyor. Bu ayar yapılana kadar API sorunsuz bir şekilde 501 durum koduyla `{ error: "email_service_not_configured" }` hatası dönüyor. İç sitenin iletişim formu da bu durumu algılayıp, hata halinde klasik `mailto:` bağlantısına geçiş (fallback) yapıyor.
+
+### notlar.im — Sıfırdan Astro Content Collections
+
+Eski notlar.im bir Docusaurus sitesiydi. İki yıldır bloga bir şey yazmıyordum çünkü Docusaurus üzerinde içerik düzenlemek tam bir eziyetti; her yeni yazı eklediğinizde `sidebars.js` dosyasını, docs/blog eklenti ayrımlarını, MDX'in tuhaflıklarını ve biraz farklı bir tasarım istediğinizde yapmanız gereken "eject veya fork" dansını düşünmek zorundaydınız. Hatta 2024'te sistemi TinaCMS'e bağlamayı bile denemiştim (eski repoda hâlâ bir `.tina/` dizini duruyor) ama pek verimli olmadı.
+
+O yüzden siteyi baştan inşa ettim:
+
+- **Astro 5 + Tailwind v4 + MDX**. Cloudflare üzerinde yayınladığım (deploy ettiğim) diğer sitelerle aynı teknoloji yığınını kullanıyor. Yazılar `src/content/blog/` ve `src/content/notlar/` klasörleri altında `.md` veya `.mdx` formatında tutuluyor. Frontmatter verileri (başlık, tarih vb.), derleme (build) sırasında Zod şeması ile tip kontrolünden geçiyor.
+- **Görsel tasarım**: [tuhat.net](https://tuhat.net) sitesinden ilham alındı. Tek sütunlu, yeniden eskiye doğru sıralanan bir akış (feed). Sistem fontları (`ui-sans-serif, system-ui`) kullanıldı. Başlık, tarih ve hashtag şeklindeki etiketlerden oluşuyor. Anasayfada yazı özetleri yok. Beyaz arkaplan üzerinde koyu metin. CMS veya yönetici arayüzü yok; sadece dosyayı aç, yaz ve commit'le.
+- **İçerik Aktarımı (Importer)**. Eski Docusaurus reposunu tarayan, her MDX dosyasını `gray-matter` ile ayrıştıran, frontmatter verilerini yeni şemaya uyarlayan ve sonuçları yeni içerik klasörlerine kaydeden, tek seferlik bir Node betiği yazdım. Bu betik, Docusaurus'a özgü birkaç tuhaflığı da otomatik olarak çözdü: `<!--truncate-->` şeklindeki özet işaretleyicileri, eski temanın "yayında olmayan taslak" anlamında kullandığı `date_published: 1970-01-01T00:00:00.000Z` varsayılan tarihi ve taslak notlar sayfasındaki `⚠️ Taslak` başlık ön ekinin temizlenmesi gibi.
+- **URL Yapısını (Slug) Koruma**. Arama motorlarındaki trafiği kaybetmemek için eski Docusaurus URL'lerinin (örneğin `/notlar/TA2KB-Rle-Listesi/`) büyük-küçük harf duyarlılığını aynen korumam gerekiyordu (site üzerindeki Google Search Console trafiğinin büyük kısmı bu sayfaya geliyordu) ve Cloudflare Workers URL'leri büyük-küçük harfe duyarlıdır. Astro 5'in `glob` yükleyicisi, otomatik olarak küçük harfe çevrilen ID değerini ezmenize (override) olanak tanıyan bir `generateId` seçeneği sunuyor. Dosya isimlerini birebir aynı tutmak için bu özelliği kullandım.
+
+### /videolar — Otomatik Çekilen YouTube Kanal Listesi
+
+notlar.im'in yeniden inşasıyla birlikte bir de "Videolar" sayfası ekledim. [@bugra-hoca YouTube kanalımdaki](https://www.youtube.com/@bugra-hoca) videoları elle girmek yerine bu listenin otomatik güncellenmesini istiyordum. Bunun için iki seçeneğim vardı:
+
+- YouTube Data API v3 — API anahtarı, Google Cloud projesi ve kota yönetimi gerektiriyor. Gerçek bir ticari ürün için yapılabilir ancak 33 videoluk bir kanal için gereksiz derecede büyük bir iş olacaktı.
+- Derleme (build) sırasında yt-dlp ile veri çekmek: API anahtarı gerektirmiyor ancak yt-dlp'yi CI/CD süreçlerine veya deploy aşamasına dahil etmek sisteme ağır bir bağımlılık (dependency) getiriyordu.
+
+Bulduğum orta yol: yt-dlp'yi yerel makinemde bir `pnpm refresh-yt` betiği üzerinden çalıştırıp sonuçları `src/data/youtube.json` dosyasına kaydetmek. Bu JSON dosyası git ile repoya ekleniyor ve site derlenirken veriyi doğrudan bu dosyadan okuyor. Böylece sunucu tarafında yt-dlp çalıştırmaya gerek kalmıyor; işlem sadece geliştirici makinesinde yapılıyor. Yeni bir video yüklediğimde listeyi güncellemek için betiği çalıştırıp JSON dosyasını commit'lemem ve siteyi deploy etmem yeterli.
+
+33 videoyu tek sayfada listelemek yerine sayfalama (pagination) yapmayı tercih ettim: sayfa başına 12 video düşecek şekilde üç ayrı sayfa (`/videolar/`, `/videolar/2/`, `/videolar/3/`). Bunun için Astro'nun kendi içindeki `paginate()` fonksiyonunu kullandım. Listedeki her video; sağ alt köşesinde süre bilgisi bulunan bir küçük resim (thumbnail), video başlığı ve Türkçe formatta yayın tarihinden oluşuyor.
+
+### YZ / AI İçerik Etiketi
+
+Bu sabah yaptığım son ekleme (çift dilli yapıya geçmeden önce): Yapay zeka tarafından üretilmiş veya yapay zeka desteğiyle düzenlenmiş yazılara, frontmatter üzerinden `ai: true` özelliği eklemek oldu. Bu özellik, hem ana akışta hem de yazı detay sayfasında başlığın hemen yanında küçük, çerçeveli bir rozet olarak görünüyor; Türkçe sayfalarda **YZ**, İngilizce sayfalarda ise **AI** şeklinde. Tasarım olarak etiketlerden tamamen ayrı tutuldu (farklı HTML elementi, farklı stil); böylece içeriğin kaynağı (provenance) sıradan bir konu etiketiyle karıştırılmıyor.
+
+Örneğin, hem okumakta olduğunuz bu yazı hem de Ender 3 / Klipper geçişini anlattığım yazı `ai: true` rozeti taşıyor. Yazılardaki teknik içerik ve süreç tamamen bana ait; ancak aldığım notların düzgün birer makale haline getirilmesi ve düzenlenmesi Claude tarafından yapıldı.
+
+## Mimari Özeti
+
+```text
+canata.dev          → 3D ofis sahnesi (Three.js + WebGL + React 17)
+                      /api/contact isteklerini Cloudflare Email Service ile Worker karşılıyor
+                      Statik dosyalar ./public klasörüne bağlı
+                      Cloudflare Workers üzerinde özel alan adı (custom domain)
+
+canata-dev-inner    → masaüstü OS sitesi (React 17 / CRA)
+  .bugra.workers.dev  Dış sahnedeki CRT monitör tarafından iframe ile çekiliyor
+                      Sadece statik dosyalardan oluşuyor (Worker kodu yok)
+
+notlar.im           → kişisel blog (Astro 5 / Tailwind v4 / MDX)
+                      Çift dilli (Bilingual) TR/EN
+                      Sadece statik dosyalardan oluşuyor
+
+canata.com.tr       → e-posta altyapısı
+                      Cloudflare Email Routing ile gelen mailleri inbox'a yönlendiriyor
+```
+
+Üç farklı site, üç farklı kitle:
+
+- **canata.dev** — geliştiriciler ve işe alım uzmanları için. 2008'den beri süregelen freelance geçmişim ve üzerine eklediğim AI / Cloudflare yetkinliklerimi yansıtıyor.
+- **bugracanata.com.tr** — Türkçe eğitim ve okul camiasına yönelik kitle. Şimdilik hâlâ eski altyapıda; bir sonraki yenileme hedefim o.
+- **notlar.im** — kişisel blogum, iki dilli olarak yayın hayatına devam ediyor.
+
+Her bir Cloudflare Worker için sadece bir adet `wrangler.jsonc` yapılandırma dosyası kullanılıyor. Karmaşık GitHub Actions süreçleri veya CI hatları yok; deploy işlemleri doğrudan bilgisayarımdan `pnpm deploy` komutuyla yapılıyor. Bu projelerin tamamı, süreçleri hızlandırmaktan çok yavaşlatacak karmaşık sistemler kurmaya değmeyecek kadar ufak ve sade yapılar.
+
+## Bu Akşamki Çalışmanın Asıl Amacı Neydi?
+
+Temelde iki şey.
+
+Birincisi: **Mimariyi düzenleme deneyiminin sizi yönlendirmesine izin vermek**, tam tersi değil. notlar.im sitesine iki yıldır uğramıyordum çünkü editörün kullanımı çok zahmetliydi. Bu, benim yazacak bir şey bulamamamdan ziyade, doğrudan Docusaurus kaynaklı bir problemdi. Alışkın olduğum bir Astro projesinde düz Markdown dosyalarına geçiş yapmak, yazı yazmayı kelimenin tam anlamıyla bir öğleden sonraya sığacak kadar pratik hale getirdi. Buradan çıkarılacak genel ders şu: Eğer kendi işinizi kolaylaştırmak için yaptığınız bir aracı kullanmak istemiyorsanız, sorun muhtemelen sizde değil, kullandığınız araçtadır.
+
+İkincisi: **build-time (derleme zamanı) ile runtime (çalışma zamanı) arasındaki tercih değişmez bir kural değil, duruma göre ayarlanabilen bir seçenektir.** YouTube sayfasındaki veriler, çalışma anında (runtime) çekilip önbelleğe (cache) alınabilirdi. Cloudflare Email Service yerine üçüncü taraf bir SMTP servisi de kullanılabilirdi. Ancak eklediğiniz her runtime bağımlılığı, takip etmeniz gereken yeni bir hata potansiyeli (failure mode) yaratır. Benim tercih ettiğim Cloudflare Workers modeli —önden statik dosyaları sunmak ve Worker kodunu sadece gerçekten dinamik olması gereken birkaç endpoint için kullanmak— hata riskini (yüzey alanını) en aza indiriyor. Bu çalışmanın ardından izlemem gereken tek bir dinamik Worker endpoint'im var (iletişim formu), bunun dışında sadece derleme (build) sırasında bozulabilecek statik sitelerim ve sadece ben istediğimde yenilenen bir YouTube listem var.
+
+Bir kişisel site için en ideal karmaşıklık seviyesi tam olarak bu bence.

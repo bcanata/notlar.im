@@ -1,25 +1,69 @@
 ---
 import '../styles/global.css';
+import LangSwitcher from '../components/LangSwitcher.astro';
+import SearchModal from '../components/SearchModal.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import { t, withLangPrefix, type Lang } from '../lib/i18n';
 
 interface Props {
     title: string;
     description?: string;
     canonical?: string;
     ogType?: 'website' | 'article';
+    lang?: Lang;
+    /** Path on the other-language site, if the current page has a counterpart. */
+    altLangUrl?: string;
+    /**
+     * Blog-post slug used to derive the per-post OG image URL (`/og/<slug>.png`).
+     * When undefined and ogType is 'article', falls back to a static site OG.
+     */
+    ogSlug?: string;
 }
 
-const { title, description, canonical, ogType = 'website' } = Astro.props;
-const siteTitle = 'notlar.im';
+const {
+    title,
+    description,
+    canonical,
+    ogType = 'website',
+    lang = 'tr',
+    altLangUrl,
+    ogSlug,
+} = Astro.props;
+const siteTitle = t(lang, 'site_title');
 const fullTitle = title === siteTitle ? title : `${title} · ${siteTitle}`;
-const canonicalURL =
-    canonical ?? new URL(Astro.url.pathname, Astro.site ?? 'https://notlar.im').toString();
+const SITE = Astro.site ?? new URL('https://notlar.im');
+const canonicalURL = canonical ?? new URL(Astro.url.pathname, SITE).toString();
+const otherLang: Lang = lang === 'tr' ? 'en' : 'tr';
+const home = lang === 'tr' ? '/' : '/en';
+const rssHref = lang === 'tr' ? '/rss.xml' : '/en/rss.xml';
+const ogImage =
+    ogType === 'article' && ogSlug
+        ? new URL(`/og/${ogSlug}.png`, SITE).toString()
+        : new URL('/og/_default.png', SITE).toString();
 ---
 
 <!doctype html>
-<html lang="tr">
+<html lang={lang}>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fbf8f2" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1612" media="(prefers-color-scheme: dark)" />
+    {/*
+      Theme boot script. Reads localStorage.theme and applies data-theme on
+      <html> synchronously, BEFORE the page paints, so there's no flash of
+      wrong theme. Auto state means no override — system pref decides.
+    */}
+    <script is:inline>
+        (() => {
+            try {
+                const t = localStorage.getItem('theme');
+                if (t === 'dark' || t === 'light') {
+                    document.documentElement.setAttribute('data-theme', t);
+                }
+            } catch (_) {}
+        })();
+    </script>
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonicalURL} />
@@ -28,36 +72,180 @@ const canonicalURL =
     <meta property="og:type" content={ogType} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:site_name" content={siteTitle} />
-    <link rel="alternate" type="application/rss+xml" title={siteTitle} href="/rss.xml" />
+    <meta property="og:locale" content={lang === 'tr' ? 'tr_TR' : 'en_GB'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="alternate" hreflang={lang} href={canonicalURL} />
+    {altLangUrl && <link rel="alternate" hreflang={otherLang} href={new URL(altLangUrl, SITE).toString()} />}
+    <link rel="alternate" type="application/rss+xml" title={siteTitle} href={rssHref} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />
 </head>
 <body>
-    <div class="mx-auto max-w-2xl px-5 py-8 sm:py-12">
+    <div class="mx-auto flex min-h-dvh max-w-4xl flex-col px-5 pt-6 pb-24 sm:pt-12 sm:pb-32">
         <header class="mb-10">
-            <nav class="flex flex-wrap items-baseline gap-x-6 gap-y-2 text-sm">
-                <a href="/" class="text-base font-semibold tracking-tight text-[var(--color-ink)] hover:underline">notlar.im</a>
-                <span class="text-[var(--color-ink-mute)]">·</span>
-                <a href="/notlar" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">Notlar</a>
-                <a href="/blog" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">Blog</a>
-                <a href="/hakkinda" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">Hakkında</a>
-                <a href="/rss.xml" class="ml-auto text-[var(--color-ink-mute)] hover:text-[var(--color-ink)] hover:underline">RSS</a>
+            {/*
+              Mobile-first nav layout: wordmark + condensed action cluster
+              (search + theme + hamburger) on the top row. Section links
+              live in a slide-down menu opened by the hamburger button on
+              small screens, and are rendered inline on sm+.
+            */}
+            <div class="flex items-center justify-between gap-4">
+                <a href={home} class="wordmark text-xl text-[var(--color-ink)] hover:text-[var(--color-accent)] sm:text-2xl">notlar.im</a>
+
+                <div class="flex items-center gap-3 text-sm sm:gap-4">
+                    <button type="button" id="search-trigger" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline" aria-label={t(lang, 'search_open')}>
+                        {t(lang, 'nav_search')}
+                        <kbd class="ml-1 hidden rounded border border-[var(--color-rule)] px-1 text-[10px] text-[var(--color-ink-mute)] sm:inline-block">⌘K</kbd>
+                    </button>
+                    <ThemeToggle lang={lang} />
+                    <LangSwitcher lang={lang} targetUrl={altLangUrl} />
+                    <a href={rssHref} class="hidden text-[var(--color-ink-mute)] hover:text-[var(--color-ink)] hover:underline sm:inline">{t(lang, 'nav_rss')}</a>
+
+                    <button
+                        type="button"
+                        id="nav-hamburger"
+                        class="flex h-8 w-8 items-center justify-center rounded border border-[var(--color-rule)] text-[var(--color-ink-soft)] hover:border-[var(--color-ink-soft)] hover:text-[var(--color-ink)] sm:hidden"
+                        aria-label={lang === 'tr' ? 'Menüyü aç' : 'Open menu'}
+                        aria-expanded="false"
+                        aria-controls="nav-mobile-panel"
+                    >
+                        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+                            <path d="M2 4h12M2 8h12M2 12h12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            {/* Desktop section nav (sm+) */}
+            <nav class="mt-3 hidden flex-wrap items-baseline gap-x-6 gap-y-2 text-sm sm:flex" aria-label={lang === 'tr' ? 'Bölümler' : 'Sections'}>
+                <a href={home} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'nav_posts')}</a>
+                <a href={withLangPrefix('/videolar', lang)} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'nav_videos')}</a>
+                <a href={lang === 'tr' ? '/kitaplik' : '/en/library'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'nav_books')}</a>
+                <a href={lang === 'tr' ? '/mekanlar' : '/en/places'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'nav_reviews')}</a>
+                <a href={lang === 'tr' ? '/etiketler' : '/en/tags'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'nav_tags')}</a>
+                <a href={lang === 'tr' ? '/hakkimda' : '/en/about'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'nav_about')}</a>
+            </nav>
+
+            {/* Mobile section panel — toggled by the hamburger button */}
+            <nav
+                id="nav-mobile-panel"
+                class="mt-3 hidden flex-col gap-3 border-t border-[var(--color-rule)] pt-4 text-base sm:hidden"
+                aria-label={lang === 'tr' ? 'Bölümler' : 'Sections'}
+            >
+                <a href={home} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">{t(lang, 'nav_posts')}</a>
+                <a href={withLangPrefix('/videolar', lang)} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">{t(lang, 'nav_videos')}</a>
+                <a href={lang === 'tr' ? '/kitaplik' : '/en/library'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">{t(lang, 'nav_books')}</a>
+                <a href={lang === 'tr' ? '/mekanlar' : '/en/places'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">{t(lang, 'nav_reviews')}</a>
+                <a href={lang === 'tr' ? '/etiketler' : '/en/tags'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">{t(lang, 'nav_tags')}</a>
+                <a href={lang === 'tr' ? '/hakkimda' : '/en/about'} class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)]">{t(lang, 'nav_about')}</a>
+                <a href={rssHref} class="text-[var(--color-ink-mute)] hover:text-[var(--color-ink)]">{t(lang, 'nav_rss')}</a>
             </nav>
         </header>
 
-        <main>
+        <main class="flex-1">
             <slot />
         </main>
 
-        <footer class="mt-20 border-t border-[var(--color-rule)] pt-6 text-sm text-[var(--color-ink-mute)]">
-            <p>
-                <a href="https://canata.dev" class="hover:text-[var(--color-ink)] hover:underline">Buğra Canata</a>
-                ·
-                <a href="/rss.xml" class="hover:text-[var(--color-ink)] hover:underline">RSS</a>
-                ·
-                <a href="https://github.com/bcanata/notlar.im" class="hover:text-[var(--color-ink)] hover:underline">GitHub</a>
+        <footer class="mt-24 border-t border-[var(--color-rule)] pt-8 text-sm text-[var(--color-ink-mute)]">
+            <div class="grid gap-8 sm:grid-cols-2">
+                <div>
+                    <p class="wordmark text-base text-[var(--color-ink-soft)]">{siteTitle}</p>
+                    <p class="mt-2 max-w-sm leading-relaxed">{t(lang, 'site_tagline')}</p>
+                </div>
+                <div>
+                    <p class="font-semibold uppercase tracking-wider text-xs text-[var(--color-ink-soft)]">{t(lang, 'footer_links')}</p>
+                    <ul class="mt-3 grid grid-cols-2 gap-x-4 gap-y-1">
+                        <li><a href="https://canata.dev" class="hover:text-[var(--color-ink)] hover:underline">canata.dev</a></li>
+                        <li><a href="https://bugracanata.com.tr" class="hover:text-[var(--color-ink)] hover:underline">bugracanata.com.tr</a></li>
+                        <li><a href={rssHref} class="hover:text-[var(--color-ink)] hover:underline">RSS</a></li>
+                        <li><a href="https://github.com/bcanata/notlar.im" class="hover:text-[var(--color-ink)] hover:underline">GitHub</a></li>
+                        <li><a href="https://www.youtube.com/@bugra-hoca" class="hover:text-[var(--color-ink)] hover:underline">YouTube</a></li>
+                        <li><a href="mailto:bugra@canata.com.tr" class="hover:text-[var(--color-ink)] hover:underline">{lang === 'tr' ? 'E-posta' : 'Email'}</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-10 text-xs text-[var(--color-ink-mute)]">
+                © {new Date().getFullYear()} Buğra Canata · {t(lang, 'footer_built_with')}
             </p>
         </footer>
     </div>
+
+    {/* Site-wide search overlay (⌘K). Trigger hooked below. */}
+    <SearchModal lang={lang} />
+
+    <script>
+        // Wire the nav search trigger to the global modal opener exposed by
+        // SearchModal.
+        document.getElementById('search-trigger')?.addEventListener('click', () => {
+            (window as unknown as { openSearchModal?: () => void }).openSearchModal?.();
+        });
+
+        // Mobile hamburger menu.
+        const hamburger = document.getElementById('nav-hamburger') as HTMLButtonElement | null;
+        const panel = document.getElementById('nav-mobile-panel') as HTMLElement | null;
+        if (hamburger && panel) {
+            function setOpen(open: boolean) {
+                if (!hamburger || !panel) return;
+                hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (open) {
+                    panel.classList.remove('hidden');
+                    panel.classList.add('flex');
+                } else {
+                    panel.classList.add('hidden');
+                    panel.classList.remove('flex');
+                }
+            }
+            hamburger.addEventListener('click', () => {
+                const open = hamburger.getAttribute('aria-expanded') === 'true';
+                setOpen(!open);
+            });
+            // Esc closes; clicking a link inside also closes (so route-change feels right).
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') setOpen(false);
+            });
+            panel.querySelectorAll('a').forEach((a) =>
+                a.addEventListener('click', () => setOpen(false)),
+            );
+        }
+
+        // Inject "copy" buttons on every <pre> code block (post-content) and
+        // toggle the button label briefly when clicked.
+        function installCopyButtons() {
+            const COPY = document.documentElement.lang === 'tr' ? 'Kopyala' : 'Copy';
+            const COPIED = document.documentElement.lang === 'tr' ? 'Kopyalandı' : 'Copied';
+            for (const pre of document.querySelectorAll<HTMLPreElement>('.prose pre')) {
+                if (pre.querySelector('.code-copy-btn')) continue;
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'code-copy-btn';
+                btn.textContent = COPY;
+                btn.addEventListener('click', async () => {
+                    const code = pre.querySelector('code');
+                    const text = code?.innerText ?? pre.innerText;
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        btn.textContent = COPIED;
+                        btn.classList.add('is-copied');
+                    } catch (_) {
+                        btn.textContent = '!';
+                    }
+                    setTimeout(() => {
+                        btn.textContent = COPY;
+                        btn.classList.remove('is-copied');
+                    }, 1500);
+                });
+                pre.appendChild(btn);
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', installCopyButtons);
+        } else {
+            installCopyButtons();
+        }
+    </script>
 </body>
 </html>

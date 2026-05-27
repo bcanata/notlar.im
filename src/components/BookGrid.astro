@@ -1,0 +1,154 @@
+---
+/*
+ * Bookshelf grid + client-side search. Each card links to the book's detail
+ * page (/kitaplik/<slug> or /en/library/<slug>). Books without a downloaded
+ * cover get a typographic "spine" fallback so the shelf reads as intentional.
+ *
+ * Search: an input above the grid filters cards live by a diacritic-folded
+ * haystack (title + author + publisher) carried in data-search. No network,
+ * no Pagefind — instant filtering over the rendered DOM (182 cards).
+ */
+import type { BookWithSlug } from '../lib/books';
+import { foldTr } from '../lib/books';
+
+interface Props {
+    books: BookWithSlug[];
+    base: string; // '/kitaplik' or '/en/library'
+    searchPlaceholder: string;
+    countLabel: string; // "{n} kitap" with {n} already substituted, or template
+    noResultsLabel: string;
+}
+const { books, base, searchPlaceholder, countLabel, noResultsLabel } = Astro.props;
+
+const SPINE_TINTS = [
+    '#8a5a44', '#6b6b3b', '#4a6b5a', '#5a5a7a',
+    '#7a4a5a', '#3f5d6b', '#7a6a3a', '#5c4a6b',
+];
+function tintFor(s: string): string {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return SPINE_TINTS[h % SPINE_TINTS.length];
+}
+---
+
+<div class="mb-8">
+    <label class="relative block">
+        <span class="sr-only">{searchPlaceholder}</span>
+        <input
+            type="search"
+            id="book-search"
+            placeholder={searchPlaceholder}
+            autocomplete="off"
+            class="w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-4 py-2.5 text-base text-[var(--color-ink)] placeholder:text-[var(--color-ink-mute)] focus:border-[var(--color-ink-soft)] focus:outline-none"
+        />
+    </label>
+    <p id="book-search-count" class="mt-2 text-sm text-[var(--color-ink-mute)]" data-count-label={countLabel} aria-live="polite"></p>
+</div>
+
+<ul id="book-grid" class="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
+    {
+        books.map((b) => (
+            <li class="book-card group" data-search={b.search}>
+                <a href={`${base}/${b.slug}`} class="block focus:outline-none">
+                    <div class="relative aspect-[2/3] overflow-hidden rounded-sm shadow-[0_2px_10px_rgba(0,0,0,0.12)] ring-1 ring-black/5 transition group-hover:-translate-y-0.5 group-hover:shadow-[0_6px_18px_rgba(0,0,0,0.18)]">
+                        {b.cover ? (
+                            <img
+                                src={b.cover}
+                                alt={`${b.title}${b.author ? ' — ' + b.author : ''}`}
+                                loading="lazy"
+                                class="h-full w-full object-cover"
+                            />
+                        ) : (
+                            <div
+                                class="flex h-full w-full flex-col justify-between p-3 text-[var(--color-paper)]"
+                                style={`background:${tintFor(b.title)}`}
+                                aria-hidden="true"
+                            >
+                                <span class="block h-1 w-8 rounded bg-white/40" />
+                                <span class="display-title text-base leading-tight line-clamp-5">{b.title}</span>
+                                {b.author && (
+                                    <span class="text-[0.7rem] uppercase tracking-wider opacity-80 line-clamp-2">{b.author}</span>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                    <div class="mt-2">
+                        <p class="display-title text-sm leading-snug line-clamp-2 group-hover:text-[var(--color-accent)]">{b.title}</p>
+                        {b.author && (
+                            <p class="mt-0.5 text-xs text-[var(--color-ink-mute)] line-clamp-1">{b.author}</p>
+                        )}
+                        {b.year && (
+                            <p class="text-[0.7rem] text-[var(--color-ink-mute)] tabular-nums">{b.year}</p>
+                        )}
+                    </div>
+                </a>
+            </li>
+        ))
+    }
+</ul>
+
+<p id="book-no-results" class="hidden py-8 text-center text-[var(--color-ink-soft)]">{noResultsLabel}</p>
+
+<script>
+    function foldTr(s: string): string {
+        return s
+            .toLocaleLowerCase('tr')
+            .replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i')
+            .replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's')
+            .replace(/ü/g, 'u');
+    }
+
+    const input = document.getElementById('book-search') as HTMLInputElement | null;
+    const grid = document.getElementById('book-grid');
+    const countEl = document.getElementById('book-search-count');
+    const noResults = document.getElementById('book-no-results');
+
+    if (input && grid && countEl) {
+        const cards = Array.from(grid.querySelectorAll<HTMLLIElement>('.book-card'));
+        const total = cards.length;
+        const template = countEl.dataset.countLabel || '{n}';
+
+        function render(visible: number) {
+            countEl!.textContent = template.replace('{n}', String(visible));
+            noResults?.classList.toggle('hidden', visible !== 0);
+        }
+
+        function filter() {
+            const q = foldTr(input!.value.trim());
+            if (!q) {
+                cards.forEach((c) => (c.style.display = ''));
+                render(total);
+                return;
+            }
+            let visible = 0;
+            for (const c of cards) {
+                const hay = c.dataset.search || '';
+                const match = hay.includes(q);
+                c.style.display = match ? '' : 'none';
+                if (match) visible++;
+            }
+            render(visible);
+        }
+
+        input.addEventListener('input', filter);
+        // Initial count (total).
+        render(total);
+        // Restore query from URL ?q= for shareable filtered views.
+        const urlQ = new URLSearchParams(location.search).get('q');
+        if (urlQ) {
+            input.value = urlQ;
+            filter();
+        }
+    }
+</script>
+
+<style is:global>
+    .line-clamp-1, .line-clamp-2, .line-clamp-5 {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .line-clamp-1 { -webkit-line-clamp: 1; }
+    .line-clamp-2 { -webkit-line-clamp: 2; }
+    .line-clamp-5 { -webkit-line-clamp: 5; }
+</style>

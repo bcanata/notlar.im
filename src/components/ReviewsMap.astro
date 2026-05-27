@@ -1,0 +1,210 @@
+---
+/*
+ * Leaflet map of reviewed places. Markers are clustered (the data is dense
+ * around a few towns) and the view auto-fits to all points — so places that
+ * fall outside Türkiye (e.g. across the Aegean in Greece) still show. Leaflet
+ * loads client-side only; the marker payload is serialized into a JSON
+ * <script> tag and read by the bundled module script below.
+ *
+ * Markers + clusters are drawn with divIcons themed via CSS variables (no
+ * Leaflet image assets), and the list's "show on map" buttons call the
+ * window.focusReview(id) bridge this script exposes.
+ */
+import type { ReviewWithMeta } from '../lib/reviews';
+
+interface Props {
+    reviews: ReviewWithMeta[]; // mappable subset (lat/lng present)
+    emptyLabel: string;
+}
+const { reviews, emptyLabel } = Astro.props;
+
+// Minimal payload — full text lives in the list, so the popup only needs
+// enough to identify the place and link out.
+const markers = reviews.map((r) => ({
+    id: r.id,
+    place: r.place,
+    rating: r.rating,
+    lat: r.lat,
+    lng: r.lng,
+    url: r.url,
+}));
+// Guard against a place name containing "</script>" breaking out of the tag.
+const markerJson = JSON.stringify(markers).replace(/</g, '\\u003c');
+---
+
+<div class="relative">
+    <div
+        id="reviews-map"
+        class="h-[58vh] min-h-[340px] w-full overflow-hidden rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-soft)]"
+        role="application"
+    >
+    </div>
+    {markers.length === 0 && (
+        <p class="py-8 text-center text-[var(--color-ink-soft)]">{emptyLabel}</p>
+    )}
+</div>
+
+<script type="application/json" id="reviews-map-data" set:html={markerJson} />
+
+<script>
+    import L from 'leaflet';
+    import 'leaflet.markercluster';
+    import 'leaflet/dist/leaflet.css';
+    import 'leaflet.markercluster/dist/MarkerCluster.css';
+
+    type MarkerData = {
+        id: string;
+        place: string;
+        rating: number;
+        lat: number;
+        lng: number;
+        url: string | null;
+    };
+
+    function escapeHtml(s: string): string {
+        return s
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function clampRating(n: number): number {
+        return Math.max(0, Math.min(5, Math.round(n || 0)));
+    }
+
+    const el = document.getElementById('reviews-map');
+    const dataEl = document.getElementById('reviews-map-data');
+
+    if (el && dataEl) {
+        const markers: MarkerData[] = JSON.parse(dataEl.textContent || '[]');
+
+        const map = L.map(el, {
+            scrollWheelZoom: false, // don't hijack page scroll until clicked
+            attributionControl: true,
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 19,
+        }).addTo(map);
+
+        const cluster = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            maxClusterRadius: 45,
+            iconCreateFunction: (c) =>
+                L.divIcon({
+                    html: `<span>${c.getChildCount()}</span>`,
+                    className: 'review-cluster',
+                    iconSize: L.point(34, 34),
+                }),
+        });
+
+        const pinIcon = L.divIcon({
+            className: 'review-pin',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8],
+            popupAnchor: [0, -8],
+        });
+
+        const byId = new Map<string, L.Marker>();
+        const points: L.LatLngExpression[] = [];
+
+        for (const m of markers) {
+            const marker = L.marker([m.lat, m.lng], { icon: pinIcon, title: m.place });
+            const stars = '★'.repeat(clampRating(m.rating));
+            const placeHtml = escapeHtml(m.place);
+            const title = m.url
+                ? `<a href="${escapeHtml(m.url)}" target="_blank" rel="noopener">${placeHtml}</a>`
+                : placeHtml;
+            marker.bindPopup(
+                `<div class="review-popup"><strong>${title}</strong>` +
+                    (stars ? `<div class="review-popup-stars">${stars}</div>` : '') +
+                    `</div>`,
+            );
+            cluster.addLayer(marker);
+            byId.set(m.id, marker);
+            points.push([m.lat, m.lng]);
+        }
+
+        map.addLayer(cluster);
+
+        if (points.length) {
+            map.fitBounds(L.latLngBounds(points).pad(0.08));
+        } else {
+            map.setView([39.0, 35.0], 5); // fallback: roughly centered on Türkiye
+        }
+
+        // Enable wheel zoom once the user interacts with the map.
+        map.on('click', () => map.scrollWheelZoom.enable());
+
+        // Bridge for the list's "show on map" buttons.
+        (window as unknown as { focusReview?: (id: string) => void }).focusReview = (
+            id: string,
+        ) => {
+            const marker = byId.get(id);
+            if (!marker) return;
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            cluster.zoomToShowLayer(marker, () => marker.openPopup());
+        };
+    }
+</script>
+
+<style is:global>
+    /* Marker dot — accent circle with a paper-colored ring. */
+    .review-pin {
+        border-radius: 9999px;
+        background: var(--color-accent);
+        border: 2px solid var(--color-paper);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    }
+    /* Cluster bubble — themed to match the pins. */
+    .review-cluster {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9999px;
+        background: var(--color-accent);
+        color: #fff;
+        font-weight: 600;
+        font-size: 13px;
+        border: 2px solid var(--color-paper);
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    }
+    /* Popups follow the paper theme instead of Leaflet's default white. */
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip {
+        background: var(--color-paper);
+        color: var(--color-ink);
+    }
+    .leaflet-popup-content-wrapper {
+        border-radius: 8px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+    }
+    .review-popup a {
+        color: var(--color-accent);
+    }
+    .review-popup-stars {
+        margin-top: 2px;
+        color: var(--color-accent);
+        letter-spacing: 1px;
+    }
+    .leaflet-container {
+        font: inherit;
+        background: var(--color-paper-soft);
+    }
+    /* OSM raster tiles are light; gently tone them for dark mode so the map
+       blends with the paper-at-night palette (markers/popups are unaffected). */
+    :root[data-theme='dark'] .leaflet-tile {
+        filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+    }
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme]) .leaflet-tile {
+            filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+        }
+    }
+    :root[data-theme='light'] .leaflet-tile {
+        filter: none;
+    }
+</style>

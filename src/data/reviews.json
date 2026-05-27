@@ -1,0 +1,2507 @@
+{
+  "generatedAt": "2026-05-27T14:01:46.977Z",
+  "count": 250,
+  "withCoords": 250,
+  "reviews": [
+    {
+      "place": "NAKAVT Burger & Kafe",
+      "address": "Hürriyet, Girgin Sk. No:11, 59030 Süleymanpaşa/Tekirdağ, Türkiye",
+      "rating": 5,
+      "text": "Tekirdağ gibi sosyal aktivitenin sahilde turlamaktan ibaret olduğu bir şehirde resmen ilaç gibi geldi. Bir süredir müdavimiyiz.\n\nŞehirde arkadaşlarınızla gidip kutu oyunu oynayabileceğiniz, üstüne bir de quiz night etkinliğine katılabileceğiniz tek yer zaten. Etkinlikleri mekanın sahibi hazırlayıp bizzat sunuyor. Film okumaları, kitap kulübü gibi etkinlikler de var.\n\nHem kafa dağıtıp tatlı tatlı rekabet etmek hem de kaliteli bir tayfayla vakit geçirmek için şehirdeki en mantıklı adres. Bizim Salla Kazan ekibi olarak haftalık rutinimiz oldu bile. Farklı bir etkinlik arayanlar mutlaka şans versin.",
+      "date": "2026-05-23",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9114da3a0807288f",
+      "lat": 40.9835186,
+      "lng": 27.5591958
+    },
+    {
+      "place": "Nasreddin Hoca Taş Fırın Hürriyet",
+      "address": "Hürriyet, enginar sokak no 3/A, 59030 Süleymanpaşa/Tekirdağ, Türkiye",
+      "rating": 1,
+      "text": "1 buçuk saatte 5 tane lahmacun getiriyorsunuz o da buz gibi geliyor. İftar saati de değil sonrasında söyledik bir de.",
+      "date": "2026-03-04",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xea023f842e4c18d",
+      "lat": 40.9836013,
+      "lng": 27.560656
+    },
+    {
+      "place": "Loe Cafe Datça",
+      "address": "İskele, Atatürk Cd. No: 29/A, 48900 Datça/Muğla, Türkiye",
+      "rating": 1,
+      "text": "Kafe iken züccaciyeciye dönmüş maalesef.",
+      "date": "2025-08-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe85a115b72a532ee",
+      "lat": 36.7250585,
+      "lng": 27.6855538
+    },
+    {
+      "place": "Mercan Cafe Beach",
+      "address": "Datça, Sevgi Yolu No:37, 48900 Datça/Muğla, Türkiye",
+      "rating": 1,
+      "text": "Öncelikle kredi kartı geçmiyor, onu belirteyim. Eve yakın diye 2 senedir gidiyorduk, bugün eşim oturmuş, ben de bisikletimi bağlamaya çalışırken vay efendim düşer, vay efendim çocuklar oynar diye masaların yanına koydurmadılar.\n\nBi de şikayet edip sildirmişler yorumumu. Komiksiniz :)",
+      "date": "2025-08-07",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x17682b646fc9ba0b",
+      "lat": 36.7313757,
+      "lng": 27.6920594
+    },
+    {
+      "place": "YalıGıyı CoffeeBistro",
+      "address": "İskele, Atatürk Cd. no:91, 48900 Datça/Muğla, Türkiye",
+      "rating": 1,
+      "text": "Loud music.",
+      "date": "2025-08-04",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x5834606a38daf8ec",
+      "lat": 36.7231432,
+      "lng": 27.6890388
+    },
+    {
+      "place": "Ibri Hotel",
+      "address": "Atatürk, 1053. Sk. No:5, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 1,
+      "text": "Booking üzerinde \"evcil hayvan dostu\" yazmışsınız, arayınca \"evcil hayvan kabul edilmediği\" iletildi. Booking üzerinden düzeltme yapıp iletirseniz yorumu düzenleyeceğim.",
+      "date": "2025-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x8104094329ac0aa0",
+      "lat": 37.951309,
+      "lng": 27.367304
+    },
+    {
+      "place": "Otopratik Bahar Otomotiv",
+      "address": "100. Yıl, Kita Sk. Tan İş Merkezi No:2 B Bölüm No:1, 59100 Süleymanpaşa/Tekirdağ, Türkiye",
+      "rating": 5,
+      "text": "10 bin bakımı için getirdim. Tüm sıkıntılarla detaylı bir şekilde ilgilendiler. İçeride rahat bir bekleme alanı olması büyük avantaj.",
+      "date": "2024-08-27",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xfaa936603711713",
+      "lat": 40.966062,
+      "lng": 27.486698
+    },
+    {
+      "place": "Tekirdağ Nakliyat",
+      "address": "Yavuz, Şht. İlhan Doyran Sk. No:4, 59100 Süleymanpaşa/Tekirdağ, Türkiye",
+      "rating": 5,
+      "text": "Haziran sonunda Büyükçekmece'den Tekirdağ TOKİ'ye taşındık. Hem yorumları iyi diye, hem de uygun bir fiyat verdikleri için tercih ettim.\n\nÇalışanlar piyasadan 3-5 günlüğüne tutulmuş kişiler değil, firmanın kendi elemanı. Araçlar da yine kendi logolu araçları.\n\nEvi asansörlü bir şekilde alıp kırmadan dökmeden taşıdılar. Sonradan da verilen fiyatı artırma vs. olmadan tamamlayıp gittiler.",
+      "date": "2024-08-27",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6e9e6e03dd1fbcaa",
+      "lat": 40.9751948,
+      "lng": 27.5024704
+    },
+    {
+      "place": "Ziyafet Dünyası",
+      "address": "Sinanoba Mh, Mimaroba, Akkuzu Sk. N.6 B, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Mimaroba'da en ilgili, en lezzetli restoran. Kerim Bey'e teşekkürler.",
+      "date": "2024-05-01",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x58c917647be5793",
+      "lat": 40.9919185,
+      "lng": 28.543313
+    },
+    {
+      "place": "Teknosa",
+      "address": "Yenibosna Merkez, Değirmenbahçe Cd. No:34, 34197 Bahçelievler/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Aldığım sıfır powerbank bozuk çıktı. 2 gün sonra geldim, \"ürünü servise yollayacağız onlar inceleyecek\" dediler. 5 gündür ürünün servise \"yollanmasını\" bekliyorum.\n\nSakın ola alışveriş yapmayın buradan.\n\nAşağıdaki Tarkan bey, size telefon bırakalı 5 gün oldu. Herhangi bir çözüm bulduğunuz yok, yasal süreci tekrarlayıp duruyorsunuz.",
+      "date": "2024-01-12",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdfb2054e1e5ef12a",
+      "lat": 41.0112484,
+      "lng": 28.8150176
+    },
+    {
+      "place": "Teknosa",
+      "address": "Adnan Kahveci, Yavuz Sultan Selim Blv. Perla Vista Avm Magaza No:C018 1, 34528 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Aldığım sıfır powerbank bozuk çıktı. 2 gün sonra geldim, \"ürünü servise yollayacağız onlar inceleyecek\" dediler. 5 gündür ürünün servise \"yollanmasını\" bekliyorum.\n\nSakın ola alışveriş yapmayın buradan.",
+      "date": "2024-01-12",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe3a2c316b0f35969",
+      "lat": 41.0160998,
+      "lng": 28.6277972
+    },
+    {
+      "place": "Tırmata Cafe Beach Datça",
+      "address": "Burgaz Mevkii, İskele, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "10 gündür civarı hemen hemen her gün geliyorum. Bilgisayarda çalışmam gerekiyor, arada da denize giriyorum. İnterneti baya iyi, 20 Mbit civarı çıkıyordu. Upload nispeten düşük. Stabil çalışıyor ama o iyi. Birkaç masanın yanında priz var, çok çok kullanışlı oldu.\n\nÇok sessiz bir mekan, Datça içerisinde böyle sessiz bir yer bulma imkanı yok gibi artık. Müzik çalıyorlar çoğunlukla ama kıs deseniz de kısarlar, anlayışlı bir işletme. Garson arkadaşlar bir şey olunca anında koşuyor.\n\nÇok işlek olmadığı için yemek seçeneği kısıtlı. Zaten Datça içerisinde de hemen hemen öyle. Gelenler taze ve güzel geliyor. Kahvaltı doyurucu, özenli.\n\nDenizi güzel, Datça'nın bu tarafı hemen hemen aynı şekilde zaten. Portatif iskele var, onunla girme imkanı var.\n\nKişi başı 250 TL harcama yaparsanız şezlong kullanımı da ücretsiz oluyor.",
+      "date": "2023-07-12",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x10cec280836b6e8c",
+      "lat": 36.7448642,
+      "lng": 27.7052122
+    },
+    {
+      "place": "İstanbul Valiliği İl Nüfus Ve Vatandaşlık Müdürlüğü",
+      "address": "Hırka-i Şerif, Adnan Menderes Vatan Blv. No:62, 34091 Fatih/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Hem kendim ve eşim için pasaport randevusu almıştım. Sıra numarası yarım saat önce açılıyor, açıldığı zaman aldık. Tıkır tıkır tam randevu saatinde işlemleri hallettirdik. Kalabalık yok, yığılma yok. Saat gibi çalışıyorlar.",
+      "date": "2023-01-09",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x5ec2a6c2132f3db2",
+      "lat": 41.0204548,
+      "lng": 28.9364436
+    },
+    {
+      "place": "Kaya Restaurant",
+      "address": "Evciler, 09500 Çine/Aydın, Türkiye",
+      "rating": 5,
+      "text": "Senelerdir burdan geçerken uğruyoruz. Kahvaltı, çöp şiş, köfte, ne yediysek hepsini çok beğendik. Ancak bugün akşam geçerken kapalı gördük üzüldük. İnşallah kalıcı olarak kapanmamıştır, bugünlük kapalıdır.",
+      "date": "2022-11-12",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3dedd7142337cabe",
+      "lat": 37.5916304,
+      "lng": 28.0597767
+    },
+    {
+      "place": "Bakery İstanbul",
+      "address": "Mimaroba, Ertürkler Cd., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Makul fiyatlı ve sakin bir yer. Eve de sipariş verdik, çok hızlı ve sıcak olarak gönderdiler. Kahvaltısı da güzel. Hayırlı işler dilerim.",
+      "date": "2022-10-16",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x19bb2590da477b7",
+      "lat": 41.0069511,
+      "lng": 28.5345305
+    },
+    {
+      "place": "Serin Bahçe Cafe Restaurant",
+      "address": "İskele, 87. Sk. no:3, 48900 Datça/Muğla, Türkiye",
+      "rating": 1,
+      "text": "Getir üzerinden verdiğim siparişi \"ürün eksik\" diyerek iptal etmişler. Aradım sordum \"orası biraz uzak kalıyor\" diye açıklama yapıyor. O zaman minimum sipariş tutarını ona göre ayarlamayı öğrenin, biz de ona göre sipariş verelim.",
+      "date": "2022-07-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x771f45388999c224",
+      "lat": 36.7302732,
+      "lng": 27.6882948
+    },
+    {
+      "place": "Bisiklet Kliniği (BİSİKLET TAMİR VE KİRALAMA SERVİSİ )",
+      "address": "ana cadde, Güvercintepe, İpekyolu Cd., 34520 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bölgede bisikletçiye gerçekten ihtiyaç duyuluyordu. İşlerini de iyi yapıyorlar, iyi çalışmalar dilerim.",
+      "date": "2022-02-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe5bab9f5ef90918",
+      "lat": 41.0779895,
+      "lng": 28.7520333
+    },
+    {
+      "place": "Emlak Konut Mimar Sinan Anadolu Lisesi",
+      "address": "Sinanoba Mah., Şükran Cd. No:1, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Artık sınavla öğrenci almıyor maalesef, mahalli yerleştirme ile alıyor.",
+      "date": "2022-02-08",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb89eb61e7ec4e79e",
+      "lat": 40.9988692,
+      "lng": 28.5380923
+    },
+    {
+      "place": "Avukat Mehmet Çavdar Hukuk ve Danışmanlık Bürosu",
+      "address": "Gökevler Mah. Ginza Corner E-5 Yanyolu No:3 Kat: 9, 34522 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Başarılı bir avukat, hayırlı işler diliyorum.",
+      "date": "2022-01-04",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xab6900324690e8ac",
+      "lat": 41.0207491,
+      "lng": 28.6304097
+    },
+    {
+      "place": "VetEvA Veteriner Kliniği",
+      "address": "Sinanoba mah. Mustafa Kemal Bulvarı No: 53/M, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bölgedeki işini iyi yapan tek veteriner. Eyüp Bey ve Aslı Hanım'a ilgi ve alakaları için teşekkür ederiz.",
+      "date": "2021-09-28",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb6e151e0b7860dc1",
+      "lat": 40.9938667,
+      "lng": 28.5399373
+    },
+    {
+      "place": "Pupa Lounge Cafe&Bar",
+      "address": "İskele, Yat Limanı Sk. No:102/A, 48900 Datça/Muğla, Türkiye",
+      "rating": 1,
+      "text": "Ses sistemini amfideki para verdiğimiz gösteride sizi duymayacak şekilde ayarlarsanız çok muhteşem olur.",
+      "date": "2021-07-30",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xccc3273fa10e6033",
+      "lat": 36.7230063,
+      "lng": 27.6885456
+    },
+    {
+      "place": "Kahvecin - Capello Corner",
+      "address": "İsa Bey, Namık Kemal Cd. No:11, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 5,
+      "text": "Köşe başında bulunan küçük bir mekan. Kahve seçenekleri, menüsü gayet geniş. Sakin de oluyor, espresso bazlı kahve içmek isterseniz tercih edebilirsiniz.",
+      "date": "2021-07-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x72162b3e0e2847ec",
+      "lat": 37.9508608,
+      "lng": 27.3710184
+    },
+    {
+      "place": "Asia kıtchen",
+      "address": "Atatürk, Uğur Mumcu Sevgi Yolu 6 A, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 5,
+      "text": "Çok iyi bir lokanta idi ama kapanmış maalesef. Yerine başka bir kebapçı açılmış. Eğer sahipleri başka bir yere taşındıysa yanıt olarak buraya bilgilendirme yapabilirse seviniriz.",
+      "date": "2021-07-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7e943974955cd399",
+      "lat": 37.9497225,
+      "lng": 27.3687472
+    },
+    {
+      "place": "Rhapsody Garden Park",
+      "address": "Bahçelievler, İstanbul Blv. No:59, 59000 Merkez/Tekirdağ, Türkiye",
+      "rating": 1,
+      "text": "3 garson yağlı masaya bakarken bize 1 tanesi gelemedi malesef.",
+      "date": "2021-07-03",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x8f557fec93140782",
+      "lat": 40.995711,
+      "lng": 27.63547
+    },
+    {
+      "place": "Özcanlar Köfte | Beyazköy Şube",
+      "address": "Bahçelievler, 59000 Süleymanpaşa/Tekirdağ, Türkiye",
+      "rating": 5,
+      "text": "Kalabalık olmasına rağmen hızlı servis ve kaliteli ürünler geldi.",
+      "date": "2021-07-02",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4eec3db55b9f2aae",
+      "lat": 40.9895902,
+      "lng": 27.6026842
+    },
+    {
+      "place": "GÖRENLER KÜNEFE",
+      "address": "Mimaroba, 34535 MİMAROBA/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Eve sipariş verdik. 2 kişilik künefe söyledik, 4 kişi yedik. Gayet sıcak gelmişti, beğenerek yedik. Burada linç kültürüne kurban gitmiş sanıyorum. Puanı neden düşük demiştim, yorumlara bakınca niye olduğunu anlamak mümkün.",
+      "date": "2021-06-25",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe727966b04fbaa32",
+      "lat": 41.0017624,
+      "lng": 28.5434625
+    },
+    {
+      "place": "Etiler Marmaris Mimaroba",
+      "address": "Ekinoba Mah. Mustafa Kemal Bulvarı (Marine Park Sitesi) Şakir Sok. No: 1F, D:3, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Allah razı olsun, kolay gelsin 🖐️",
+      "date": "2020-12-06",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd6043d1e18736b65",
+      "lat": 41.0025845,
+      "lng": 28.5429314
+    },
+    {
+      "place": "Kardeşler Pide Kızlan",
+      "address": "Kızlan, Kızlan Sk No:298 Daire:2, 48900 Datça/Muğla, Türkiye",
+      "rating": 4,
+      "text": "Fiyatına ve malzemeye göre çok iyi bir yer değil. Yeri geniş, o biraz avantaj.",
+      "date": "2020-07-30",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x64a23a9cc4a6d349",
+      "lat": 36.7753014,
+      "lng": 27.6889349
+    },
+    {
+      "place": "The Coffee Grinder Datça",
+      "address": "İskele, Ali Osman Çetiner cad No:9/D, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Datça'da bulabileceğiniz az sayıda kahveciden birisi. Boyut olarak büyük boy kahvelerini başka bir yerde bulamazsınız. Tatlı/yiyecek olarak muhteşem değil ama idare eder.",
+      "date": "2020-07-30",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd3cd49df65ff0478",
+      "lat": 36.7262018,
+      "lng": 27.6869185
+    },
+    {
+      "place": "D-PO Pizza",
+      "address": "İskele, Vatan Cd. No:14, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Ortadoğu'nun hatta Balkanların en iyi pizzası burada :) Murat Bey'e selamlar",
+      "date": "2020-07-30",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xfd8315572e34d0b1",
+      "lat": 36.7267978,
+      "lng": 27.6846236
+    },
+    {
+      "place": "Dikçe Beach",
+      "address": "İskele, Kargı Yolu Cd, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Beach kısmını birkaç yıldır arada bir kullanıyoruz. Kargı'ya göre daha az kalabalık, daha uygun fiyatı var.",
+      "date": "2020-07-30",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xce4a16665db27319",
+      "lat": 36.7028008,
+      "lng": 27.6772709
+    },
+    {
+      "place": "Dereli Rest&Camping",
+      "address": "Atatürk, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 1,
+      "text": "İlk kez 2017'de gittik. O zaman kişi başı 25 liraydı. Eşimle 50 liraya kaldık. İçindeki restoranda yemek yedik bir seferinde, uçuk fiyatları vardı. Yakında da sadece bir tekel bayii var, Selçuk Merkez'e gitmeniz lazım alışveriş için. Elektriği var, ona karışan falan yok. Duşlar, lavabolar var ama çok temiz değil. Temizlendiğine de rastlamadım kaldığım süre boyunca.\n\nBu sene 2019 Temmuz'da kalalım diye telefon ettim. Telefondaki ilgili, kişi başı 50 lira olduğunu söyledi. Ben de gayri ihtiyari, içine acaba kahvaltı vs. mi eklediler diye, bu fiyatın içine nelerin dahil olduğunu sordum.\n\nCiddi ciddi duşumuz, tuvaletimiz var diye anlattı. Kablomuz varsa elektrik çekebilirmişiz. Ciddi şekilde kalabalık olan, yanındaki belediye tesisinde konserler, gençlik kampları yapılan yer burası. Kendi çadırımda, kendi ekipmanımla, bomboş bir arazide, gürültü içinde kalıp bir tek su ve elektrik kullanımı için 100 lira istediler yani özetle. Booking üzerinden aradım, 129 ve 138 liraya iki tane kahvaltı dahil otel vardı. Nicea Hotel'den 138 liraya bir oda ayırttım. Klimalı, kendi duşu tuvaleti olan, gayet makul bir kahvaltısı olan, 7/24 çayı kahvesi olan bir otelde, 40 lira fazla vererek kalmış oldum. Dereli'de kalsaydım da kişi başı 20 lira kahvaltıya verecektim zaten.\n\nBu kamp yerlerinin kendilerini beş yıldızlı otel sanması gibi bir olay gerçekleşmiş sanırım bu yıl. Otel ile aynı parada olacaksa gider otelde kalırız.",
+      "date": "2019-07-24",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x444f169b820d7ae7",
+      "lat": 37.9394256,
+      "lng": 27.2763916
+    },
+    {
+      "place": "Nicea Hotel",
+      "address": "Atatürk, Uğur Mumcu Sevgi Yolu 14/b, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 5,
+      "text": "Hasan Bey, otele girişimizden itibaren gayet ilgili davrandı. Booking üzerinden uygun fiyata aldım odayı, neredeyse bölgedeki kamplarla aynı fiyat. Makul bir kahvaltı da dahil. 7/24 çayı kahvesi var. Ne zaman lobiden geçsek, bütün görevliler güler yüzlü, yardımsever davrandılar. Odası, ekonomik odayı aldığımız için orta apartman boşluğuna bakıyordu ama sorun yaşamadık. Biraz üst bir fiyata balkonlu odaları var.\n\nOdadaki banyo, eşyalar vs. yepyeniydi. Normalde tekli yatak vardı ama isteğimiz üzerine yatakları da birleştirip hazırlamışlar. Odada buzdolabı yok ama aşağıda kendi buzdolabında suyu, içecekleri vs. çoğu marketten ucuza satıyorlar.\n\nİlgileri için çok teşekkür ederiz, çok memnun kaldık, tekrar kalacak olsak yine buraya geliriz muhemelen.",
+      "date": "2019-07-24",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbd0d07e18911c760",
+      "lat": 37.9494936,
+      "lng": 27.368462
+    },
+    {
+      "place": "Dereli Motel",
+      "address": "Atatürk, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 1,
+      "text": "2017'de gelip kişi başı 25 liraya kalmıştık. 2019'da bu sene arayıp sordum, kişi başı 50 lira dedi. İçinde ne var diye sordum, işte duş, tuvalet, elektrik var diyor. 2 kişi gecelik 100 liraya buraya verene kadar gidip 20 lira farkla Selçuk merkezde kahvaltı dahil otelde kalıyoruz. Şaşırmışlar galiba.",
+      "date": "2019-07-12",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9238cb5fbb96ff21",
+      "lat": 37.9400787,
+      "lng": 27.2759094
+    },
+    {
+      "place": "Tchibo",
+      "address": "Mehmet Akif Ersoy, Bağdat Cd. No:60/B, 06374 Yenimahalle/Ankara, Türkiye",
+      "rating": 1,
+      "text": "Kapanmış",
+      "date": "2019-06-06",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x8bc7f2a4c1635eec",
+      "lat": 39.9621561,
+      "lng": 32.7692125
+    },
+    {
+      "place": "Pelican Mall AVM",
+      "address": "Üniversite, D-100 Kuzey Yanyolu No:42, 34320 Avcılar/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "AVM havası yok, çok boğmuyor. Kalabalık da değil. Avcılar'a her yolum düştüğünde uğruyorum.",
+      "date": "2019-04-29",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe0d85c4d83cc07b6",
+      "lat": 40.9908492,
+      "lng": 28.7152012
+    },
+    {
+      "place": "Şehzade Cağ Kebap",
+      "address": "Hoca Paşa, Hocapaşa Camii Sok. No:6 D:4, 34110 Fatih/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "İstanbul'daki en ünlü çağ kebapçısı. Lezzet olarak ününün hakkını veriyormuş. Fiyatlarına da uygun denilebilir. 2 kişi doyana kadar yedik, 1 porsiyon tatlı vs. aldık içecekler vs. hepsi beraber 110 TL tuttu.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3a3126ac9d5344f7",
+      "lat": 41.0139781,
+      "lng": 28.9752568
+    },
+    {
+      "place": "M Migros",
+      "address": "Sinanoba, Mustafa Kemal Blv. No: 52, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Enteresan bir ilgisizlik var burada. Sanki almak zorundaymışız da bize lutfetmişler gibi bir tavırdalar bütün çalışanlar. Ekinoba'daki büyük Migros'la alakası yok o açıdan.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb5152e12108f43ca",
+      "lat": 40.9964159,
+      "lng": 28.5400036
+    },
+    {
+      "place": "Avrupa Akademi Veteriner Polikliniği",
+      "address": "Güzelce, Geçit Cd. 22/2, 34530 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Baya büyük, kapsamlı, rehabilitasyon için havuz bile mevcut olan bir yer ama biraz pahalı maalesef.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4eee52a4102fe470",
+      "lat": 41.0067389,
+      "lng": 28.5167994
+    },
+    {
+      "place": "Jimmy Joker Cafe Restaurant",
+      "address": "Ekinoba mah.Mustafa Kemal Bulv. Eliaçık Sk Westpark Evleri Mimaroba, Ziyagökalp, B2 Blok, 34490 Büyükçekmece, Türkiye",
+      "rating": 3,
+      "text": "Buraya ne zaman gelsek bir sıkıntı çıkıyor. Kahvaltı istiyoruz 50 dakikada geliyor. Garsondan ekmek vs. istemek istiyorsun garson bulamıyorsun. Bir türlü memnun ayrılamadık burdan.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7181496488c362f0",
+      "lat": 41.0061748,
+      "lng": 28.5410971
+    },
+    {
+      "place": "atça B",
+      "address": "İskele, Halil Aşkın Cd. 1/C, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Öğlenleri uygun fiyata esnaf menüleri çıkıyor.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9cc45f37c349ccc9",
+      "lat": 36.7248314,
+      "lng": 27.6837528
+    },
+    {
+      "place": "Mall of Istanbul",
+      "address": "Ziya Gökalp, Süleyman Demirel Blv No:7, 34490 Başakşehir/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Arap turistlerin uğrak mekanı.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x51dbb16a702cb15a",
+      "lat": 41.0625272,
+      "lng": 28.8075256
+    },
+    {
+      "place": "Roll Coffee House",
+      "address": "İskele, Atatürk Cd. No:94/A, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Güleryüzlü, samimi sahipleri var. Geniş bir alkollü içecek yelpazesi varmış. Küçük bir alanı olduğundan genellikle kalabalık oluyor.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd7c83718136012ae",
+      "lat": 36.722585,
+      "lng": 27.687915
+    },
+    {
+      "place": "Mehmet Bisiklet Büyükçekmece",
+      "address": "Atatürk, Atatürk Cd Kaya apt No 20, 06101 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bisiklet ve aksesuar çeşidi olarak en geniş yelpaze Büyükçekmece'de burada. Zaten çoğu bisiklet markasının bayisi burası.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x20a0738ae808bacd",
+      "lat": 41.0157131,
+      "lng": 28.5951518
+    },
+    {
+      "place": "Şençam Köfte Kokoreç Döner - AOÇ",
+      "address": "Atatürk Orman Çiftliği, Etimesgut Ankara TR, Emniyet, Cumhurbaşkanlığı Blv 11/C-D, 06600 Yenimahalle, Türkiye",
+      "rating": 5,
+      "text": "Kokoreçi güzelmiş, biraz kalabalık oluyor ama biraz beklemeniz gerekebilir.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x69c2bc4a36a0f417",
+      "lat": 39.9393963,
+      "lng": 32.7960754
+    },
+    {
+      "place": "Sirkeci Dogubank Business Center",
+      "address": "Hobyar, Hamidiye Cd. No:10, 34112 Fatih/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Elektronik cenneti, her türlü elektroniğin çakmasının, kaçağının harman olduğu yer.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9f7e6f64875e4764",
+      "lat": 41.0153299,
+      "lng": 28.974929
+    },
+    {
+      "place": "77y Peace Park from 7",
+      "address": "Batıköy, İpekçi Sk. No:12, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Mimaroba'da yürüyüşe, dolaşmaya çıkmak için en güzel alternatif.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc622558628b8f034",
+      "lat": 40.9943284,
+      "lng": 28.5374365
+    },
+    {
+      "place": "Bati garden",
+      "address": "Mimaroba, Yaprak Sk., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Tavşanlardan dolayı evcil hayvanları almıyorlar, ancak Mimaroba'da gidebileceğiniz iyi mekanlardan birisi. Fiyatları ise ortalamaya göre pahalı.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa0777876fd4f0c08",
+      "lat": 40.9991205,
+      "lng": 28.5465573
+    },
+    {
+      "place": "Topkapi Palace Museum",
+      "address": "Cankurtaran, Babı Hümayun Cad No: 1, 34122 Fatih/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "İşaretleme, tabela falan hak getire. Daha önceden bir plan yapmadan direkt gireyim de gezeyim derseniz hayatta bütün bölümlere uğrayamazsınız. En azından bir numaralandırma yapılabilir, insanların onu sırayla takip etmesi sağlanabilirdi. Ayrıca Harem'e ekstra 30'ar TL verip girdik, haremin olduğu asıl kısım tadilattaymış.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x15aa1943c3015300",
+      "lat": 41.0115195,
+      "lng": 28.9833789
+    },
+    {
+      "place": "MM Migros",
+      "address": "Mimaroba Mah. Atatürk Bulv. Ekinoba Konutları A Blok No: 1, Mimar Sinan Merkez, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Özellikle et, tavuk gibi ürünleri taze, genelde buradan alıyorum. Mimaroba bölgesinde en çok alternatifi bulabileceğiniz süpermarket burası.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x131bfae028e9ea02",
+      "lat": 41.011258,
+      "lng": 28.5365611
+    },
+    {
+      "place": "Orman Restaurant - Kahvaltı",
+      "address": "Karaçam, Manisa Yolu 8 km, 35040 Bornova/İzmir, Türkiye",
+      "rating": 5,
+      "text": "Yemekleri çok lezzetli idi, pastırmalı humus tavsiye etmişler, biz de denedik ve beğendik.",
+      "date": "2019-03-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3546e804a22c0a2a",
+      "lat": 38.5084245,
+      "lng": 27.269034
+    },
+    {
+      "place": "Dut Ağacı Cafe",
+      "address": "Behram Köyü Yolu, 17862 Behram/Ayvacık/Çanakkale, Türkiye",
+      "rating": 5,
+      "text": "Assos'ta, küçük ama sevimli bir cafe. Ben mantı yedim, eşim zeytinyağlı tabağı yedi. Yediğim en güzel mantılardan biri idi. Yolumuz düştükçe uğrayacağız.",
+      "date": "2018-08-28",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2a85957dbb817035",
+      "lat": 39.4925704,
+      "lng": 26.3343341
+    },
+    {
+      "place": "Goat Camping",
+      "address": "Harapiçi Mevkii, Harapiçi Küme Evleri No:10, 17862 Kuruoba/Ayvacık/Çanakkale, Türkiye",
+      "rating": 5,
+      "text": "Kamp alanı şu an yarım pansiyon kişi başı 70 TL. Tuvaletleri, duşları temiz. Sabunu, tuvalet kağıdı, kağıt havlusuna kadar var.\n\nGörece küçük ve şirin bir alan, ön tarafında kendi kumsalı, şezlongları, iskelesi var.\n\nİşleten arkadaşlar çok ilgililer. Sağolsunlar bir sürü konuda yardımcı oldular. Her yemekten sonra beğendiniz mi, doydunuz mu diye özellikle soruyorlar.\n\nİnternet bağlantıları var. Çadıra su veya elektrik tesisatı yok, elektrik için uzun bir kablo ile bazı noktalardan alabilirsiniz. Yemek alanında da kullanabileceğiniz prizler var. Karavan için müsait değil.",
+      "date": "2018-07-17",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa93e58eed4fc9950",
+      "lat": 39.4806206,
+      "lng": 26.257423
+    },
+    {
+      "place": "Starbucks",
+      "address": "Beşyol, İnönü Cd. No:38, 34295 Küçükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Kampüsün içinde, dışarıdan erişim yokmuş.",
+      "date": "2018-07-04",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6d69aa21a08efd1d",
+      "lat": 40.9928319,
+      "lng": 28.7976884
+    },
+    {
+      "place": "BALIKÇI KENAN E5",
+      "address": "Büyükşehir, 34520 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Yiyecekler güzel, fiyatları da iyiydi.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x90c8f6a5eb1c1ec1",
+      "lat": 41.0135219,
+      "lng": 28.6451003
+    },
+    {
+      "place": "Happy Center",
+      "address": "Büyükşehir Mh. Belediye Cad. No:20. E-5 Karayolu Marka City AVM No:5, Beylikdüzü Cd., 34520 Beylikdüzü, Türkiye",
+      "rating": 3,
+      "text": "Marka City yıkılacağı için dışarıda prefabrik bir yere taşımışlar.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x68d06d84b3079188",
+      "lat": 41.0121576,
+      "lng": 28.6477496
+    },
+    {
+      "place": "Küba Cafe Gusto",
+      "address": "Cumhuriyet, Cumhuriyet Cd., 34520 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Sıcak kahvaltısı güzelmiş. Ancak diğer yorumlarda da yazıldığı gibi serviste biraz sıkıntı var. Sabah ilk ben gittiğimde bile bakmaları 10-15 dakika aldı. Bir de mekanın sahibiydi sanırım, eşimle oturup üşüdük diyoruz, geldi tavanı açtı :) Güneş vurursa ısınırdınız ama vurmuyor dedi geri kapattı.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdee7807cb948fe4",
+      "lat": 41.0120518,
+      "lng": 28.6440457
+    },
+    {
+      "place": "Medicana International Istanbul",
+      "address": "Büyükşehir, Beylikdüzü Cd. No:3, 34520 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Bölgedeki en kapsamlı hastane. Ben onkoloji hastasıydım, bu bölgede gidebileceğiniz alternatif yok zaten. Ama pahalı ve bazı polikliniklerde tecrübeli değil.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbf7a6e5db0269867",
+      "lat": 41.0129651,
+      "lng": 28.6453056
+    },
+    {
+      "place": "Starbucks",
+      "address": "Adnan Kahveci, Yavuz Sultan Selim Blv. No:53/A, 34528 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Yukarıdaki Hilal Konakları şubesine göre çok daha sakin, çalışanları çok daha bilgili.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1401545649c78b4f",
+      "lat": 40.9951813,
+      "lng": 28.6259392
+    },
+    {
+      "place": "Tugbis Manti",
+      "address": "Acıbadem, Faikbey Mescidi Sk 39/B, 34660 Üsküdar/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Selamlar :)",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4ffa232e8543f17a",
+      "lat": 41.006684,
+      "lng": 29.0468235
+    },
+    {
+      "place": "Fusha Şile",
+      "address": "Balibey, Fener Cd. No:3, 34980 Şile/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Fiyatlar ortalama üzeri sayılır ama yeri, manzarası güzel. Yemekleri de güzel.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x886c56b58594ca33",
+      "lat": 41.1797547,
+      "lng": 29.6130469
+    },
+    {
+      "place": "Tarihi Samatya Köftecisi",
+      "address": "Cerrahpaşa, Org. Abdurrahman Nafiz Gürman Cd. No:43 D:B, 34098 Fatih/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Ufak, sakin bir mekan. Köftesi gayet güzeldi. Çevrede de yemek yiyecek başka düzgün yer göremedim.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xfda823031d09e0cb",
+      "lat": 41.003334,
+      "lng": 28.9429854
+    },
+    {
+      "place": "Şile Saklıgöl",
+      "address": "Karamandere, 34980 Şile/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Leş gibi bir mekan. İğne atsan yere düşmez. Elini attığın yerden bi gelin damat çıkıyor. Fiyatlar uçuk. Çay içseniz cüzdanı alacaklar neredeyse. Tuvaletler kalabalık, leş gibi. Pislikten tuvalet önlerinde sinek sürüsü dolanıyor. Sırf İstanbul insanının çıkalım da bir yerlere gidelim inadı yüzünden böyle şişirilmiş.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9ee174b1be0f21a8",
+      "lat": 41.1212024,
+      "lng": 29.5935
+    },
+    {
+      "place": "Terbiyeli Çorba Et Köfte",
+      "address": "Piri Mehmet Paşa, Atatürk Cd., 34570 Silivri/İstanbul, Türkiye",
+      "rating": 2,
+      "text": "Yorumlara aldanıp gittik ama hiç memnun kalmadık. Köfteyi çiğ vermişler, söyleyince bütün tabağı aldı gitti. Sanıyorum ki değiştirecekler, o pişmeyen köfteyi az daha ızgaraya atmış, yine pişmeden getirmiş. Köfteyi bile pişiremeyecekseniz bu işi yapmayın.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbba4a2f0ede61389",
+      "lat": 41.0749272,
+      "lng": 28.2437164
+    },
+    {
+      "place": "Decathlon",
+      "address": "Ziya Gökalp, Süleyman Demirel Blv No:7 Kat: 0, 34490 Başakşehir/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "İstanbul içinde kapsamlı şubelerden birisi. Özellikle bisiklet aksesuarı olarak aranabilecek çoğu şey ellerinde vardı.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdfc3311795f4555e",
+      "lat": 41.062255,
+      "lng": 28.807078
+    },
+    {
+      "place": "Şile İyot Restaurant",
+      "address": "Balibey, Şht. Levent Birben Cd. No:4, 34980 Şile/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bir sefer sakinken, bir sefer kalabalıkken gittik. Sakin olduğu zaman hizmet çok iyiydi, ekstra ikramlarda bulundular. Kalabalık olduğu gün (ki anneler günüydü) yine yiyecekler vs. iyiydi ama siparişlerde karışıklıklar oldu. Kahvaltı parça parça geldi, sonuncular gelirken artık sofradan kalkıyorduk. Fiyatları uygun, yeri güzel, ama sakinken gitmek lazım.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7d17fc6c04a802a1",
+      "lat": 41.1798,
+      "lng": 29.6117
+    },
+    {
+      "place": "İpek Fırın",
+      "address": "Barış, Ada Çiftliği Cd., 34520 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Müşteriyle nasıl konuşulacağını bilmeyen çalışanları var malesef. Fiyatları da uçuk, internette daha düşük görüp, ona aldanıp gitmiştim, bir daha uğramam.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x82fcd111e3d07faf",
+      "lat": 40.999695,
+      "lng": 28.6537
+    },
+    {
+      "place": "Yeşim Datça",
+      "address": "İskele, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Manzarası gerçekten güzel, bütün Datça ve civarını görebiliyorsunuz.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1c2f8419b5a48114",
+      "lat": 36.722047,
+      "lng": 27.684347
+    },
+    {
+      "place": "Starbucks",
+      "address": "Sarıana, Netsel Marina Münir Elgin Bulv No:38, 48700 Marmaris/Muğla, Türkiye",
+      "rating": 3,
+      "text": "Çok sıkışık bir şube, dışarıda oturacak yeri de yokmuş.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3364ca39aa9d368c",
+      "lat": 36.8531832,
+      "lng": 28.2809534
+    },
+    {
+      "place": "EKİNOVA FIRIN",
+      "address": "Batıköy Mahallesi, Çarmıklı Cd. No:28 D:2, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Çeşit açısından çevredeki en geniş fırın.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc9b99d31b1571aa3",
+      "lat": 41.0029293,
+      "lng": 28.5321056
+    },
+    {
+      "place": "Special Medicell Medical Center",
+      "address": "Mimaroba, Çarmıklı Cd. No: 7 D:1, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Dışarıdan güzel görünen, aslen bir işe yaramayan hastane.\n\nParmağımı kestim, dikiş atıldı. Parmağım uyuşuk diyorum, geçer dediler. Meğer parmağımdaki sinir de kesilmiş, üzerinden zaman geçmeden müdahale edilmesi lazımmış.\n\n1 senedir 3-4 kere karın ağrısıyla gittim. Böbrek taşıdır, enfeksiyondur, kumdur, huzursuz bağırsak sendromudur dediler. Meğer kanser hastalığı varmış, karnımda 5 cm kitle varmış. 2 kere alt batın üst batın ultrason çektiniz. 600 lira para aldınız. Niyeyse kocaman kitleyi göremediniz. Aşağıdaki ultrasoncu amcayı bir göz kliniğine gösterin.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9df1596d23d62fa2",
+      "lat": 41.0045069,
+      "lng": 28.53391
+    },
+    {
+      "place": "Yurtiçi Kargo Muratçeşme",
+      "address": "Murat Çeşme mah. Yunus Emre 2. cad. B Blok No: 85 D:, D:1, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Diğer şubelerin durumunu da bildiğimden,; çoğu Yurtiçi Kargo şubesinden kat kat iyi çalışan bir şube. Sağolsunlar bir durum olunca arayıp bilgilendirme yapıyorlar en azından.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1905527d28b88e0b",
+      "lat": 41.0192261,
+      "lng": 28.5409042
+    },
+    {
+      "place": "Papa John's Pizza Esenyurt",
+      "address": "Akevler, 1048. Sk No:17, 34513 Esenyurt/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Mimaroba'daki tek güzel pizzacı.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x423cfff8c17ecd31",
+      "lat": 41.0170439,
+      "lng": 28.6726816
+    },
+    {
+      "place": "Büyük Japon Pazarı",
+      "address": "Batıköy, Çarmıklı Cd. No:230, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Fiyat açısından çok makul değil ama çeşit açısından çoğu şeyi bulabilirsiniz. Bir de çalışanlar 'yardımcı olayım' demeyip rahat bıraksalar çok iyi olacak.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x147c5cd665b5e561",
+      "lat": 41.0069736,
+      "lng": 28.5377778
+    },
+    {
+      "place": "BlancA Cafe",
+      "address": "Mimaroba Mahallesi Eta marine sitesi Ünlusoy cad D:No:18, D:1, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Mimaroba'da sessiz sakin oturup yemek yiyebileceğiniz güzel yerlerden. Yalnız burada yerini yanlış işaretlemişler, Ünlüsoy Caddesi üzerinde.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd731a1b590c61c76",
+      "lat": 40.9986734,
+      "lng": 28.5437887
+    },
+    {
+      "place": "Elcielo Mimaroba",
+      "address": "sinan oba mah M.K Paşa Bulvarı Lavinya Marmara, 34000 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Uzun süredir ilk defa geçenlerde gittik. Sessiz sakince oturup konuşabileceğiniz, menüsü geniş güzel bir yermiş. Bangır bangır saçma müzikler çalmıyorlar. Çalışanlar işini düzgün yapıyor.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x93b87dd19f72f643",
+      "lat": 40.9961514,
+      "lng": 28.5404393
+    },
+    {
+      "place": "Starbucks",
+      "address": "Sinanoba, Hayırlı Sk No:1, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Mimaroba'nın ikinci dalga kahveci eksiliğini giderdiler. Akşamları, okul çıkışları vs. kalabalık oluyor genelde. Ekibe selamlar :)",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7c3fad659481292d",
+      "lat": 40.9960885,
+      "lng": 28.5405071
+    },
+    {
+      "place": "Mutlu Lezzetler",
+      "address": "Mimaroba, Belen Sk., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Ne zaman gitsem az ürün kalmış oluyor. Bir terk edilmiş havası var nedense.",
+      "date": "2018-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x199f316e90a4f497",
+      "lat": 40.9992515,
+      "lng": 28.5395295
+    },
+    {
+      "place": "YILDIRIM KIRTASİYE CERRAHPAŞA",
+      "address": "38, Cerrahpaşa, Koca Mustafapaşa Cd., 34098 Fatih/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Bir DVD kopyalamaya geldim, onun işini hallet, bunun işini hallet sıra gelmedi ne yazık ki. Şimdi koydular DVD'yi kenara arkadaşın keyfi yetsin de bilgisayara takip düğmeye bassın diye bekliyorum.\n\nBir de \"Sen mi DVD için bekliyordun, gel bakalım\" falan diye konuşuyor. Müşteriyle nasıl konuşulacağını öğrenin önce.",
+      "date": "2018-05-08",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x47294888d4ee8c85",
+      "lat": 41.007086,
+      "lng": 28.942038
+    },
+    {
+      "place": "Yasmin Motel",
+      "address": "Ağva Merkez, Yakuplu Cd. 9A, 34990 Şile/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Bölgedeki en ucuz otellerden birisi. Diğer oteller fiyatına göre çok yüksek fiyatlandırılmış. Kahvaltısı güzeldi, açık büfe değil ama gayet kapsamlı ve güzel hazırlamışlar. Hava geceleri soğuk olmasına rağmen oda sıcaktı, petekler çalışıyordu. Odanın temizliği biraz özenli yapılabilir. Üstünkörü temizlenmiş gibiydi.",
+      "date": "2018-04-30",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x300221ceb5c737b0",
+      "lat": 41.138187,
+      "lng": 29.8553477
+    },
+    {
+      "place": "Konak Tuncel Efe",
+      "address": "İskele, Atatürk Cd. No:55, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Restoran kısmı olan Gocadam'a oturduk 1-2 kere, salata söyledik. Salata da ilgileri de gayet iyiydi.",
+      "date": "2017-07-10",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x10f112248e80fbe2",
+      "lat": 36.723537,
+      "lng": 27.686513
+    },
+    {
+      "place": "Hotel Mare",
+      "address": "İskele, Hürriyet Cd. No:29, 48900 Datça/Muğla, Türkiye",
+      "rating": 3,
+      "text": "Biraz pahalı.",
+      "date": "2017-06-23",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3b1b1fd73ba8bee6",
+      "lat": 36.7307855,
+      "lng": 27.6899118
+    },
+    {
+      "place": "Şükrü Paşa Memorial",
+      "address": "Atatürk, Talat Paşa Cd. No:92, 22030 Edirne Merkez/Edirne, Türkiye",
+      "rating": 4,
+      "text": "Edirne'yi yukarıdan gören güzel bir seyir alanı.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xce6cf5333fe7c3f4",
+      "lat": 41.675286,
+      "lng": 26.5753672
+    },
+    {
+      "place": "COMU TRAINING HOTEL AT DARDANOS CAMPUS",
+      "address": "Dardanos, Eski İzmir Cd. Çanakkale Onsekiz Mart Üniversitesi, 17100 Merkez/Çanakkale Merkez/Çanakkale, Türkiye",
+      "rating": 4,
+      "text": "Yerleşke olarak çok güzelmiş. Biz 2017 Çanakkale Bisiklet Turu'nun kamp alanı olarak geldik. Yerleşkenin güvenlik amirinin kamp olacağından o gün haberi olmuş. Aşağı yukarı 200-300 kampçı geldi. Tuvaletler yetersiz geldi (ve pisti). Lokantada çorba haricinde hiçbir şey kalmamış. Kantini zar zor açtırdık. Kamp alanında ateş yakılması yasak dediler, herkes dondu. Duş imkanı olacak dediler duş falan görmedik. Elektrik olacak dediler, elektrik bulamadık. Doğada kamp yapmış gibi olduk.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xccc478306dada46c",
+      "lat": 40.0743659,
+      "lng": 26.3586715
+    },
+    {
+      "place": "BUDO Büyükçekmece İskelesi",
+      "address": "Mimar Sinan Merkez mah. İskele Cd. No:17, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Önceden alırsanız fiyatları uygun, haftasonluğuna ucuza günübirlik Mudanya turu yapabilirsiniz.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7a5538036c7ae813",
+      "lat": 41.015365,
+      "lng": 28.563566
+    },
+    {
+      "place": "Gaşık Konya Mutfağı",
+      "address": "Mimarsinan Merkez Mahallesi, E5 üzeri Londra Asfaltı No:70, Mimarsinan Mh, E-5 Karayolu No:57, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Yemekler iyi ama fiyat pahalı. 5 liralık etliekmeği 15 liraya satıyorlar.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd4b08fd7974c740b",
+      "lat": 41.015443,
+      "lng": 28.550993
+    },
+    {
+      "place": "Bisikletçi Nuri Usta",
+      "address": "Güzelce, Balıkçı Cd., 34530 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Nuri abi sağolsun her türlü bisiklet sorununuzu, uygun fiyata çözer. Zamanında giderseniz semaverde çay ikramından da faydalanabilirsiniz :) Yalnız aksesuarları birazcık pahalıya satıyor, o kadar da olsun.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xefc0bf3c474208fa",
+      "lat": 40.9951267,
+      "lng": 28.5264483
+    },
+    {
+      "place": "Atlantis Shopping Center",
+      "address": "Kardelen Mah Başkent Bulvarı. No: 224 H, 06370 Yenimahalle/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Batıkent'te bu tarz bir yer yoktu, açılması o açıdan iyi oldu. Gerçi içindeki mağaza yelpazesi çok geniş değil maalesef. En azından Batıkent civarında gidilebilecek sinema ihtiyacını karşılıyor.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xedc6a7e4ba242978",
+      "lat": 39.9701023,
+      "lng": 32.7150498
+    },
+    {
+      "place": "Barco Tekstil",
+      "address": "Muratbey Merkez, Çatalca İstanbul Yolu No:104/1, 34540 Çatalca/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Sağolsunlar çoğu spora destek, sponsor oluyorlar. Mayıs'ta yine bisiklet turlarına katıldık. Verdikleri formayı bir seneki bisiklet turlarına kadar çıkarmadan kullanıyorum. Sattıkları ürünler de gayet kaliteli.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdc3e0710a1d61831",
+      "lat": 41.1015023,
+      "lng": 28.5080903
+    },
+    {
+      "place": "Parkshop Outlet",
+      "address": "Kargalıyeniköy, Tem Otoyolu 157. Km. Hamitli Mevkii PARKSHOP OUTLET CENTER, 54300 Hamitli Köyü/Hendek/Hendek/Sakarya, Türkiye",
+      "rating": 1,
+      "text": "İçinde hiçbir şey kalmamış, hayalet şehir gibi. Tuvaletleri açık ve temiz, sadece tuvalet için gelinebilir.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xaa8a4ad438f6f1a3",
+      "lat": 40.7508719,
+      "lng": 30.6959242
+    },
+    {
+      "place": "Egyptian Bazaar",
+      "address": "Rüstem Paşa, 34116 Fatih/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Kapalıçarşı'ya göre daha az turistik, daha çok aradığınızı bulabileceğiniz bir yer.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x44bbef8d97b0505d",
+      "lat": 41.0165001,
+      "lng": 28.9705194
+    },
+    {
+      "place": "Datca Ilce Milli Egitim Mudurlugu",
+      "address": "Datça, Gazi Mustafa Kemal Cd. No:12/5, 48900 Datça/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Kaymakamlık binası yıkıldığı için buradaki kurumları farklı yerlere vermişler. İlçe Milli Eğitim binasını da Kargı yolundaki Özcan Yılmaz lisesine taşımışlar geçici olarak.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x38197ff49bc9c3df",
+      "lat": 36.7408492,
+      "lng": 27.6676426
+    },
+    {
+      "place": "Shell",
+      "address": "Kozpinar Kume Evleri, Tulum, Kozpinar Mevkii 16-10, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 3,
+      "text": "Eskiden tuvaletleri vs. tertemizdi, şimdi bozmuş, kötü durumdaydı.",
+      "date": "2017-06-22",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1cdd0e8a82ec3d6d",
+      "lat": 38.070365,
+      "lng": 27.409942
+    },
+    {
+      "place": "Kargı Cove",
+      "address": "Datça, 48900 Datça/Muğla, Türkiye",
+      "rating": 4,
+      "text": "Deniz burada Datça içinden soğuk oluyor. Mekanlar fiyat/performansa göre kötü. Kendi havlunuzu atabileceğiniz küçük bir alan var. Taşlık bir kumsalı olduğu için tercih ediliyor genelde.",
+      "date": "2017-06-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf94533fece40f7a3",
+      "lat": 36.7002221,
+      "lng": 27.6755768
+    },
+    {
+      "place": "Palmetto Resort Hotel",
+      "address": "Selimiye, 48700 Marmaris/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Temiz ve özenli, teşekkürler.",
+      "date": "2017-06-19",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xadaca0295ed2a259",
+      "lat": 36.7083307,
+      "lng": 28.0955137
+    },
+    {
+      "place": "Cafe Meydey",
+      "address": "Batıköy, 7den 77ye Barış Park İçi Yolu, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Sahibi eski pilot olan bir beyefendi. Müşterilerle ilgileniyor, tavsiyeler veriyor. Çoğunlukla sakin oluyor.\n\nÇok iş yapmıyordu son zamanlarda, 2016 yazında kapanmış",
+      "date": "2016-10-27",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf19a64476acf22ee",
+      "lat": 40.9956627,
+      "lng": 28.5381074
+    },
+    {
+      "place": "Kumluk Otel",
+      "address": "İskele, Atatürk Cd. No:39, 48900 Datça/Muğla, Türkiye",
+      "rating": 1,
+      "text": "Plajda şezlong 15 TL, kişi başı 50 TL alışveriş yaparsak ücretsizmiş. Sanki Bahamalar'da hizmet veriyorlar.",
+      "date": "2016-08-02",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe37a3e3e437addc8",
+      "lat": 36.7243878,
+      "lng": 27.6859094
+    },
+    {
+      "place": "Zekeriya Sofrası",
+      "address": "İskele, Atatürk Cd. NO:70, 48400 Datça/Muğla, Türkiye",
+      "rating": 2,
+      "text": "Waited almost half an hour for this tasteless manti. Certainly not worth the price.",
+      "date": "2016-07-20",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x278f710a5fdedccd",
+      "lat": 36.7237723,
+      "lng": 27.686032
+    },
+    {
+      "place": "Ali Baba & Mehmet Kebab House",
+      "address": "Atatürk, 1047. Sk. no: 4, 35920 Selçuk/İzmir, Türkiye",
+      "rating": 1,
+      "text": "Regarding the restaurant; nearly all the things on the dish were horrible and the service was too slow. Probably used to be good some time but now it isn't now worth its price. There are lots of alternatives in the city center.",
+      "date": "2016-07-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x8701a854dd8d8a22",
+      "lat": 37.9492335,
+      "lng": 27.3680786
+    },
+    {
+      "place": "Armada Shopping and Business Center",
+      "address": "Beştepe, Dumlupınar Blv. No:6, 06560 Yenimahalle/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Hayat sokağı akşam 11'e kadar hareketli oluyormuş.",
+      "date": "2016-07-07",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc99085df9dc02ed7",
+      "lat": 39.9128676,
+      "lng": 32.8082402
+    },
+    {
+      "place": "Grand Bazaar",
+      "address": "Beyazıt, 34126 Fatih/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Pazar günleri kapalı oluyor.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x64c8680b5ac198ab",
+      "lat": 41.0106848,
+      "lng": 28.9680681
+    },
+    {
+      "place": "Tüyap Fair Convention and Congress Center",
+      "address": "Eski, Cumhuriyet, Hadımköy Yolu Cd 9/1, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Eski havası yok, alakasız fuarlar oluyor genelde.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x709578caeb4c6f62",
+      "lat": 41.02654,
+      "lng": 28.6238832
+    },
+    {
+      "place": "Kolan Hospital",
+      "address": "Fatih, Fedakar Sk No:3, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Büyükçekmece'deki tek özel hastane burası.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xae8293e191b4a228",
+      "lat": 41.021582,
+      "lng": 28.5859191
+    },
+    {
+      "place": "BABACAN RESTAURANT",
+      "address": "Dizdariye Mh., 34522 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Bangır bangır müzik çalmasa daha iyi olacak.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa521c2110e2032e2",
+      "lat": 41.0176295,
+      "lng": 28.5838887
+    },
+    {
+      "place": "Dede Bisiklet",
+      "address": "Fatih, Gazi Mustafa Kemal Cad./yonca Sok. 4/A, 34500 Büyükçekmece/İstanbul - Avrupa, Türkiye",
+      "rating": 4,
+      "text": "Ufak bir dükkan, daha çok bisiklet tamiri yapıyor.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe8bf57afc032c246",
+      "lat": 41.0186944,
+      "lng": 28.5886886
+    },
+    {
+      "place": "Istanbul University-Cerrahpaşa Veterinary Faculty",
+      "address": "İstanbul Üniversitesi-Cerrahpaşa Büyükçekmece Yerleşkesi Alkent 2000 Mah. Yiğittürk Cad Hayvan Hastanesi Avcılar Yerleşkesinde Bulunmaktadır, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Evcil hayvanlarınızda gerçekten iyi ilgileniyorlar.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xfa7b64886f9718d0",
+      "lat": 41.0912083,
+      "lng": 28.6214408
+    },
+    {
+      "place": "Albatros Fish Restaurant",
+      "address": "Atatürk, Albatros Sk., 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Denizin içinde ufak bir adacık şekilde duruyor.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7be0d039e97ecf1f",
+      "lat": 41.0103633,
+      "lng": 28.598193
+    },
+    {
+      "place": "Park",
+      "address": "Gürpınar, Dalyan Cd., 34528 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Mangalcı kitlenin akınına uğruyor, uzak durmak lazım.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4550f4870af95538",
+      "lat": 40.990788,
+      "lng": 28.597318
+    },
+    {
+      "place": "Büyükçekmece Atatürk Cultural Center",
+      "address": "Yanı, Fatih, Gazi Mustafa Cd Kuba Cami No: 43, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Büyükçekmece Belediyesi'nin kültür etkinlikleri burada yapılıyor.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe9ea61a34b36513b",
+      "lat": 41.0175621,
+      "lng": 28.5924039
+    },
+    {
+      "place": "Antik Lounge",
+      "address": "Albatros Mevkii, Atatürk, Kordonboyu Cd. No:1, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Dondurması çok iyi, her uğradığımızda mutlaka yiyoruz.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd204db6f2d41adfd",
+      "lat": 41.012833,
+      "lng": 28.5974185
+    },
+    {
+      "place": "LİMAN AY RESTAURANT",
+      "address": "Fatih, Kordonboyu Cd., 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Her önünden geçişimizde muhteşem kokuyor ama yemeklerine gerçekten iş yokmuş.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x5df05fa4dec8f39d",
+      "lat": 41.0180545,
+      "lng": 28.5820583
+    },
+    {
+      "place": "Kültür Park",
+      "address": "Dizdariye, Kültür Park İçi Yolu, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "İşletmeler güzel, mantık da güzel ama yöresel şeyler yerine hepsinde aynı yemekler var. Üstüne aynı zamanda fiyatları da aşırı pahalı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xac3a5f1a0b4d0c9c",
+      "lat": 41.0224486,
+      "lng": 28.5748671
+    },
+    {
+      "place": "Mimar Sinan Bridge",
+      "address": "Dizdariye, Kanuni Sultan Süleyman Köprüsü, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Yıkıldı yıkılacak diye bekliyoruz. 2015'te bir kere kısmi şekilde çöktü, 3-4 saat trafik kapandı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x55e7a5b7b709b33b",
+      "lat": 41.02224,
+      "lng": 28.5733717
+    },
+    {
+      "place": "Domino's Pizza",
+      "address": "Mimaroba Mahallesi Mustafa Kemal Pasa Bulv Gul İns.C Blok, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Defalarca kavga ettikten sonra uzun süredir sipariş vermiyorum. Sürekli bir sorun çıkıyordu.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1834fe95937b31b6",
+      "lat": 41.0078141,
+      "lng": 28.5367003
+    },
+    {
+      "place": "Seyran Pasta Cafe Restaurant",
+      "address": "Mimar Sinan Merkez, Mustafa Kemal Blv. 8/1, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "12'de gittik diye \"kahvaltı veremiyoruz\" diyen bir işletme. Sanki salatalık kesip dolaptan peynir veremiyorlar. Enteresan.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf84e9eef2fecb2d5",
+      "lat": 41.0085381,
+      "lng": 28.5370075
+    },
+    {
+      "place": "A101",
+      "address": "Batıköy Mah, Çarmıklı Cd., 34000 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bölgedeki en işlek A101 şubesi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1427125d437f945d",
+      "lat": 41.0036,
+      "lng": 28.5328
+    },
+    {
+      "place": "Irmaklar",
+      "address": "Mimaroba, Çarmıklı Cd. No:20, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Manav kısmı geniş ve taze.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7d2986ec7bcdb13d",
+      "lat": 41.0025845,
+      "lng": 28.5337522
+    },
+    {
+      "place": "Aslanlar Gurup Ekonomik Halk Pazarı",
+      "address": "Batıköy, Çarmıklı Cd., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Genelde taze oluyor, burdaki birkaç alternatiften birisi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x29f30812b1a6ce36",
+      "lat": 41.0041234,
+      "lng": 28.5330643
+    },
+    {
+      "place": "Komagene etsiz çiğ köfte",
+      "address": "Mimaroba, Çarmıklı Cd. No:402 E Blok, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Güzel ama eve servisi yok.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x49767cbd95c158f9",
+      "lat": 41.0036892,
+      "lng": 28.5332218
+    },
+    {
+      "place": "Park",
+      "address": "Batıköy, Ülker Sk., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Yeni yapıldı tamamlandı sayılır, Barış Manço Parkı'yla bağlandı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb8e18139345a02aa",
+      "lat": 41.0025245,
+      "lng": 28.5413153
+    },
+    {
+      "place": "Independence Park",
+      "address": "Fidanlık, Prof. Dr. Nusret Fişek Cd. No:39, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Ankara'nın içinde parka benzeyen, çıkıp yürüyüş yapabileceğiniz, oturup dinleyebileceğinizi tek yer burası kaldı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x5692900f57ecc881",
+      "lat": 39.9274396,
+      "lng": 32.864004
+    },
+    {
+      "place": "Ankara Palace of Justice",
+      "address": "Hacı Bayram, Atatürk Blv No:52, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Her daim kalabalık.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x48042762156e74b6",
+      "lat": 39.9305013,
+      "lng": 32.852666
+    },
+    {
+      "place": "TED University",
+      "address": "Ön Cebeci, Ziya Gökalp Cd. 48/A, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Eski TED Koleji binasıydı, şimdi üniversite oldu.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xafa8419945f5d098",
+      "lat": 39.9228214,
+      "lng": 32.8618589
+    },
+    {
+      "place": "Anafartalar Bazaar",
+      "address": "Hacı Bayram, Anafartalar Cd No:4, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Çocukluğumun alışveriş merkezi. 3'üncü katta bir oyuncakçı vardı oraya giderdik, hey gidi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa314deca6cef5d05",
+      "lat": 39.9414685,
+      "lng": 32.8563302
+    },
+    {
+      "place": "Museum of the War of Independence",
+      "address": "Hacı Bayram, Cumhuriyet Cd. No: 2/1, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Türkiye'nin ilk meclis binası burası. Aynı zamanda içinde Kurtuluş Savaşı ile ilgili bir müze var. Diğer Meclis binasıyla beraber burayı da ziyaret etmeyi unutmayın.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x69bcbf44518d353",
+      "lat": 39.9418394,
+      "lng": 32.8536242
+    },
+    {
+      "place": "Republic Museum (The Second Parliament Building)",
+      "address": "Doğanbey Mahallesi, Cumhuriyet Cd. No:7, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Durumu halen iyi, içinde de ufak bir müze oluşturmuşlar. Giriş çok cüzi bir fiyattaydı, Ankara'nın tarihini anlamak için mutlaka gidip gezin.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x73d72409e1897ea2",
+      "lat": 39.9411625,
+      "lng": 32.8515237
+    },
+    {
+      "place": "Tarihi Şengül Hamamı",
+      "address": "Hacı Bayram Mah. Denizciler Cad, Acıçeşme Sk. No: 3, 06030 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Ankara'nın, deyimlere bile konu olmuş en eski hamamı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xfa9fbaba72d949b5",
+      "lat": 39.9363842,
+      "lng": 32.8604263
+    },
+    {
+      "place": "Ankara Painting and Sculpture Museum",
+      "address": "Hacettepe, Türkocağı Sk., 06230 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Devlet elindeki birkaç resim heykel müzesinden birisi, oldukça kapsamlı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3afae954c1c5b935",
+      "lat": 39.9332721,
+      "lng": 32.8557004
+    },
+    {
+      "place": "T.C. Kültür ve Turizm Bakanlığı Etnografya Müzesi",
+      "address": "Hacettepe, Türkocağı Sk. No:4, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Ankara'da, hatta belki Türkiye'deki en kapsamlı müzelerden.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x31ad98d46182a7a0",
+      "lat": 39.9325218,
+      "lng": 32.8552727
+    },
+    {
+      "place": "Suluhan Bazaar",
+      "address": "Anafartalar Mahallesi, Şht. Teğmen Kalmaz Posta Cd No:38, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 4,
+      "text": "İncik boncuk, el işi vs. için malzeme ihtiyacınız olursa en çok seçeneğin olduğu çarşı burası.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc84f31d927608fe8",
+      "lat": 39.9396966,
+      "lng": 32.8584898
+    },
+    {
+      "place": "Hacettepe Üniversitesi Edebiyat Fakültesi",
+      "address": "Üniversiteler, Hacettepe Beytepe Kampüsü No:11, 06800 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "4 buçuk sene okudum, halen her yerine gitmemişimdir. Çok aşağı katlara gitmeyin dönüş yolunu bulamazsınız.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9fbab966312b8838",
+      "lat": 39.872817,
+      "lng": 32.737611
+    },
+    {
+      "place": "Başkent Öğretmenevi",
+      "address": "Emniyet, Abant 2.Sokak No:15, 06560 Yenimahalle/Ankara, Türkiye",
+      "rating": 2,
+      "text": "Yılın 12 ayı çok kalabalık, ensesi kalınların eşi dostundan başka kalabilen yok.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xcbfbc566c24bdff",
+      "lat": 39.9340339,
+      "lng": 32.8187292
+    },
+    {
+      "place": "Gençlik Park",
+      "address": "Doğanbey Mahallesi, Atatürk Blv No:50, 06050 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Melih Gökçek'in önce kapatıp tinerci yuvası ettiği, sonra açıp güya temizlediği, 90'lı yıllara dair Ankara'nın güzel yerlerinden.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa93a64d9fd769621",
+      "lat": 39.9370104,
+      "lng": 32.8497594
+    },
+    {
+      "place": "19 Mayıs Stadium",
+      "address": "Hacı Bayram, Cumhuriyet Cd., 06050 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Çocukluğumuzun geçtiği tribünler, hey gidi koca Gençlerbirliği.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe3f940fc870bd617",
+      "lat": 39.9401436,
+      "lng": 32.8457395
+    },
+    {
+      "place": "Konevi Etliekmek",
+      "address": "Konevi Mahallesi Sadrettin Konevi Sokak No:2/B, Kaşıkçı Sitesi Altı, 42040 Meram/Konya, Türkiye",
+      "rating": 5,
+      "text": "Kolay gelsin :)",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x96978cf4fba8001c",
+      "lat": 37.8673302,
+      "lng": 32.4835117
+    },
+    {
+      "place": "Ehil Fırın Kebap Selçuklu",
+      "address": "Dr, Yazır, Doç. Dr. Halil Ürün Cd. Mustaş Sitesi B blok No:8/D, 42070 Selçuklu/Konya, Türkiye",
+      "rating": 5,
+      "text": "Gittiğim en iyi kebapçılar listesine mutlaka girer. Soğan kızartıyorlar, onu mutlaka deneyin.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2bc28bfcafd9251b",
+      "lat": 37.9490391,
+      "lng": 32.5054208
+    },
+    {
+      "place": "Köşk Kafeterya",
+      "address": "Yazır, Otobüs Terminali No:2, 42250 Selçuklu/Konya, Türkiye",
+      "rating": 1,
+      "text": "Aşırı pahalı ve yemekleri berbat. Otogarın dışında yemek yiyecek güzel mekanlar var, onlardan birini tercih edin.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9a6688f62a717384",
+      "lat": 37.9498981,
+      "lng": 32.5086497
+    },
+    {
+      "place": "Konya Şehirlerarası Otobüs Terminali",
+      "address": "Yazır, Doç.Dr. Halil Ürün Cad., 42250 Selçuklu/Konya, Türkiye",
+      "rating": 3,
+      "text": "Sürekli ney çalıp öbür dünyaya seyahat ediyormuşsunuz izlenimi veren dandik ötesi işletme.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2f65808b81e6591c",
+      "lat": 37.9507107,
+      "lng": 32.5095096
+    },
+    {
+      "place": "Forum Gaziantep",
+      "address": "Yaprak, İstasyon Cd. No:76, 27080 Şehitkamil/Gaziantep, Türkiye",
+      "rating": 5,
+      "text": "Hemen hemen bütün büyük zincir marketleri bulabileceğiniz, aşırı kalabalık olmayan güzel bir alışveriş merkezi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3b9d1f7c390e012f",
+      "lat": 37.07,
+      "lng": 37.3811111
+    },
+    {
+      "place": "Katmerci Zekeriya Usta",
+      "address": "Alaybey, Bay Hilmi Gç. No:16/C-D, 27010 Şahinbey/Gaziantep, Türkiye",
+      "rating": 5,
+      "text": "Türkiye'deki en mükemmel katmeri yapan ufacık bir dükkan.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x427dc8ca25dd3528",
+      "lat": 37.0622324,
+      "lng": 37.3827337
+    },
+    {
+      "place": "İmam Çağdaş Kebap Ve Baklava Salonu",
+      "address": "Şekeroğlu Mahallesi, Uzun Çarşı Caddesi No:49, 27010 Şahinbey/Gaziantep, Türkiye",
+      "rating": 5,
+      "text": "Kesinlikle lezzeti, yemekleri muhteşem. Fiyatı ortalama bir restorana göre pahalı ama.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xefdb631119e601b5",
+      "lat": 37.0634665,
+      "lng": 37.3852237
+    },
+    {
+      "place": "Coppersmith Bazaar",
+      "address": "Boyacı, Eskici Çarşısı Sk., 27400 Şahinbey/Gaziantep, Türkiye",
+      "rating": 5,
+      "text": "Bakır, antika sevenler için bir cennet.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1ec5c3788bec0f8c",
+      "lat": 37.0619833,
+      "lng": 37.3866826
+    },
+    {
+      "place": "Tahmis Kahvesi",
+      "address": "Eski, Suyabatmaz, Buğday Pazarı Sk. No:8, 27400 Şahinbey/Gaziantep, Türkiye",
+      "rating": 5,
+      "text": "Hayatımda gördüğüm en muhteşem kahve. Menengiç kahvesini mutlaka tadın.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa5115f88e495d40e",
+      "lat": 37.0613206,
+      "lng": 37.3877814
+    },
+    {
+      "place": "Eredem Dondurmaları",
+      "address": "Kazancı, İnönü Cd. No:87, 42310 Ereğli/Konya, Türkiye",
+      "rating": 3,
+      "text": "Ereğli'nin en ünlü dondurmacısı ama sevemedim.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x66641c1743a24d05",
+      "lat": 37.5071595,
+      "lng": 34.0556691
+    },
+    {
+      "place": "Ereğli",
+      "address": "Kazancı, Derviş İzbudak Cd. No:1, 42310 Ereğli/Konya, Türkiye",
+      "rating": 3,
+      "text": "Neredeyse hiçbir sefer yok, genelde ticari amaçla kullanılıyor.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x431ae5ef627ccd11",
+      "lat": 37.5058231,
+      "lng": 34.0569571
+    },
+    {
+      "place": "Ereğli Lunapark",
+      "address": "Sümer, 42320 Ereğli/Konya, Türkiye",
+      "rating": 2,
+      "text": "Buraya lunapark demeye bin şahit ister.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3a73d737bf52ad54",
+      "lat": 37.504124,
+      "lng": 34.0519118
+    },
+    {
+      "place": "Bimeks Konya Ereğli",
+      "address": "Sümer Mah. Rasim Erel Cad. Eczacı Sami Sok. K: Zemin D: Z01, Ereğli Park Site Alışveriş ve Eğlence Merkezi No: 3, Ereğli, 42320 Konya, Türkiye",
+      "rating": 3,
+      "text": "Teknosa'dan daha iyiydi ama küçük, seçenekler az.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb7d0cb592a3a7b09",
+      "lat": 37.506807,
+      "lng": 34.049783
+    },
+    {
+      "place": "Teknosa",
+      "address": "Sümer Mh. Rasim Erel Cd. No:3 Konya Ereğli Parksite AVM. Mağaza No:11 zemin kat, 42320 Ereğli/Konya, Türkiye",
+      "rating": 3,
+      "text": "Popüler ürünler harici hiçbir şey ellerinde olmaz genellikle.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3f834b5527343fc9",
+      "lat": 37.506605,
+      "lng": 34.0498985
+    },
+    {
+      "place": "Meydan Etli Ekmek",
+      "address": "Eti, Gümüş Bahçe Cd. No:1, 42310 Ereğli/Konya, Türkiye",
+      "rating": 4,
+      "text": "Ereğli'nin en ünlü fırınlarından biri burası. Genelde buralılar pideyi Meydan'da yaptırır.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x17a7ee4c1534ddf9",
+      "lat": 37.5147729,
+      "lng": 34.0521989
+    },
+    {
+      "place": "Eregli Museum",
+      "address": "Boyacıali, Atatürk Blv No:116, 42310 Ereğli/Konya, Türkiye",
+      "rating": 5,
+      "text": "Girişler ücretsiz, içinde çok bir şey yok ama gidin gezin mutlaka. Bölgeden bulunan mamut dişi vardı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xabed36b072524c3f",
+      "lat": 37.5159312,
+      "lng": 34.0476957
+    },
+    {
+      "place": "Kwangjin Park",
+      "address": "Sümer, Cumhuriyet Cd. No:32, 42320 Ereğli/Konya, Türkiye",
+      "rating": 4,
+      "text": "Niye burda olduğu anlaşılamayan Kore kardeşlik parkı.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x79fc14426d139134",
+      "lat": 37.5031755,
+      "lng": 34.0500455
+    },
+    {
+      "place": "Yunus Emre Parkı",
+      "address": "Hacı Mütahir, Dr. Rauf Denktaş Cd. No:3, 42320 Ereğli/Konya, Türkiye",
+      "rating": 5,
+      "text": "Ereğli'nin buluşma noktası buradaki çınarın altıdır.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7782ed6f4d8a01d5",
+      "lat": 37.5100374,
+      "lng": 34.0507416
+    },
+    {
+      "place": "Eregli Grand Mosque",
+      "address": "Boyacı Ali, 42310 Ereğli/Konya, Türkiye",
+      "rating": 5,
+      "text": "Selçuklu'nun muhteşem eserlerinden. Üzerinden yüzyıllar geçmesine rağmen dimdik ayakta duruyor.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4dcab80e8b931bd2",
+      "lat": 37.5138772,
+      "lng": 34.0496104
+    },
+    {
+      "place": "Ereğli Otogarı",
+      "address": "Cahı, Kızlar Bağı Sk. No:18, 42320 Ereğli/Konya, Türkiye",
+      "rating": 4,
+      "text": "Marketten kaşarlı tost yemeden binmeyin :)",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x59ece163a64e36e4",
+      "lat": 37.5240593,
+      "lng": 34.0358734
+    },
+    {
+      "place": "ŞEHİRLER ARASI OTOBÜS TERMİNALİ",
+      "address": "Akköprü, 65200 Tuşba/Van, Türkiye",
+      "rating": 2,
+      "text": "Buraya otogar demeye bin şahit ister. Oturup bekleyecek yer bile yok. Bir Aralık'ta burda indim, otobüs dolmuş olmayınca donuyordum.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe4ff0c56d8e30694",
+      "lat": 38.5132869,
+      "lng": 43.3787494
+    },
+    {
+      "place": "Hotel Mirva",
+      "address": "Bahçıvan, Zübeyde Hanım Cd., 65130 İpekyolu/Van, Türkiye",
+      "rating": 4,
+      "text": "2013'te uygun fiyattan kalmıştım. Biraz ufak bir yer, odaları temiz, sessiz.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7ab606a680f2baf5",
+      "lat": 38.501537,
+      "lng": 43.3904773
+    },
+    {
+      "place": "Star Hakkari Turizm",
+      "address": "Vangölü Yanı, Bulak, İstiklall Cd., 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 4,
+      "text": "Pazarlık etmeden almayın, tutturabildiğine bilet satıyorlar. Başka alternatif yok gerçi Van'a vs. gitmek için.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb4b1f0049006f9ed",
+      "lat": 37.5769199,
+      "lng": 43.7372336
+    },
+    {
+      "place": "İdem Alışveriş",
+      "address": "Bulak, Cumhuriyet Cd. No:18, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 4,
+      "text": "Çok ufak bir yer ama fiyatları çok uygun. Çok alternatif de yok gerçi ama olduğu kadarıyla.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdaad4c3a22a96094",
+      "lat": 37.5765233,
+      "lng": 43.7360873
+    },
+    {
+      "place": "Ozdamak Ocakbasi",
+      "address": "Otel Oslo Karşısı, Nedim Zeydan Cd, 30300 Yüksekova/Hakkari, Türkiye",
+      "rating": 3,
+      "text": "Eh işte.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x8d72f24edb73de5f",
+      "lat": 37.5723356,
+      "lng": 44.2804722
+    },
+    {
+      "place": "Ahs Avm",
+      "address": "Pehlivan, Çölemerk Cd. No:5, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 4,
+      "text": "AVM yazdığına bakmayın süpermarket işte, Salı ve Perşembe günleri tavuk ürünleri geliyordu. Hakkari'de bulabileceğinizin en iyisi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4464b6ace138c1f6",
+      "lat": 37.5779431,
+      "lng": 43.7337077
+    },
+    {
+      "place": "TveK Hakkari",
+      "address": "Bulak Mah. Kayacan Cad. No: 55, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 4,
+      "text": "Hakkari'de kırtasiye adına iyi yerlerden birisi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x5f3a2c6074353ff0",
+      "lat": 37.5764444,
+      "lng": 43.7362988
+    },
+    {
+      "place": "Zap Pub",
+      "address": "Bulak, 1009. Sk. No:2, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 4,
+      "text": "Hakkari'ye göre bayağı nezih bir yermiş.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbc21bece88bc11a2",
+      "lat": 37.5765001,
+      "lng": 43.7372852
+    },
+    {
+      "place": "Eylul Kahvalti Salonu",
+      "address": "Bulak, Bulvar Cd. Oğuz Kurt Apt. No:36, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 3,
+      "text": "Çeşit, lezzet vs. iyi ama çok pahalı. Tavada yumurta yiyip de 14TL vermiştim.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9bddbad19fc8c9b4",
+      "lat": 37.5775773,
+      "lng": 43.7360176
+    },
+    {
+      "place": "Governor's Park",
+      "address": "Gazi, Çölemerk Cd. No:4, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 3,
+      "text": "Hakkari'de girip oturabileceğiniz tek park burası. Tabi park denebilirse.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2827ed943a06d215",
+      "lat": 37.5781724,
+      "lng": 43.7330079
+    },
+    {
+      "place": "Cumhuriyet İöo",
+      "address": "Bulak, Derviş Eren Cd. No:21, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 4,
+      "text": "Hakkari'nin, çoğunlukla memur çocuklarından oluşan en iyi okullarından birisi.",
+      "date": "2016-06-14",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xce254b445a8ee30c",
+      "lat": 37.5793719,
+      "lng": 43.7364564
+    },
+    {
+      "place": "Özel Mimaroba Cerrahi Tıp Merkezi",
+      "address": "Batıköy Mahallesi E-5 Karayolu Üzeri No:117, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Kapandı.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd0dd302e4f6e4a14",
+      "lat": 41.010627,
+      "lng": 28.532551
+    },
+    {
+      "place": "Büyükçekmece Nikah Sarayı",
+      "address": "Batıköy Mh., Kurucu Sk., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Belediyenin tesisi, 10 kişilik nikahımızda arkadaşımıza fotoğraf çektirmedi. Vergi yok fiş yok fatura yok, ali kıran baş kesenlik yapıyor hepsi.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x39c157b5509f7f76",
+      "lat": 40.990936,
+      "lng": 28.542675
+    },
+    {
+      "place": "ÇATI MANGALBAŞI",
+      "address": "Batıköy Çarşısı, Mimaroba, Mustafa Kemal Blv. No:10, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Fiyatlarının çok makul olduğunu söyleyemem ama lezzet ve hizmet olarak mükemmel.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7467cda10e2018f4",
+      "lat": 41.0020617,
+      "lng": 28.5417938
+    },
+    {
+      "place": "Sympathy Veterinary Clinic",
+      "address": "no:25 B/7, Mustafa Kemal Blv., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Bölgede sizi dolandırmaya çalışmadan işini yapan sayılı veterinerden birisi.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1c43fb4239bf1958",
+      "lat": 41.0019242,
+      "lng": 28.5438475
+    },
+    {
+      "place": "Oses Çiğ Köfte",
+      "address": "Batıköy Mustafa Kemal Bulvarı Yonca Sitesi Mimarsinan A Blok C -28 No:1, Batıköy Mahallesi, Batıköy Mustafa Kemal Bulvarı A Blok, Yonca Sitesi C-28, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Ufak bir dükkan, ürünleri güzel.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x108e958cbfdae056",
+      "lat": 41.006242,
+      "lng": 28.5398598
+    },
+    {
+      "place": "Faruk Gulluoǧlu",
+      "address": "Ekinoba, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 2,
+      "text": "Sürekli çocuklu aileler geliyor, gürültü kıyamet oluyor. Sakinlik arıyorsanız tercih etmeyin.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2e3dcaabf93aafcd",
+      "lat": 41.0073675,
+      "lng": 28.5391591
+    },
+    {
+      "place": "Döner Bank Mimaroba (Gece&Gündüz Dönercisi)",
+      "address": "MİMAR SİNAN MAH, Mimaroba, Hürriyet Cd. NO:80, Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Döneri pahalı olmasına rağmen lezzetliydi, ama bu aralar tadilattaymış.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc5875c437bee4b1f",
+      "lat": 41.007653,
+      "lng": 28.5389196
+    },
+    {
+      "place": "Burger King - Mimaroba",
+      "address": "Mimar Sinan Mah. Mustafa Kemal Cad. No:9 Çarmıklı İş Merkezi, 34000 Büyükçekmece, Türkiye",
+      "rating": 5,
+      "text": "Arada bir tersine gelmezse güzel çalışıyor.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6fb23acc0ed3e49e",
+      "lat": 41.0076908,
+      "lng": 28.5379975
+    },
+    {
+      "place": "CarrefourSA",
+      "address": "Mahmutlar, Atatürk Cad. No:103 D:F, 07450 Alanya/Antalya, Türkiye",
+      "rating": 4,
+      "text": "Ufak bir market ama ürün yelpazesi geniş.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6c2bb7cf60d41637",
+      "lat": 36.4874679,
+      "lng": 32.1018822
+    },
+    {
+      "place": "Uyum Market Mimaroba",
+      "address": "Mimarsinan Mimaroba Çarmikli Cad., Ada 2 No:178, 34530 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Mimaroba'nın en eski marketi. Ürün yelpazesi geniş ama rakip marketlerden fiyat olarak çok avantajlı değil.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x49df9e75e6d27f72",
+      "lat": 41.0069141,
+      "lng": 28.537347
+    },
+    {
+      "place": "Ykm",
+      "address": "Kızılay, Gazi Mustafa Kemal Blv. No:3, 06430 Çankaya/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Yıllar boyu değişmeyen buluşma yeri. Fiyatları aşırı pahalı.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd5c21fb7d8db7790",
+      "lat": 39.9208126,
+      "lng": 32.8529382
+    },
+    {
+      "place": "Ülkealan Passage",
+      "address": "Kızılay, İzmir-1 Cd., 06420 Çankaya/Ankara, Türkiye",
+      "rating": 4,
+      "text": "Kızılay'da spor ürünleri alacaksanız adresiniz burası. Çanta, ayakkabı, forma veya diğer spor aksesuarları burda bulunur.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x73960819bea97656",
+      "lat": 39.9226112,
+      "lng": 32.8528251
+    },
+    {
+      "place": "Abdi İpekçi Park",
+      "address": "Sağlık, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 2,
+      "text": "Burayı yıllardır bir ıslah etmediler. Havuzun içinde yıkanan dilenci mi ararsınız, tinerci mi ararsınız, apaçi mi ararsınız hepsi burda.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x89f57c12005483b3",
+      "lat": 39.92814,
+      "lng": 32.8563963
+    },
+    {
+      "place": "Tarihi Mutfak Lokantası",
+      "address": "Kocatepe, Mithatpaşa Cd. No:64 D:B, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Fiyatı ortalamanın üzerinde ama lezzeti her zaman güzeldir. Kızılay'da kebap yiyecekseniz mutlaka uğrayın.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x99737e6860f49249",
+      "lat": 39.9188136,
+      "lng": 32.8595196
+    },
+    {
+      "place": "Karanfil Kitabevi",
+      "address": "Meşrutiyet, Karanfil Sk. No:5 D:39, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 4,
+      "text": "Ucuz kitap bulabileceğiniz bir çarşı, pazarlıkla kitapevlerinin verdiği fiyattan daha düşük fiyatlar bulabilirsiniz.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1496f5f61cb37276",
+      "lat": 39.9203051,
+      "lng": 32.8553456
+    },
+    {
+      "place": "Güvenpark",
+      "address": "Kızılay Meydanı, 06421 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Melih Gökçek sökene kadar Ankara'nın içindeki son üç-beş parça yeşillik burada yatıyor.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x350fc4c1fa043f7a",
+      "lat": 39.9201797,
+      "lng": 32.8534066
+    },
+    {
+      "place": "Ot Cafe",
+      "address": "Meşrutiyet, Atatürk Blv No:105, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Fiyatı biraz ortalamanın üzerinde ama Kızılay'a gelen misarifinizi fast food'çular harici bir yere götürmek isterseniz güzel bir alternatif.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xce73e1d3035bba00",
+      "lat": 39.9189657,
+      "lng": 32.8545514
+    },
+    {
+      "place": "Limon Bazaar",
+      "address": "Meşrutiyet, Yüksel Cd. No:8, 06101 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Ankara'da ıvır zıvırı bulabileceğiniz güzel bir çarşı. Tütüncüler, CDciler, çantacılar vs. ne ararsanız var.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3cc7e2554b1621fe",
+      "lat": 39.9191057,
+      "lng": 32.8556797
+    },
+    {
+      "place": "Hosta",
+      "address": "Cumhuriyet, İnkılap Sk. No:15 D:17, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 4,
+      "text": "Yıllardır çizgisini bozmadan devam eden güzel bir işletme.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xca3cbbc3d69d25d9",
+      "lat": 39.922044,
+      "lng": 32.8564012
+    },
+    {
+      "place": "Can Balik",
+      "address": "Cumhuriyet, Sakarya Cd. No:13 D:f, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 4,
+      "text": "Kızılay'da balık yemek için çok fazla alternatif yok zaten, bu da kötünün iyisi.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9430d25349c55ee",
+      "lat": 39.9222222,
+      "lng": 32.8558333
+    },
+    {
+      "place": "Burger King",
+      "address": "Cumhuriyet, Şehit Gönenç Cad. Malltepe Park Alışveriş Ve Eğlence Merkezi No:5, 06430 Çankaya/Ankara, Türkiye",
+      "rating": 2,
+      "text": "Yıkılan Yeni Sahne'nin yerine yapıldı. Çevrede dershane yoğunlukta olduğu için çoluğun çocuğun her daim akın ettiği, gürültülü bir yer.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf1af01303b25f318",
+      "lat": 39.9232513,
+      "lng": 32.8554355
+    },
+    {
+      "place": "Kitapçılar Çarşısı",
+      "address": "Cumhuriyet, Bayındır-1 Sk. No:6 D:59, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Zafer Çarşısı'nın daha sahaf ağırlıklı olan bölümü.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbe8ff949e1749198",
+      "lat": 39.9241667,
+      "lng": 32.8555556
+    },
+    {
+      "place": "Mine Mağazaları",
+      "address": "Cumhuriyet, Atatürk Blv No:65, 06430 Çankaya/Ankara, Türkiye",
+      "rating": 4,
+      "text": "Ankara'nın en eski giyim mağazalarından biridir.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x1f641ce3ca186b4a",
+      "lat": 39.925112,
+      "lng": 32.8552581
+    },
+    {
+      "place": "Zafer Çarşısı",
+      "address": "Cumhuriyet, 06430 Çankaya/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Eskiden kitap alırken ilk uğranması gereken yerlerden birisiydi ama şu an test kitapçısı oldu.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd310fa8666ee98f7",
+      "lat": 39.9245569,
+      "lng": 32.855717
+    },
+    {
+      "place": "Karagoz Pasta & Cafe",
+      "address": "Cumhuriyet, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 4,
+      "text": "Kahvaltı vs. yapmak, bir şeyler içmek için güzel bir mekan. Dışarıda da oturabiliyorsunuz, Sakarya Caddesi'ni görüyor.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb030502200f405f4",
+      "lat": 39.9214114,
+      "lng": 32.8567145
+    },
+    {
+      "place": "Rumeli İşkembecisi",
+      "address": "Cumhuriyet, Bayındır-1 Sk. 25/A, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Şu ana kadar gittiğim en iyi işkembeci bu. Gitmediyseniz mutlaka uğrayın.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf3437213d5581dce",
+      "lat": 39.921831,
+      "lng": 32.857276
+    },
+    {
+      "place": "NT Magazalari",
+      "address": "Cumhuriyet Mah. Inkılap Sok. No: 4, Kızılay, Çankaya, 06420 Ankara, Türkiye",
+      "rating": 4,
+      "text": "Sevimsiz bir işletme olmasına rağmen, niye bilmem, gittikçe sürekli uğrarım. Kızılay'da tek doğru düzgün kırtasiye burası kaldı.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc365597bded5c662",
+      "lat": 39.9209656,
+      "lng": 32.857038
+    },
+    {
+      "place": "Hüsmen Aga Turşucusu",
+      "address": "Cumhuriyet, Kızılay şubesi:Sakarya Caddesi No:11A cumhurriyet mah, Sakarya Cd., Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Kızılay'ın en eski turşucusu, belki de en eski dükkanlarından. Her zaman eskiden kalma havasını koruyor, uğrarsanız bir turşu suyu içmeyi unutmayın.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa240d9d2233943ec",
+      "lat": 39.9220735,
+      "lng": 32.8556307
+    },
+    {
+      "place": "BOLULU HASAN USTA KIZILAY ŞUBESİ",
+      "address": "Meşrutiyet, Atatürk Blv No:95, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Kızılay'da oturup bir şeyler içmek, tatlı yemek için en iyi mekanlardan birisi. Fiyatları da ortalama.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb35a654124fb142c",
+      "lat": 39.9204359,
+      "lng": 32.8548291
+    },
+    {
+      "place": "eSkiyEni",
+      "address": "Cumhuriyet, İnkılap Sk. 6/A, 06410 Çankaya/Ankara, Türkiye",
+      "rating": 2,
+      "text": "Her daim kalabalık ve gürültülü. Bangır bangır müzik çalarken karşınızdakiyle iki kelime edemiyorsunuz. Eğlence anlayışınız bu değilse kötü.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x12d9a0124157c12",
+      "lat": 39.922436,
+      "lng": 32.855717
+    },
+    {
+      "place": "Kizilay",
+      "address": "Devlet, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Melih Gökçek olmasa mükemmel bir metro istasyonu.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xeac7b6b57c5a111a",
+      "lat": 39.920802,
+      "lng": 32.85406
+    },
+    {
+      "place": "Dost Bookstore",
+      "address": "Kızılay, Karanfil Sk. No:11, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Kızılay'daki tek adamakıllı kitapçı burası olmasına rağmen, fiyatları ortalamanın üzerindedir. Aşağıdaki kitapçılar çarşısından fiyat almadan buraya uğramayın.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x279dab44977ddb09",
+      "lat": 39.9196734,
+      "lng": 32.8553064
+    },
+    {
+      "place": "Paribu Cinerverse Atlantis Batıkent",
+      "address": "Kardelen Mah. Başkent Blv Atlantis City Avm, Batıkent Blv. No:224, 06370 Yenimahalle/Ankara, Türkiye",
+      "rating": 1,
+      "text": "Saatlerce reklam izlemek istemiyorsanız gitmeyin. Ne yazık ki Batıkent'teki tek sinema burası.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdce3cdcf01516768",
+      "lat": 39.9686511,
+      "lng": 32.7153498
+    },
+    {
+      "place": "Kipa Hipermarket",
+      "address": "Kardelen Mah. Başkent Bulv. Atlantis Alışveriş ve Eğlence Merkezi No: 224 Kat: G, 06370 Yenimahalle, Türkiye",
+      "rating": 4,
+      "text": "Baya büyük bir mağaza, alternatif oluşturuyor.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xdc651916720357cd",
+      "lat": 39.9709644,
+      "lng": 32.7146407
+    },
+    {
+      "place": "Gimsa Market Batıkent",
+      "address": "İlkyerleşim, Batıkent Blv. No:202, 06370 Yenimahalle/Ankara, Türkiye",
+      "rating": 2,
+      "text": "Kalabalık mı ararsınız, medeniyetsiz ayılar mı ararsınız. Batıkent'te Sincan havası yakalamak istiyorsanız mutlaka ziyaret edin.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x241ea64a9c8b6cd9",
+      "lat": 39.9689362,
+      "lng": 32.7276335
+    },
+    {
+      "place": "Hulya Bazaar",
+      "address": "Uğur Mumcu, 1595. Sk. Hülya Kent Sitesi No:2, 06370 Yenimahalle/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Hiçbir işletmenin dikiş tutturamadığı enteresan bir çarşı.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x99034405c9f1e3a8",
+      "lat": 39.9614876,
+      "lng": 32.7403659
+    },
+    {
+      "place": "TURYOL Büyükada İskelesi",
+      "address": "Maden, Gülistan Cd., 34970 Adalar/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Sakin, fiyatları makul.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x4fb90e0fb15944b8",
+      "lat": 40.874772,
+      "lng": 29.131252
+    },
+    {
+      "place": "Aymerkez Mall",
+      "address": "Murat Çeşme, E - 5 Londra Asfaltı No:92, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "AVM demeye bin şahit ister. Büyük bir LCW şubesi diyebiliriz.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3a581097b705c141",
+      "lat": 41.0139387,
+      "lng": 28.5434904
+    },
+    {
+      "place": "Tekzen",
+      "address": "Mimaroba, Çarmıklı Cd. No:57, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Ufak ama yapı markette aradığınız temel şeyleri bulmak mümkün.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2929786c72d56203",
+      "lat": 41.0041132,
+      "lng": 28.5337076
+    },
+    {
+      "place": "Marmara Forum",
+      "address": "Osmaniye, Çobançeşme Koşuyolu Cd. No:3, 34568 Bakırköy/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Kalabalık.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x60142cce9c508686",
+      "lat": 40.9968286,
+      "lng": 28.8862202
+    },
+    {
+      "place": "Feyziye Mektepleri Vakfı Işık Okulları",
+      "address": "19 Mayıs, Sinan Ercan Cd. No:17, 34736 Kadıköy/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Diğer kampüslere göre daha gri, ama yine de güzel.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x445ec43e77ac9ba9",
+      "lat": 40.973745,
+      "lng": 29.085959
+    },
+    {
+      "place": "Özdilek Ev Tekstili",
+      "address": "Highway Outlet Ankara, Elmalık Mücavir, Anadolu Otoyolu 227. Km, 14030 Elmalık/Bolu Merkez/Bolu, Türkiye",
+      "rating": 5,
+      "text": "Fiyatlar da lezzet de makul.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd378f1cfa96df9e3",
+      "lat": 40.7224856,
+      "lng": 31.4653058
+    },
+    {
+      "place": "Highway Outlet",
+      "address": "Kuruçay Kpr, Istanbul 227. Km Elmalık Mevkii No:5, Anadolu Otoyolu Abant Bağlantısı, 14030 Elmalık/Bolu Merkez/Bolu, Türkiye",
+      "rating": 5,
+      "text": "Yıllarda dandik mola yerlerinde boşuna zaman geçirmişiz, istediğinizi ucuza bulabiliyorsunuz.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf1b835bd47b7a080",
+      "lat": 40.7225807,
+      "lng": 31.4666318
+    },
+    {
+      "place": "Büyülü Fener Sinemaları Kızılay",
+      "address": "Kocatepe Mh Meşrutiyet Cad, Hatay Sk. No:18, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Kızılay'daki eski sinema kültüründen kalan tek tük sinemalardan birisi. İçeride kredi kartı geçmiyor, her gidişimizde unutuyoruz, yanınızda nakit bulundurun.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3cc7937d670ea6fa",
+      "lat": 39.9177463,
+      "lng": 32.8583946
+    },
+    {
+      "place": "Hülya Kent Sitesi",
+      "address": "Uğur Mumcu, 1595. Sk. No:124, 06370 Yenimahalle/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Emekli kenti.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbca979f98f6eabfb",
+      "lat": 39.9617135,
+      "lng": 32.7417816
+    },
+    {
+      "place": "Bauhaus Beylikdüzü",
+      "address": "Mevlana, Sultan Ahmet Cd No:2, 34515 Esenyurt/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bölgedeki en büyük yapı market, aradığınızı bulabiliyorsunuz.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7c515f283c7722f7",
+      "lat": 41.01152,
+      "lng": 28.6571184
+    },
+    {
+      "place": "Excuses Café Culture",
+      "address": "Caferağa, Kadife Sk. No:27/1, 34710 Kadıköy/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Serkan Yılmaz'ın gösterisi için gitmiştik, eh işte.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb152169ca6112cbe",
+      "lat": 40.9864634,
+      "lng": 29.0267163
+    },
+    {
+      "place": "Onur Hipermarketleri",
+      "address": "Sinanoba, İbrahimzade Cad./252. Sok. No:2, 34535 Büyükçekmece/İstanbul - Avrupa, Türkiye",
+      "rating": 2,
+      "text": "Ne zaman gitsem yavaşlıktan kanser oluyorum.",
+      "date": "2016-06-13",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf8840c498bd1cfcc",
+      "lat": 40.9919967,
+      "lng": 28.536499
+    },
+    {
+      "place": "HD İskender",
+      "address": "Kızılay Cumhuriyet, Selanik Cd No:7/D, 06420 Çankaya/Ankara, Türkiye",
+      "rating": 1,
+      "text": "Sıfır hizmet, lezzetli dayak yemek isterseniz mutlaka gidin.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x31898f48dda57b9c",
+      "lat": 39.9222287,
+      "lng": 32.8554063
+    },
+    {
+      "place": "Çankaya Municipality",
+      "address": "Cumhuriyet, Ziya Gökalp Cd. No:11, 06430 Çankaya/Ankara, Türkiye",
+      "rating": 3,
+      "text": "Yılların efsanesi SSK İşhanı'nın yenilenmiş hali.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc4fb4eb09f3cf975",
+      "lat": 39.9216092,
+      "lng": 32.8560826
+    },
+    {
+      "place": "Ankara Castle",
+      "address": "Kale, 06240 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Kaleden başka her şeye benzeyen ortam. Merak edip gidecekseniz boşuna gitmeyin, bir şey yok.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7415e004939401c0",
+      "lat": 39.9390359,
+      "lng": 32.8654212
+    },
+    {
+      "place": "Divan Çukurhan",
+      "address": "Kale, 3 Depo Sokak, 06240 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Odaları eski hanın havasını bozmadan dizayn edilmiş, Ankara'yı tepeden görüyor. Fiyatı da Ankara'daki diğer otellere göre gayet makul.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc367fa1b7df78ca9",
+      "lat": 39.9374334,
+      "lng": 32.8633664
+    },
+    {
+      "place": "Rahmi M. Koc Museum Ankara",
+      "address": "Kale, Hacettepe, Depo Sokak No:1, 06230 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Herkesin gitmesi gereken, herkesin ilgileneceği bir alan bulabileceği, Ankara'nı en kapsamlı özel müzesi.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x2a20481a30414e35",
+      "lat": 39.9372464,
+      "lng": 32.8634883
+    },
+    {
+      "place": "Museum of Anatolian Civilizations",
+      "address": "Kale, Gözcü Sk. No:2, 06240 Ulus/Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Ankara'da ziyaret edilebilecek en kapsamlı müze.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x9b91ac47e4f46746",
+      "lat": 39.9382042,
+      "lng": 32.8618958
+    },
+    {
+      "place": "Temple of Augustus",
+      "address": "Hacı Bayram, 06030 Altındağ/Ankara, Türkiye",
+      "rating": 5,
+      "text": "Ankara'nın en eski yapıtlarından birisi, açıkta, korumasız öylece bekliyor. Yarın öteki gün yıkılmadan gidin görün.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xbbd26ab1bfaebd3b",
+      "lat": 39.9441182,
+      "lng": 32.8582255
+    },
+    {
+      "place": "Torium AVM",
+      "address": "Torium AVM, Turgut Özal Mahallesi E-5 Üzeri, Haramidere Yolu, 34903, Turgut Özal, E-5 Yanyolu No:50, 34513 Esenyurt/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Mağaza yelpazesi geniş ama içerisi her daim kıyamet gibi.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb400ec44e7243407",
+      "lat": 41.0041831,
+      "lng": 28.6878147
+    },
+    {
+      "place": "Mevsim Balıkçılık",
+      "address": "E-5 Karayolu Atatürk Blv Mimarsinan Büyükçekmece, 34500, Türkiye",
+      "rating": 2,
+      "text": "Fiyatları baya uçukmuş.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xec2be1ca34f4b1a2",
+      "lat": 41.0118374,
+      "lng": 28.533949
+    },
+    {
+      "place": "Beylikdüzü Düğün Salonu /Düğün/Nişan/Kına/Sünnet Düğünü/Kokteyl",
+      "address": "Cumhuriyet Mah. E5 karayolu üzeri Fesh İş Merkezi Kat:10, 34520 Beylikdüzzü/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Basık ortam, gürültülü canlı müzik.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xb9b3768648899f5b",
+      "lat": 41.015974,
+      "lng": 28.640928
+    },
+    {
+      "place": "Tosunoğlu Kebap",
+      "address": "Mimar Sinan Merkez, Mustafa Kemal Blv., 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Eh işte, fiyatlar da lezzet de idare eder.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xa5aaf526152d5bd0",
+      "lat": 41.0076503,
+      "lng": 28.5380659
+    },
+    {
+      "place": "Marmara Park",
+      "address": "D100, Çelebi Mehmet Cad. 33A, 34515 Esenyurt/İstanbul, Türkiye",
+      "rating": 2,
+      "text": "Ne zaman gitsek 2 tane güvenlik kapısı ve önünde Halk Ekmek kuyruğu oluyor.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x866a9eb3f857e928",
+      "lat": 41.0092874,
+      "lng": 28.6600973
+    },
+    {
+      "place": "Vatan Bilgisayar Beylikdüzü",
+      "address": "Metrobüs Durağı Yanı, E-5 Yanyolu/Esenyurt, Cumhuriyet, 1995. Sk. No:2, 27090 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Ürün skalası az, daha fazla olan şubeler var.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x47f5e96e49a36423",
+      "lat": 41.0157194,
+      "lng": 28.64245
+    },
+    {
+      "place": "Miniatürk",
+      "address": "Örnektepe, İmrahor Cd. No:7, 34445 Beyoğlu/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "İstanbul'da gidilmesi gereken yerlerden.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x3189508ccec2d71c",
+      "lat": 41.0589927,
+      "lng": 28.9492193
+    },
+    {
+      "place": "Idris Usta Et Doner",
+      "address": "Bulak, Cumhuriyet Cd. Özdinç Apartmanı iş hanı no:34D, 30100 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 5,
+      "text": "Hakkari'de yenebilecek en iyi şey.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x713652049974f700",
+      "lat": 37.5767384,
+      "lng": 43.7359436
+    },
+    {
+      "place": "Hakkari Ogretmenevi",
+      "address": "Bulak, Cumhuriyet Cd. No:37, 30000 Hakkâri Merkez/Hakkari, Türkiye",
+      "rating": 3,
+      "text": "Barınma için en ucuz yer burası. Ama odalar küçük, imkânlar az.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xc3bb67f5ec387be2",
+      "lat": 37.574208,
+      "lng": 43.7368833
+    },
+    {
+      "place": "Chaplin Cafe & Restaurant Büyükçekmece",
+      "address": "Atatürk Mahallesi, Kordonboyu Caddesi 109/A, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Çalışanlar ilgili, mekanın teması güzel, yemekler güzel. Fiyat olarak biraz ortalamanın üzerinde yalnız.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7801c16693967e2a",
+      "lat": 41.0135176,
+      "lng": 28.5972569
+    },
+    {
+      "place": "Moda Otopark",
+      "address": "Caferağa, Sakız Gülü Sk. No:25, 34710 Kadıköy/İstanbul, Türkiye",
+      "rating": 2,
+      "text": "Bu Kadıköy'ün nasıl bir trafiği varsa labirent gibi zar zor geldik buraya, doluymuş. Ana yolun üstünde park ettiniz ettiniz.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6ea2dfad8b9153b8",
+      "lat": 40.987442,
+      "lng": 29.027278
+    },
+    {
+      "place": "West Panorama Social Facilities",
+      "address": "Ünlüsoy Cad., Akkuyu Sok. no:6, 34535, Türkiye",
+      "rating": 3,
+      "text": "Biraz ıssız duruyor, kahvaltısı \"eh işte\" idi.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x98b69cb1f0fbd43f",
+      "lat": 40.992099,
+      "lng": 28.543
+    },
+    {
+      "place": "Cinemapink",
+      "address": "Beykent, Adnan Kahveci, Yavuz Sultan Selim Blv. No:3, 34528 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Kitlesi ve kalitesine bakılınca büyük bir çevre içinde gidilebilecek en iyi sinema burası.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x426240f47df691bf",
+      "lat": 41.015775,
+      "lng": 28.6278527
+    },
+    {
+      "place": "Meşhur Köfteci Abdi Özcan",
+      "address": "Süleymanpaşa Tekirdağ TR, Ortacami Mh, Kolordu Cd. No:5, 59030 Merkez, Türkiye",
+      "rating": 5,
+      "text": "Özcankar Köftenin eski ustasıymış sanırım. Köftelerin lezzeti, ikram, hizmet, hepsi muhteşemdi. Fiyatı da diğer köftecilere nazaran gayet uygun.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x986c11a88cabbde4",
+      "lat": 40.9782761,
+      "lng": 27.5132136
+    },
+    {
+      "place": "KEBAPÇI ÇETİN USTA",
+      "address": "Ekinoba, Mustafa Kemal Blv. 5D, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Bu şubeye ne zaman gitsek, hem yediğimiz hem hizmet muhteşem oluyor ama aşağıdaki diğer şubeleri çok vasat.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xeb5ba48e972cba07",
+      "lat": 41.009537,
+      "lng": 28.536513
+    },
+    {
+      "place": "McDonald's Mimaroba",
+      "address": "Mimar Sinan Mah, Mustafa Kemal Blv. No:16, 34089 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Mimaroba'nın en temiz, düzgün çalışan fast food işletmesi.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x43bf23ac956a7c5",
+      "lat": 41.0072551,
+      "lng": 28.5391814
+    },
+    {
+      "place": "İBB Büyükçekmece Sosyal Tesisleri",
+      "address": "Piyade Sok, Fatih, Kordonboyu Cd. No:7, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Yemekleri idare eder, fiyatları çok uygun. Yalnız çok kalabalık oluyor, garsonlarda da tam bir memur havası var.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xefcafff6102c0459",
+      "lat": 41.0181053,
+      "lng": 28.5828526
+    },
+    {
+      "place": "Perlavista Shopping Centre",
+      "address": "Adnan Kahveci, Yavuz Sultan Selim Blv. No:116, 34528 Beylikdüzü/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Büyükçekmece/Beylikdüzü bölgesinde gidilebilecek en makul/sakin AVM.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x5ffc76bdb144450d",
+      "lat": 41.0158976,
+      "lng": 28.6275615
+    },
+    {
+      "place": "İskele Restaurant",
+      "address": "Mimarsinan Merkez Mahallesi, İskele Cd. No:2, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 2,
+      "text": "4 kişi kahvaltıya gittik, resmen önemsenmedik. Kahvaltı geç geldi, içinde çoğu şey yok, garson arıyorsun yok, çay istiyorsun yok. Önceden gördüğünde çok iyi bir intiba bırakmıştı ama bir daha da gitmem muhtemelen.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xf7fad267275c4475",
+      "lat": 41.0152074,
+      "lng": 28.5625833
+    },
+    {
+      "place": "Sürat Kargo Dizdariye Şube",
+      "address": "19 Mayıs, Osman Gazi Cd. No:8-A, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 2,
+      "text": "Berbat çalışıyorlar, en yavaş çalışan kargo budur muhtemelen.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xeb3a4da08368e972",
+      "lat": 41.0249043,
+      "lng": 28.5834249
+    },
+    {
+      "place": "Çiya Sofrası",
+      "address": "Caferağa, Güneşlibahçe Sok. no 34710, 34710 Kadıköy/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Ününü duyup gittik, Gülbahar Kebap yedik. Resmen yoğurda batırılmış şiş kebap verdiler. Doğru dürüst hizmet de yoktu.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x58aaaeb4b80c5113",
+      "lat": 40.989254,
+      "lng": 29.0241904
+    },
+    {
+      "place": "Çınar Restaurant",
+      "address": "Çamlı Mahallesi Köybüşü Sokak No:5/A Sedir Adası yolu üzeri 2. km, 48700 Marmaris/Muğla, Türkiye",
+      "rating": 4,
+      "text": "Restoranı orman içinde, gayet güzel. Kahvaltıları da lezzetli. Yalnız biraz kalabalık oluyor. Hizmet biraz daha iyi olabilirdi.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6d9039e23d2aea5e",
+      "lat": 36.9686637,
+      "lng": 28.2717272
+    },
+    {
+      "place": "Total",
+      "address": "Mimar Sinan Merkez, Uğur Sk. 21c, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "İn cin top oynuyormuş gibi duruyor, marketinde bile hiçbir şey yok.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe410649597f1548e",
+      "lat": 41.0171851,
+      "lng": 28.5574102
+    },
+    {
+      "place": "Atirus Shopping Center",
+      "address": "Fatih, Rızaküçükoğlu Paşa Cad No:40, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 4,
+      "text": "Büyükçekmece bölgesinin doğru düzgün tek AVM'si. Biraz küçük bir yer, içinde D&R, Teknosa, Watsons vs. gibi işletmeler var. Fiyat olarak makul, ancak izleyen kitlesi biraz düşük yaşta olan Site Sinemaları var.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x188cb659a43c20bd",
+      "lat": 41.0217282,
+      "lng": 28.5845048
+    },
+    {
+      "place": "Efor",
+      "address": "Mimaroba, 34535 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 3,
+      "text": "Çok kere ürünlerde kasada farklı fiyat çıktı. Açıldığı zaman iyiydi ama az iş yapmasından dolayı kalite biraz düştü sanırım.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x609d950749635767",
+      "lat": 41.0025987,
+      "lng": 28.5336835
+    },
+    {
+      "place": "Shell",
+      "address": "Gökova, Muğla Fethiye Yolu, 48660 Ula/Muğla, Türkiye",
+      "rating": 5,
+      "text": "Benzinliğin yanında ufak bir kafe var. 2 tost aldık, 20 lira verdik. Nasıl olsa başka alternatif yok diye karaborsacılık yapıyorlar. Shell'in içinde bir sürü çeşit sandviç satılıyormuş, bunlara para kaptırmayın Shell'e gidip ordan alın.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xd14fad01d1b1a8e1",
+      "lat": 37.041171,
+      "lng": 28.381411
+    },
+    {
+      "place": "Cemo Kebap",
+      "address": "Kumburgaz, İstanbul Caddesi, 34530 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Genel olarak fiyatları da makul olmakla beraber, lahmacun denemenizi kesinlikle tavsiye ederim.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6feafb1d9af65bca",
+      "lat": 41.028003,
+      "lng": 28.4607781
+    },
+    {
+      "place": "Görkem Kilis Sofrası",
+      "address": "Şenlikköy Mahallesi, Yeşilköy-Halkalı Caddesi, No:4 Florya Güneş Plajı Yanı / Florya, 34153 Bakırköy/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Fiyatları bölgeye göre çok pahalı olmasa da pahalı sayılır ancak kebapçı hürmetini görebildiğimiz, hizmet sektörünün ne olduğunun farkında olan bir işletme. Rica minnet hizmet alabildiğiniz yerlere 3 vermek yerine buraya 5 verin.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x7ca085b6e3466ed3",
+      "lat": 40.9712715,
+      "lng": 28.7907333
+    },
+    {
+      "place": "Konak Dürüm Evi",
+      "address": "Atatürk, Birgul sokak, 34500 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 5,
+      "text": "Fiyatı uygun, çalışanları ve sahibi ilgili, yiyecekleri de güzel bir işletme.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0x6f02ebe32f861add",
+      "lat": 41.0140096,
+      "lng": 28.5989059
+    },
+    {
+      "place": "Yeni Palmiye Cafe & Restaurant",
+      "address": "Güzelce, Yoğurthane Cd. No: 6, 34530 Büyükçekmece/İstanbul, Türkiye",
+      "rating": 1,
+      "text": "Yarım saat oturduk, garson defalarca dolaştı, gelip de 'merhaba' demedi. Tekrar kalktık, o zaman bile 'niye kalkıyorsunuz' diye sormadı. Saldım çayıra mevlam kayıra mottosuyla çalışan bir işletme.",
+      "date": "2016-06-05",
+      "url": "https://www.google.com/maps/place//data=!4m2!3m1!1s0x0:0xe351d914c22a9d64",
+      "lat": 40.9990924,
+      "lng": 28.5127671
+    }
+  ]
+}

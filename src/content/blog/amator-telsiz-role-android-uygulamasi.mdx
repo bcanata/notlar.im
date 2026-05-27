@@ -1,0 +1,37 @@
+---
+title: 'Amatör Telsiz Röle: Android Uygulaması'
+date: '2024-03-29T00:00:00.000Z'
+updated: '2024-04-03T00:00:00.000Z'
+tags:
+  - amatör telsiz
+  - yazılım
+description: amatortelsizcilik.com.tr ve @telsizbot'a alternatif olarak React Native + Expo ile geliştirdiğim Android uygulamasının kayıt notları.
+lang: tr
+translationKey: amator-telsiz-role-app
+ai: true
+---
+
+[Google Play Store'da](https://play.google.com/store/apps/details?id=com.tr.amatortelsizcilik) yer alan Android uygulaması. React Native ile Expo üzerinde geliştirildi. amatortelsizcilik.com.tr ve Telegram'daki [@telsizbot](https://t.me/telsizbot) botu ile aynı veritabanını kullanıyor. VHF, UHF ve crossband röleleri listeliyor şu anlık.
+
+Başlangıçta basit bir tablo şeklinde görüntüleme yapıyordu. 29 Mart 2024 güncellemesinde karanlık mod özelliği ve röleleri harita üzerinde görüntüleme eklendi.
+
+## Gelen öneriler ve yapılacaklar
+
+**Özellik**
+
+- [x] Röle listesine filtre ve arama imkânı eklenecek.
+- [x] İleri/geri sayfa tuşu yerine parmakla kaydırma.
+- [x] Karanlık mod, telefon ayarına göre otomatik ayarlanacak.
+- [ ] Rölelerin detay sayfası eklenecek. Üzerine tıklayınca diğer detaylar ve konumu görüntülenecek.
+- [ ] Röle detay sayfalarına hata bildirme + yeni röle bildirme butonları.
+- [ ] QRZ üzerinden çağrı işareti sorgulama konabilir.
+- [x] Veritabanı çevrimdışı çalışacak şekilde SQLite veritabanına aktarılacak.
+- [ ] iOS sürümü yapılabilir. Geliştirici hesabı satın almak gerekli.
+
+**Sorunlar**
+
+- [ ] Konum güncellenmiyormuş, listeye sabit kaydediyor sanırım.
+
+## 3 Nisan 2024 güncellemesi
+
+SQLite veritabanını kaldırdım, onda sorun çıkıyordu. Laravel ile çalışan amatortelsizcilik.com.tr API'si üzerinden bilgileri alıyor, 24 saatliğine cache'e atıyor şu anlık. Tasarımda da ufak tefek güncellemeler yapıldı.

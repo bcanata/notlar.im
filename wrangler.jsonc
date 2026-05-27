@@ -12,16 +12,9 @@
     "directory": "./dist",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
-  }
-  /*
-   * To flip notlar.im DNS to this Worker, uncomment the routes block below
-   * and re-deploy. The existing notlar.im DNS currently points to the old
-   * Docusaurus site host — claiming the custom_domain will repoint the
-   * apex + www to this Worker on the next deploy.
-   *
-   * "routes": [
-   *   { "pattern": "notlar.im",     "custom_domain": true },
-   *   { "pattern": "www.notlar.im", "custom_domain": true }
-   * ]
-   */
+  },
+  "routes": [
+    { "pattern": "notlar.im", "custom_domain": true },
+    { "pattern": "www.notlar.im", "custom_domain": true }
+  ]
 }

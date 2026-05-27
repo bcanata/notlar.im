@@ -1,0 +1,82 @@
+---
+import Page from '../../layouts/Page.astro';
+import { allBooks, type BookWithSlug } from '../../lib/books';
+import { t } from '../../lib/i18n';
+
+export function getStaticPaths() {
+    return allBooks().map((book) => ({
+        params: { slug: book.slug },
+        props: { book },
+    }));
+}
+
+const { book } = Astro.props as { book: BookWithSlug };
+const lang = 'tr' as const;
+const isbn = book.isbn13 || book.isbn10;
+const olUrl = isbn ? `https://openlibrary.org/isbn/${isbn}` : null;
+
+const meta: { label: string; value: string }[] = [];
+if (book.publisher) meta.push({ label: t(lang, 'book_publisher'), value: book.publisher });
+if (book.year) meta.push({ label: t(lang, 'book_year'), value: String(book.year) });
+if (book.pages) meta.push({ label: t(lang, 'book_pages'), value: String(book.pages) });
+if (book.isbn13) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn13 });
+else if (book.isbn10) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn10 });
+---
+
+<Page
+    title={book.title}
+    description={book.description ?? `${book.title}${book.author ? ' — ' + book.author : ''}`}
+    lang={lang}
+>
+    <p class="mb-8 text-sm">
+        <a href="/kitaplik" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'books_back')}</a>
+    </p>
+
+    <article class="flex flex-col gap-8 sm:flex-row sm:gap-10">
+        <div class="shrink-0 sm:w-56">
+            <div class="relative aspect-[2/3] overflow-hidden rounded-sm shadow-[0_4px_16px_rgba(0,0,0,0.16)] ring-1 ring-black/5">
+                {book.cover ? (
+                    <img src={book.cover} alt={book.title} class="h-full w-full object-cover" />
+                ) : (
+                    <div class="flex h-full w-full flex-col justify-between bg-[var(--color-paper-soft)] p-4">
+                        <span class="block h-1 w-10 rounded bg-[var(--color-ink-mute)]/40" />
+                        <span class="display-title text-lg leading-tight text-[var(--color-ink)]">{book.title}</span>
+                        {book.author && (
+                            <span class="text-xs uppercase tracking-wider text-[var(--color-ink-mute)]">{book.author}</span>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+
+        <div class="min-w-0 flex-1">
+            <h1 class="post-title text-3xl leading-tight sm:text-4xl">{book.title}</h1>
+            {book.author && (
+                <p class="mt-2 text-lg text-[var(--color-ink-soft)]">{book.author}</p>
+            )}
+
+            {meta.length > 0 && (
+                <dl class="mt-6 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
+                    {meta.map((m) => (
+                        <>
+                            <dt class="text-[var(--color-ink-mute)]">{m.label}</dt>
+                            <dd class="tabular-nums">{m.value}</dd>
+                        </>
+                    ))}
+                </dl>
+            )}
+
+            {book.description && (
+                <div class="prose mt-8">
+                    <p>{book.description}</p>
+                </div>
+            )}
+
+            {olUrl && (
+                <p class="mt-8 text-sm">
+                    <a href={olUrl} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] underline decoration-1 underline-offset-2">{t(lang, 'book_openlibrary')} ↗</a>
+                </p>
+            )}
+        </div>
+    </article>
+</Page>

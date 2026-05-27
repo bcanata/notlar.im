@@ -1,0 +1,485 @@
+---
+title: 'Modernizing an Ender 3 v2 in 48 Hours: From OctoPrint to Klipper, Tailscale HTTPS, and Six Calibrations'
+date: '2026-05-26T12:00:00.000Z'
+tags:
+  - 3d-printing
+  - klipper
+  - ender-3
+  - homelab
+description: A two-day weekend log of moving an Ender 3 v2 off Marlin + OctoPi onto Klipper + Mainsail + OrcaSlicer + Tailscale, plus every calibration that comes after.
+lang: en
+ai: true
+translationKey: ender3-klipper-48h
+---
+
+Two days, one printer, a lot of small gotchas. This is the log of moving a working-but-tired Ender 3 v2 setup off Marlin + OctoPi and onto Klipper + Mainsail + OrcaSlicer + Tailscale, then dialing in every calibration the printer needs to actually print well.
+
+I'm writing this partly as documentation for future-me and partly because every single step in this journey was Googled at some point — and several answers I needed didn't exist anywhere on the internet in the form they should have.
+
+
+## The starting point
+
+The printer is a 2020 Ender 3 v2 that's been quietly accumulating upgrades:
+
+- **Mainboard**: stock 4.2.2 swapped for a Creality 4.2.7 silent board (STM32F103, supports BLTouch natively).
+- **BLTouch clone** (one of the cheap 3DTouch boards) for ABL.
+- **Filament runout sensor** wired to the dedicated 3-pin header.
+- **Minimus Snap** hotend shroud and ABL backplate by Rogue Designs — a popular Ender 3 v2 cooling mod.
+- **Hotend rebuild kit**: Micro Swiss MK8 plated copper heater block, titanium bimetal heatbreak, CHT-style triple-orifice 0.4 mm carbon nozzle (Bondtech CHT clone), silicone sock, Capricorn 2/4 mm Bowden tube, and a generic 100K NTC thermistor that replaced the stock EPCOS one.
+- **Creality aluminum dual-gear extruder** (the 1:1 dual-grip aluminum upgrade, not Bondtech).
+- **Glass bed** held by binder clips.
+
+The control side was **OctoPi on a Raspberry Pi 3 Model B**, with the printer USB-connected. The Pi was also running a **Tuya smart plug** for automated printer power on/off via the [TuyaSmartplug OctoPrint plugin](https://github.com/ziirish/OctoPrint-TuyaSmartplug), and Telegram notifications via OctoPrint's Telegram plugin. Marlin firmware on the mainboard.
+
+It worked. But it was slow, and OctoPrint's age was showing.
+
+## Why migrate
+
+Three reasons:
+
+1. **Speed**. Marlin caps acceleration around 500 mm/s² without aggressive tuning. Klipper with input shaper routinely runs 4000–8000 mm/s² on the same hardware. That's a real difference in print times.
+2. **Slicer integration**. OrcaSlicer talks to Moonraker much more cleanly than to OctoPrint, including thumbnail preview in Mainsail.
+3. **Remote access**. OctoPrint's authentication and webcam stack felt like 2019. I wanted proper Tailscale + HTTPS, and Moonraker handles that gracefully.
+
+The plan: do it all in a weekend.
+
+---
+
+## Day 1: stack migration
+
+### Backup everything
+
+Before touching the Pi, I tar'd the whole `~/.octoprint` directory to my Mac:
+
+```bash
+ssh bcanata@octoprint.local 'tar -czf /tmp/octoprint-backup.tar.gz ~/.octoprint'
+scp bcanata@octoprint.local:/tmp/octoprint-backup.tar.gz ~/backups/
+```
+
+Most importantly, I extracted the Tuya plug's **device ID, local key, and protocol version** from `~/.octoprint/config.yaml`. Those are not recoverable later — pairing a Tuya device via the official cloud and extracting the local key is the most annoying single task in 3D printing, and OctoPrint had already done it years ago. Saving the YAML block was the difference between "5 minute fix later" and "a Saturday".
+
+### Install Klipper + Moonraker + Mainsail
+
+Klipper's own `scripts/install-debian.sh` still tries to create the Python virtualenv with `python2`. On a current Raspberry Pi OS that's broken. The workaround is to install dependencies via apt and then build the venv manually:
+
+```bash
+sudo apt-get install -y virtualenv python3-dev libffi-dev build-essential \
+  libncurses-dev libusb-dev avrdude gcc-avr binutils-avr avr-libc \
+  stm32flash dfu-util libnewlib-arm-none-eabi \
+  gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0 pkg-config
+
+virtualenv -p python3 ~/klippy-env
+~/klippy-env/bin/pip install -r ~/klipper/scripts/klippy-requirements.txt
+```
+
+Then a systemd unit, `klipper.service`, that runs the host process. Moonraker's installer worked out of the box. Mainsail is just a static SPA — drop the zip into `/home/bcanata/mainsail` and serve via nginx.
+
+The catch with nginx: OctoPi's haproxy was already listening on port 80. I gave Mainsail port 81 initially, kept OctoPrint alive on 80, and switched ports later once I was sure the new stack worked.
+
+### Build and flash Klipper firmware for the 4.2.7
+
+The 4.2.7 uses an STM32F103, 28KiB Creality bootloader, USART1 serial communication. The `make menuconfig` choices are:
+
+```
+Micro-controller Architecture (STMicroelectronics STM32)
+Processor model (STM32F103)
+Bootloader offset (28KiB bootloader)
+Clock Reference (8 MHz crystal)
+Communication interface (Serial (on USART1 PA10/PA9))
+Baud rate for serial port (250000)
+```
+
+The output is `out/klipper.bin`. Creality's bootloader flashes files named `firmware.bin` placed on an SD card at the front of the LCD. Copy, insert, power on, wait 30 s, done.
+
+```bash
+cp out/klipper.bin /Volumes/SD/firmware.bin
+```
+
+A subtle gotcha: the bootloader renames the file to `FIRMWARE.CUR` after a successful flash. If your file is still `firmware.bin` after, the flash didn't happen. Most common cause is FAT32 cluster size — format 4 KiB clusters.
+
+### printer.cfg, the long version
+
+I started from the canonical `~/klipper/config/generic-creality-v4.2.7.cfg` and layered on the BLTouch, filament sensor, bed mesh, and macros. The interesting Ender 3 v2 sections look like:
+
+```ini
+[board_pins]
+aliases:
+  EXP1_1=PC6,  EXP1_3=PB10, EXP1_5=PB14, EXP1_7=PB12, EXP1_9=<GND>,
+  EXP1_2=PB2,  EXP1_4=PB11, EXP1_6=PB13, EXP1_8=PB15, EXP1_10=<5V>,
+  PROBE_IN=PB0, PROBE_OUT=PB1, FIL_RUNOUT=PA4
+
+[bltouch]
+sensor_pin: ^PROBE_OUT
+control_pin: PROBE_IN
+x_offset: -45
+y_offset: -10
+z_offset: 2.0       # placeholder — will be PROBE_CALIBRATE'd later
+speed: 3
+sample_retract_dist: 3
+probe_with_touch_mode: false   # KEY for BLTouch clones, see below
+stow_on_each_sample: true
+samples: 3
+samples_result: median
+samples_tolerance: 0.1
+samples_tolerance_retries: 3
+```
+
+### Gotcha #1: the BLTouch clone trap
+
+After flashing, `QUERY_PROBE` returned sane states, and pushing the deployed stylus by hand correctly flipped the probe from `open` to `TRIGGERED`. So wiring was right.
+
+Then I ran `G28`. The toolhead went to safe_z_home (117.5, 117.5), started lowering Z, and **never stopped**. The Z axis drove the nozzle down into the bed, racked up `position 374` in Klipper's tracker (well past `position_max: 250`), and required a hardware power-cycle to recover.
+
+What happened: BLTouch v3 has a special "touch mode" that some Klipper users enable with `probe_with_touch_mode: true`. Genuine v3s implement this correctly. **Clones don't.** They accept the command, but the trigger signal never gets propagated during the probe move. The stylus physically touches the bed, gets pushed up — and Klipper sees nothing.
+
+The fix is one line:
+
+```ini
+probe_with_touch_mode: false
+stow_on_each_sample: true
+```
+
+Plus `samples: 3, samples_result: median, samples_tolerance: 0.1` to catch the occasional bad reading the clone still produces.
+
+If you have a 3DTouch, CR-Touch, or any BL-knockoff, those four lines are the difference between a working printer and a damaged bed.
+
+### Decommissioning OctoPrint
+
+Once Mainsail was confirmed working:
+
+```bash
+sudo systemctl disable --now octoprint haproxy gencert sshswitch
+sudo systemctl disable --now bluetooth hciuart ModemManager triggerhappy
+sudo apt-get purge haproxy
+sudo rm -rf /opt/octopi
+mv ~/.octoprint ~/.octoprint.removed-2026-05-24
+```
+
+Then moved Mainsail's nginx from port 81 to port 80. Lost about 50 MB of RAM, freed 257 MB of disk, and the Pi felt noticeably snappier.
+
+---
+
+## Day 2 morning: bed mesh, the binder-clip surprise
+
+Klipper restarted clean. `G28` worked. Time for `BED_MESH_CALIBRATE` — a 5×5 grid, ~25 probe points.
+
+Result:
+
+```
+back  +0.122 +0.098 +0.018 -0.028 -0.060
+      +0.131 +0.069 +0.004 -0.009 -0.043
+      +0.129 +0.052 +0.033 +0.004 -0.113
+      +0.171 +0.096 +0.062 +0.016 +0.000
+front +0.115 +0.079 +1.569 +0.009 -0.099
+        L                              R
+```
+
+That **+1.569 mm** in the bottom-middle was bizarre. 17× the variance of every other point. I assumed it was a clone probe glitch — bumped samples to 5 with tighter tolerance, re-ran. Same value.
+
+Turned out to be the **binder clip** in the back-center holding the glass to the heatbed. The probe was hitting it. The clip's metal arm extends about 15 mm into the bed area, well into my mesh range.
+
+The fix: shrink the mesh bounds. With probe `x_offset: -45` and toolhead `position_max: 235`, the max safe **probe X** is 235 − 45 = 190. With clips at the back edge, probe Y caps at 200. So:
+
+```ini
+[bed_mesh]
+mesh_min: 20, 20
+mesh_max: 190, 200    # NOT 220, NOT 235
+```
+
+The Ender 3 v2's printable area is 220×220 mm, but the meshable area with clips is only 180×180. Klipper extrapolates the bicubic mesh out to the print area edges, which is fine.
+
+### Z-offset and the paper test
+
+`PROBE_CALIBRATE`, then in the manual probe mode:
+
+```
+TESTZ Z=-1        # repeat ~5 times to drop near bed
+TESTZ Z=-0.1      # fine
+TESTZ Z=-0.025    # finer
+ACCEPT
+SAVE_CONFIG
+```
+
+Final value: `z_offset = 2.977`. Later bumped to `3.077` after a first-print babystep showed the original was slightly too low. Both values are normal for a BLTouch clone on a Minimus Snap mount.
+
+## Day 2 afternoon: PID, but with the right curve
+
+The hotend rebuild kit included a **generic 100K NTC thermistor** to replace the stock EPCOS. I'd been running PID calibration with `sensor_type: EPCOS 100K B57560G104F` (the default), but the physical thermistor was now a different curve. At room temperature the two curves are nearly identical, but they diverge significantly at print temperatures.
+
+Translation: my "210°C PID tune" was actually at something like 215°C or 205°C, and the PID values were off.
+
+Fix:
+
+```ini
+sensor_type: Generic 3950
+max_temp: 280       # Micro Swiss + Ti heatbreak + silicone sock can handle it
+```
+
+Then `PID_CALIBRATE HEATER=extruder TARGET=220` (CHT-friendly target):
+
+```
+pid_Kp = 28.408
+pid_Ki = 2.059
+pid_Kd = 98.008
+```
+
+And the bed:
+
+```
+pid_Kp = 68.358
+pid_Ki = 1.313
+pid_Kd = 889.507
+```
+
+### Extruder calibration: 32% off
+
+The classic test: mark filament 120 mm above the extruder inlet, command 100 mm of extrusion, measure how much actually moved.
+
+First pass result: **52 mm of filament remained from the 120 mm mark**. That meant 68 mm extruded vs 100 mm commanded — 32% under-extrusion.
+
+My first instinct was mechanical fault (gear slipping, filament jam, tension off). Then I remembered: the user has the **Creality aluminum dual-gear extruder**, not stock. Different drive hob, different gear circumference.
+
+```
+new_rotation_distance = old × (actual / commanded) = 33.500 × 0.68 = 22.78
+```
+
+Updated `rotation_distance: 22.78`, re-ran the test. Second pass: 20.3 mm remaining. **99.7 mm extruded vs 100 mm commanded — 0.3% accuracy.**
+
+Most online configs assume the stock Creality MK8 extruder with `rotation_distance: 33.5`. If you have any aftermarket extruder, you have to recalibrate from scratch. The "20% extrusion error from new tube/extruder/nozzle" thing is real.
+
+---
+
+## Input shaper with an MPU-6050
+
+The ADXL345 is the community-standard accelerometer for Klipper input shaping, but the printer owner had a **GY-521 / MPU-6050** breakout already. Klipper's `mpu9250` driver supports the MPU-6050 (despite the name) via the same I2C bus.
+
+Wiring is dead simple — 4 wires:
+
+| MPU-6050 | Pi physical pin |
+|---|---|
+| VCC | 1 (3.3 V — *not* 5 V, the chip is 3.3 V only) |
+| GND | 6 |
+| SDA | 3 (GPIO 2 / I2C1 SDA) |
+| SCL | 5 (GPIO 3 / I2C1 SCL) |
+
+Software setup is more involved:
+
+1. Enable I2C: `sudo raspi-config nonint do_i2c 0`
+2. Add user to groups: `sudo usermod -a -G i2c,gpio,spi $USER`
+3. Build a Linux MCU target of Klipper itself: `make menuconfig` → Linux process. Copy `out/klipper.elf` to `/usr/local/bin/klipper_mcu` and write a systemd unit that runs it on boot. This creates `/tmp/klipper_host_mcu`, a UDS that Klipper's main host process can talk to as a secondary MCU.
+4. `pip install numpy` into the klippy venv (resonance math needs it).
+5. Add to `printer.cfg`:
+
+```ini
+[mcu rpi]
+serial: /tmp/klipper_host_mcu
+
+[mpu9250]
+i2c_mcu: rpi
+i2c_bus: i2c.1
+
+[resonance_tester]
+accel_chip: mpu9250
+probe_points:
+    117.5, 117.5, 20
+```
+
+Mount the sensor on the toolhead (X test), run `SHAPER_CALIBRATE AXIS=X`. Move sensor to the bed for the Y test, repeat. The printer makes loud chirping noises for ~3 minutes per axis as it rings through frequencies 5–130 Hz.
+
+Results:
+
+```
+X: mzv @ 78.6 Hz, 0.1% residual vibration  (allows max_accel 18200)
+Y: ei  @ 51.2 Hz, 0.0% residual vibration  (allows max_accel 4800)
+
+new max_accel = min(18200, 4800) = 4800 mm/s²
+```
+
+That **78.6 Hz on X** is unusually high for an Ender 3 v2 (typical is 35–50 Hz). The lighter Micro Swiss + CHT toolhead explains it — less mass → higher natural frequency → more available headroom.
+
+`max_accel` went from 3000 to 4800. 60% improvement, capped by the bed's mass on Y as expected for a bed-slinger.
+
+After calibration, **you don't need the sensor anymore.** The shaper frequencies are baked into `printer.cfg`. Klipper applies the math to every move based on the saved values. Re-run only after mechanical changes (new hotend, new bed surface, retensioned belts).
+
+---
+
+## Tuya plug, the OctoPrint replacement
+
+The OctoPrint Tuya plugin had to be replaced. Moonraker's `[power]` module supports a bunch of device types — `tplink_smartplug`, `tasmota`, `mqtt`, `homeassistant`, `http`, etc. — but **not Tuya** natively.
+
+The cleanest solution is to run a tiny **HTTP bridge service** on the Pi that exposes `/on`, `/off`, and `/state` endpoints, talks to the Tuya plug locally via the [tinytuya](https://github.com/jasonacox/tinytuya) library, and then point Moonraker's `[power] type: http` at that bridge.
+
+About 100 lines of Python:
+
+```python
+import http.server, json, threading, time, tinytuya
+
+PLUG = tinytuya.OutletDevice(DEV_ID, IP, LOCAL_KEY)
+PLUG.set_version(3.3)
+
+_lock = threading.Lock()
+_cache = {"value": None, "ts": 0.0}
+
+def query_state():
+    if _cache["value"] is not None and time.monotonic() - _cache["ts"] < 3.0:
+        return _cache["value"]
+    with _lock:
+        status = _call_with_retries(lambda: PLUG.status())
+    on = bool(status["dps"]["1"])
+    _cache["value"] = on
+    _cache["ts"] = time.monotonic()
+    return on
+```
+
+The cache and retry-with-backoff are necessary because **Tuya plugs serialize TCP connections and reject rapid-fire requests**. Moonraker pings the status URL during init and got `Err 901: Network Error: Unable to Connect`. Adding a 3-second response cache and exponential backoff on retries fixed it.
+
+Moonraker side:
+
+```ini
+[power tuya_plug]
+type: http
+on_url: http://127.0.0.1:7126/on
+off_url: http://127.0.0.1:7126/off
+status_url: http://127.0.0.1:7126/state
+response_template: {% if "on" in http_request.last_response().text %}on{% else %}off{% endif %}
+on_when_job_queued: True
+locked_while_printing: True
+restart_klipper_when_powered: True
+restart_delay: 8
+bound_services: klipper
+```
+
+**Two more landmines** for anyone doing this:
+
+1. **Moonraker's config parser chokes on Jinja `{{ }}` syntax** because it conflicts with its own `${}` interpolation. Use `{% if %}...{% endif %}` blocks instead, which output raw text.
+2. **The template variable is `http_request.last_response().text`, not `http_response`.** The Moonraker docs example used to be ambiguous about this. If your `response_template` evaluates against `http_response`, that's an undefined Jinja variable, and the template always evaluates to "off" — even when the plug is actually on.
+
+I lost an hour to each of those.
+
+---
+
+## Tailscale and HTTPS via Let's Encrypt
+
+I wanted to control the printer from anywhere — phone on cellular, laptop at work — without exposing it to the public internet.
+
+**Tailscale on the Pi** handles the VPN side. `tailscale up --ssh` on the Pi adds it to my tailnet, makes it reachable via its 100.x.x.x IP, and enables Tailscale SSH (no password auth required from tailnet members).
+
+But that gives you HTTP at `http://100.x.x.x/`. Safari hates bare IPs with WebSocket. iOS/iPadOS browsers refuse some "secure context" APIs over plain HTTP. The right answer is **HTTPS with a real cert** — which Tailscale provides for free:
+
+1. Enable "HTTPS Certificates" in the Tailscale admin console (one toggle).
+2. On the Pi: `sudo tailscale cert octoprint-ev.tailnet-f1f8.ts.net`. Pulls a real Let's Encrypt cert valid for 90 days.
+3. nginx vhost listening on 443 with that cert, redirect 80 → 443.
+4. Systemd timer twice a day to re-run `tailscale cert` (no-op until close to expiry, otherwise refreshes the cert).
+
+Now `https://octoprint-ev.tailnet-f1f8.ts.net/` loads Mainsail with a green padlock from anywhere I have Tailscale.
+
+### One CORS pothole
+
+Mainsail loaded fine over HTTPS. But the browser's developer console showed dozens of WebSocket errors:
+
+```
+WebSocket connection to 'wss://octoprint-ev.tailnet-f1f8.ts.net/websocket' failed
+```
+
+The cause: Moonraker's `cors_domains` whitelist didn't include the new hostname. Added `*.ts.net` to the list, restarted Moonraker, errors gone. WebSocket connections from any tailnet hostname now allowed.
+
+For direct API calls (not through Mainsail), there's also `[authorization] trusted_clients`. Adding `100.64.0.0/10` (the Tailscale CGNAT range) makes API calls from any tailnet IP unauthenticated. Safe because only my own devices are on the tailnet.
+
+### Webcam: Safari hates MJPEG
+
+The default Mainsail webcam service is **mjpegstreamer**, which serves `multipart/x-mixed-replace` MJPEG streams. Chrome and Firefox render them. Safari doesn't.
+
+Camera-streamer (the modern replacement for mjpg-streamer) also serves **WebRTC** and **HLS**, both of which Safari supports natively. Switching the Mainsail webcam config to `service: webrtc-camerastreamer` with stream URL `/webcam/webrtc` made the camera show up reliably in every browser.
+
+---
+
+## OrcaSlicer integration
+
+OrcaSlicer talks to Moonraker over HTTPS using the printer profile's `print_host` field. Three lessons:
+
+1. **Put `https://` in the `print_host` field**, not just the hostname. Otherwise OrcaSlicer tries `http://`, gets a 301 redirect, tries to follow it with a rewind of the upload buffer, and dies with **curl Error 65: "Cannot rewind mime/post data"**.
+2. **Profile changes require an OrcaSlicer restart.** The app caches the profile JSON at startup and ignores file changes until you quit and reopen.
+3. **OrcaCloud login creates a new user directory** under `~/Library/Application Support/OrcaSlicer/user/<your-cloud-id>/` and Orca then ignores `user/default/`. If your profiles "disappear" after logging in, copy them from `default/` to the new cloud user dir manually.
+
+For the Ender 3 v2 + Klipper setup I created:
+
+- A **printer profile** pointing at the Tailscale HTTPS host, with `gcode_flavor: klipper`, custom `PRINT_START`/`PRINT_END` macros (one line each, just calls the Klipper macro), thumbnails enabled, and `machine_max_acceleration_*: 4800` to match Klipper.
+- A **filament profile** "Generic PLA - CHT hotend" with `filament_max_volumetric_speed: 20 mm³/s` (conservative; can bump after a Max Volumetric Speed test).
+- A **process profile** "0.20mm Klipper Fast" with reasonable speeds (outer wall 50, inner 120, infill 150, travel 200) and accelerations matching the input shaper's headroom.
+
+---
+
+## Calibration tests, in order
+
+Each test produces one number that goes into a config file. Each catches a different class of problem.
+
+| Test | Result | What it dialed in |
+|---|---|---|
+| **PROBE_CALIBRATE** | z_offset = **3.077** mm | The exact distance the BLTouch trigger point sits above the nozzle |
+| **PID_CALIBRATE extruder** | Kp 28.408 / Ki 2.059 / Kd 98.008 | Stable hotend temperature with the new copper block + NTC thermistor |
+| **PID_CALIBRATE heater_bed** | Kp 68.358 / Ki 1.313 / Kd 889.507 | Stable bed temperature |
+| **Rotation distance** | 22.78 (was 33.500) | Extruder gear → filament displacement ratio. Off by 32% because of the dual-gear extruder. |
+| **SHAPER_CALIBRATE AXIS=X** | mzv @ 78.6 Hz | X-axis ringing compensation |
+| **SHAPER_CALIBRATE AXIS=Y** | ei @ 51.2 Hz | Y-axis ringing compensation (the limiter) |
+| **OrcaSlicer Flow Rate Pass 1** | 0 modifier → 0.98 unchanged | Per-filament flow calibration |
+| **OrcaSlicer Pressure Advance Tower** | 0.030 | Nozzle pressure ramp-up at speed changes |
+
+The flow rate test came back perfect — "0" was the cleanest of the nine printed squares, meaning the existing 0.98 flow_ratio was already correct. That was a satisfying anticlimax.
+
+PA was less crisp; the seam test showed an oddly uniform tower with isolated blob artifacts at two specific PA values. Best read was **wide acceptable range, locked in at 0.030 conservative**. PA tuning at 50 mm/s outer-wall speeds doesn't show dramatic differences anyway — you can revisit after pushing speeds higher.
+
+---
+
+## The filament sensor pause loop
+
+Halfway through the flow rate calibration print, the runout sensor triggered, the print paused, the runout_gcode tried to call `M600`, and Klipper threw:
+
+```
+Unknown command: "M600"
+```
+
+Two problems revealed:
+
+1. **Klipper doesn't ship with `M600`** — it's a Marlin filament-change G-code. Some slicers emit it. I had referenced it in my `runout_gcode` macro assuming it existed. Fix: defined an `[gcode_macro M600]` that aliases to `PAUSE`.
+
+2. **The sensor was triggering falsely.** Filament was still loaded. The microswitch in the runout sensor was chattering during bed-slinger Y moves — vibration-induced contact bounces that read as a brief disconnect. Killed the print until the sensor decided to stop seeing nothing.
+
+Live-disabled via `SET_FILAMENT_SENSOR SENSOR=runout ENABLE=0` to finish the print, then permanently set `pause_on_runout: False` in printer.cfg. The sensor stays wired and queryable — I'll re-enable after physically inspecting the microswitch.
+
+---
+
+## Where we are now
+
+Forty-eight hours after starting, the printer:
+
+- Runs Klipper on the 4.2.7 board with full BLTouch + filament sensor + mesh compensation.
+- Is reachable at **https://octoprint-ev.tailnet-f1f8.ts.net/** from any device on my tailnet, with a real Let's Encrypt cert.
+- Auto-powers on via the Tuya plug when a print is queued; auto-powers off 60 seconds after print completion.
+- Sends Telegram notifications via [moonraker-telegram-bot](https://github.com/nlef/moonraker-telegram-bot) using the same bot token and chat ID the OctoPrint plugin used.
+- Live webcam in Mainsail via WebRTC, works in Safari.
+- Inputs shaped, max_accel at 4800, flow ratio dialed, pressure advance set.
+
+The first real test print (a 30 mm calibration cube) came out fine after I added a **prime line** to the `PRINT_START` macro — the stock Marlin macro had one, the Klipper version I'd written didn't, and the very first layer of the very first print showed missing extrusion in a few spots because the nozzle wasn't fully primed.
+
+That's been the pattern of this whole migration: **every step works once you find the one thing the standard tutorials don't mention.** Hopefully this document is one less thing future-me has to discover the hard way.
+
+---
+
+## TL;DR for anyone doing the same migration
+
+If you're an Ender 3 v2 owner thinking about leaving OctoPrint, here's the **short version** of the pitfalls:
+
+1. **BLTouch clones need `probe_with_touch_mode: false`**, period. If your Z homing crashes, this is it.
+2. **The OrcaSlicer `print_host` field needs the `https://` prefix** if your nginx redirects HTTP → HTTPS. Otherwise: curl Error 65.
+3. **Moonraker's `cors_domains` must include the Tailscale hostname** for WebSockets to work over HTTPS.
+4. **The Moonraker Jinja template variable is `http_request.last_response().text`**, not `http_response`.
+5. **Don't blindly `scp` printer.cfg from your laptop to the Pi.** SAVE_CONFIG appends to the file on the Pi; overwriting wipes your bed mesh and PID values. Always pull → edit → push.
+6. **Calibrate `rotation_distance` from scratch if you have an aftermarket extruder.** The 33.5 in every tutorial only applies to the stock Creality MK8 plastic extruder.
+7. **Re-run PID_CALIBRATE after swapping a thermistor.** The default `EPCOS 100K B57560G104F` and generic `Generic 3950` curves are similar at room temperature and diverge at print temperatures. Your PID values are tuned to the wrong target temperature if the sensor_type doesn't match what's actually in the heater block.
+8. **Klipper's `SCREWS_TILT_CALCULATE` is better than Marlin's bed-level assist.** Use it.
+9. **MPU-6050 works fine for input shaper.** ADXL345 is preferred but not necessary. 1 kHz sample rate is enough for the 30–80 Hz resonances of a stock-frame Ender.
+10. **Tailscale's free HTTPS certs make remote printing actually pleasant.** Stop port-forwarding. Stop putting OctoPrint on the open internet.
+
+If you only do one thing from this list: enable input shaper. Going from 3000 to 4800 mm/s² alone shaves an hour off a four-hour print, with no visible quality loss. Combined with the volumetric headroom from the CHT nozzle, you're looking at 2× faster prints out of a $200 printer.
+
+That's the upgrade I should have done years ago.
