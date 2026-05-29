@@ -30,6 +30,12 @@ export default defineConfig({
         '/notlar/bisiklet-uygulamalari': '/blog/bisiklet-uygulamalari',
         '/en/notlar/quansheng-uv-k5-en': '/en/blog/quansheng-uv-k5-en',
         '/en/notlar/cycling-apps': '/en/blog/cycling-apps',
+        // The 2021 "bisiklet-android-ve-iphone-uygulamalari" post was merged
+        // into "bisiklet-uygulamalari" (and its EN counterpart into cycling-apps).
+        '/blog/bisiklet-android-ve-iphone-uygulamalari': '/blog/bisiklet-uygulamalari',
+        '/notlar/bisiklet-android-ve-iphone-uygulamalari': '/blog/bisiklet-uygulamalari',
+        '/en/blog/cycling-mobile-apps-en': '/en/blog/cycling-apps',
+        '/en/notlar/cycling-mobile-apps-en': '/en/blog/cycling-apps',
     },
     integrations: [mdx(), sitemap()],
     vite: {
