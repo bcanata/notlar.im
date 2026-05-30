@@ -1,0 +1,157 @@
+---
+title: Self-Hosting with Dokploy and CasaOS
+date: '2026-05-31'
+updated: '2026-05-31'
+tags:
+  - internet
+  - self-hosting
+  - docker
+description: >-
+  Back in 2021 I wrote a general post about self-hosting. My setup has changed
+  since: I now run two separate machines — Dokploy on a VPS and CasaOS on a
+  Raspberry Pi at home. Here's what runs where, and why.
+ai: true
+lang: en
+translationKey: dokploy-casaos
+---
+
+Years ago, back in 2021, I wrote a [general post about self-hosting](/en/blog/self-hosting-en/): what it means to run the internet services you use on your own server, why it's worth it, and how to start. A lot has happened since, and my setup has changed beyond recognition. I no longer run everything in a single box; I now have **two separate machines** and **two separate interfaces** to manage them. In this post I want to walk through that setup — what runs where and, more importantly, *why* it runs there.
+
+## Two servers, two roles
+
+At the heart of the setup are two machines:
+
+- **A VPS** (Virtual Private Server). It sits in a data center in France; an old but still rock-solid Intel Xeon with 8 GB of RAM. What matters isn't its specs but its *location*: always on, static IP, with wide and symmetric bandwidth. It runs **Dokploy**.
+- **A Raspberry Pi 5** (8 GB). At home, in the living room. On my home connection, behind NAT, on a residential IP. It runs **CasaOS**.
+
+Why two? Because every job has a natural home. Anything that needs to be publicly reachable, wants bandwidth, or has to run heavy and uninterrupted lives on the VPS. Anything home-specific, low-power, or — interestingly — *that requires a residential IP* lives on the Pi at home. You'll see just how concrete that distinction can get in the Letterboxd example below.
+
+## What is Dokploy, and why use it instead of plain Docker?
+
+I used to manage everything by hand with `docker-compose` files. Delightful up to a handful of services; but as the count grew (there are ~50 containers on the VPS right now) it turned into a mess. Which service is on which port, how certificates get renewed, what I might break while updating something — it all became a source of confusion.
+
+That's exactly where [**Dokploy**](https://github.com/Dokploy/dokploy) came in. It's an open-source, self-hosted **PaaS** (Platform as a Service) — think of it as a self-hosted Vercel or Heroku. Underneath it's still Docker and [**Traefik**](https://github.com/traefik/traefik) (a reverse proxy), but from a single interface it gives me:
+
+- Projects and applications — in one tidy list,
+- An automatic domain and **automatic HTTPS** for every app (Traefik + Let's Encrypt; I never think about certificates),
+- Deployment history and one-click **rollback**,
+- Logs, environment variables, redeploys — all in one place.
+
+I split my projects by topic: *School*, *Personal*, *Development*, *Maintenance* and *Media*. The split is purely for tidiness; everything runs on the same server, just grouped in my head (and in the panel).
+
+## What runs on the VPS?
+
+Organized by project the way I have them in the Dokploy panel, here's everything currently running on the VPS:
+
+**School**
+
+- [**LittleLink Server**](https://github.com/techno-tim/littlelink-server) — a links-and-tools page for students
+
+**Personal**
+
+- [**memos**](https://github.com/usememos/memos) (+ the [**memogram**](https://github.com/rammiah/memogram) Telegram bridge) — quick notes
+- [**blinko**](https://github.com/blinkospace/blinko) — AI-assisted note-taking
+- [**docmost**](https://github.com/docmost/docmost) — wiki / knowledge base
+- [**Homepage**](https://github.com/gethomepage/homepage) — my main dashboard with widgets
+- [**Homer**](https://github.com/bastienwirtz/homer) — a simple start page
+- [**changedetection.io**](https://github.com/dgtlmoon/changedetection.io) — website change monitoring
+- [**n8n**](https://github.com/n8n-io/n8n) — automation workflows
+- [**domain-locker**](https://github.com/bcanata/domain-locker) — domain and SSL expiry tracking (a tool I built)
+- [**LittleLink**](https://github.com/techno-tim/littlelink-server) — my personal "link in bio" page
+- [**wg-easy**](https://github.com/wg-easy/wg-easy) — WireGuard VPN with a web UI
+
+**Development**
+
+- **aprs** — an amateur-radio APRS tool (my own)
+- **DMRListManager** — a DMR (digital radio) contact-list manager (my own)
+- [**PocketBase**](https://github.com/pocketbase/pocketbase) — a lightweight backend / database
+- [**13ft**](https://github.com/wasi-master/13ft) — a paywall-stripping "read it later" reader
+- [**palmr**](https://github.com/kyantech/Palmr) — file sharing
+- **memos-mcp-server** — an MCP server for memos (self-built)
+
+**Maintenance**
+
+- [**Beszel**](https://github.com/henrygd/beszel) (+ its agent) — the resource & uptime monitoring hub
+- [**Cup**](https://github.com/sergi0g/cup) — container update checks
+- [**Diun**](https://github.com/crazy-max/diun) — Docker image update notifications
+- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — a status / uptime page
+- [**Portainer**](https://github.com/portainer/portainer) — a Docker management UI
+- [**RustDesk**](https://github.com/rustdesk/rustdesk-server) (hbbs + hbbr) — my own remote-desktop relay server
+
+**Media**
+
+- [**Jellyfin**](https://github.com/jellyfin/jellyfin) — media server
+- [**Radarr**](https://github.com/Radarr/Radarr) — movie collection manager
+- [**Sonarr**](https://github.com/Sonarr/Sonarr) — TV collection manager
+- [**Bazarr**](https://github.com/morpheus65535/bazarr) — subtitle management (translates foreign content into Turkish via DeepSeek)
+- [**qBittorrent**](https://github.com/qbittorrent/qBittorrent) — torrent client
+- [**watchstate**](https://github.com/arabcoders/watchstate) — keeps watched status in sync between Plex ↔ Jellyfin
+- [**recyclarr**](https://github.com/recyclarr/recyclarr) — applies TRaSH quality guides to Radarr/Sonarr
+- [**decluttarr**](https://github.com/ManiMatter/decluttarr) — clears stalled/unwanted items from the download queue
+- [**cross-seed**](https://github.com/cross-seed/cross-seed) — cross-seeding automation
+- [**Alternatrr**](https://github.com/theultimatec0der/alternatrr) — an alternative-title helper for Sonarr
+- **whisper-openai-proxy** — a Whisper-based subtitle/translation proxy (my own)
+- [**mediastarr**](https://github.com/kroeberd/mediastarr) — media search/automation tool
+- [**bookorbit**](https://github.com/bookorbit/bookorbit) — an e-book library
+- [**Wizarr**](https://github.com/Wizarrrr/wizarr) — Jellyfin/Plex invite manager
+- [**filebrowser**](https://github.com/filebrowser/filebrowser) — a web-based file manager
+
+Underneath all of this, **Traefik** (the reverse proxy) and **Dokploy** itself run as the platform; most apps also ship with their own PostgreSQL/Redis. The media files themselves are *not* on the server — they live on Google Drive and are mounted with `rclone`, so Jellyfin's "library" actually streams from the cloud. That's also why I keep media here: the files are already mounted, and the data-center bandwidth makes streaming smooth.
+
+The common thread: every one of these either needs public access or has to run uninterrupted — both of which are what a data-center server does best.
+
+## CasaOS and the Raspberry Pi — the home side
+
+[**CasaOS**](https://github.com/IceWhaleTech/CasaOS) is an extremely simple home-server interface made for small machines like the Raspberry Pi. Next to Dokploy it's almost toy-like: an "app store" model, click-to-install, done. For the handful of services I wanted at home there was no need to stand up all of Dokploy; CasaOS was more than enough.
+
+Everything currently running on the Pi:
+
+- [**Pi-hole**](https://github.com/pi-hole/pi-hole) — network-wide ad and tracker blocking; every device at home routes DNS through it
+- [**Home Assistant**](https://github.com/home-assistant/core) — home automation (its natural home is the home network, since it touches home devices)
+- [**Plex**](https://www.plex.tv/) — the home-side media server
+- [**Prowlarr**](https://github.com/Prowlarr/Prowlarr) — indexer (source) manager
+- [**Seerr**](https://github.com/seerr-team/seerr) — media request management (a Jellyseerr/Overseerr-style app)
+- [**FlareSolverr**](https://github.com/FlareSolverr/FlareSolverr) — a solver that lets Prowlarr get past Cloudflare challenges
+- [**FreshRSS**](https://github.com/FreshRSS/FreshRSS) (+ [MariaDB](https://mariadb.org/)) — RSS reader
+- [**Karakeep**](https://github.com/karakeep-app/karakeep) (web + Chrome + Meilisearch + a Telegram bot) — bookmark and "read it later" manager
+- [**trakt-to-letterboxd**](https://github.com/louiscrc/trakt-to-letterboxd) — a tool that pushes my watched films from Trakt to Letterboxd
+- [**Cloudflared**](https://github.com/cloudflare/cloudflared) — a Cloudflare tunnel
+- [**Tailscale**](https://github.com/tailscale/tailscale) — the private network that ties the two machines together
+- [**Portainer**](https://github.com/portainer/portainer) — a Docker management UI
+- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — uptime monitoring
+- [**Cup**](https://github.com/sergi0g/cup) — update checks
+- [**Beszel agent**](https://github.com/henrygd/beszel) (not a container — via systemd) — reports to the Beszel hub on the VPS
+
+The logic of this placement: anything that touches the home network or home devices (Pi-hole, Home Assistant), anything that needs a residential IP, and the light services I simply prefer to keep at home, all live on this Pi. The most striking example is the **Letterboxd sync**: Letterboxd blocks automated logins from data-center IPs with bot protection — I first ran the same tool on the VPS and it couldn't get past the sign-in screen; behind the home's residential IP it works fine. (The automated login can still be stubborn, so more often than not the most reliable path is uploading the CSV the tool produces to Letterboxd by hand.)
+
+Even though I have a Plex at home, the **actual media library and automation chain** (Jellyfin + Radarr/Sonarr/Bazarr) deliberately lives on the VPS: the Pi's ARM CPU is weak at transcoding, the home connection's upload speed is limited, and the files are on Drive anyway. So I leave the heavy work to the data center and the home-facing, lightweight work to the Pi.
+
+## How I connect the two machines: Tailscale
+
+Both machines need to talk to each other — for example, so the Beszel hub on the VPS can monitor the Pi at home. Since the Pi is behind NAT on a residential connection, you can't reach it directly from the outside.
+
+The solution was [**Tailscale**](https://tailscale.com/): a WireGuard-based VPN that needs almost no configuration. It puts both machines on my own private virtual network; now the VPS can reach the Pi (over its Tailscale IP) as if they were sitting side by side. No public domain, no port forwarding, and the traffic is encrypted end to end. Beszel's home agent is monitored exactly this way, over Tailscale.
+
+A side benefit of Tailscale that I really like shows up with Plex. To stream from *outside* the home network, Plex normally requires Plex Pass (a paid subscription). But when I connect to Plex over Tailscale, the server sees me as being on the same local network, so it doesn't count as "remote access" — meaning I can reach my library from anywhere without Plex Pass. That's one of the reasons I keep Plex on the Pi at home.
+
+## How updates, monitoring and maintenance work
+
+- **Cup** tells me which containers have a newer version. A small trap I learned here: Cup also lists the *old* images still sitting on disk. So some of its "update available" entries are phantoms — the container is already updated, the old image is just lingering. A regular `docker image prune` clears them and makes the list honest again.
+- **When updating** I keep the order: pull the new image first, then update the compose and redeploy. For big version jumps (say an app going from v1 to v2) I back up the data first — some database migrations are one-way, with no going back.
+- **Beszel** handles resource usage and uptime monitoring; light, simple, exactly as much as I want.
+
+## Lessons along the way
+
+A few notes I've collected over the years that I wish I'd known from the start:
+
+- **Every job has a natural home.** Forcing something that needs a residential IP onto a data center (the Letterboxd example) is just a headache. Ask "where should this thing live?" first.
+- **Mounting the cloud is great, but mind the limits.** Mounting Google Drive with `rclone` is very practical; but mount and scan it from two machines at once and you can hit API limits and get temporarily banned.
+- **"Update available" isn't always real.** Don't trust the list blindly because of phantom images; tell the running version apart from the image on disk.
+- **On big updates, back up first, then watch the logs.** Follow the migration; catch it early if something goes wrong.
+- **Simple wins.** On the home side I didn't need all of Dokploy's weight; CasaOS was more than enough. Pick the tool for the job, not for the hype.
+
+## In short
+
+Today's setup really fits in a single sentence: **everything public, heavy and always-on runs on the data-center VPS with Dokploy; everything home-specific, lightweight and residential-IP-bound runs on the Pi at home with CasaOS; and both sit on the same private network via Tailscale.**
+
+I've evolved from the 2021 "run everything in one box" version of myself to "put every job in its natural home." That's the beauty of self-hosting: the setup grows and reshapes itself along with your needs. If you're building your own setup or stuck somewhere, drop me a line — I enjoy the conversation.

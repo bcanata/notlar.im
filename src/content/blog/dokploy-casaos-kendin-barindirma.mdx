@@ -12,6 +12,7 @@ description: >-
   CasaOS ile yönetiyorum. İşte neyin nerede çalıştığı ve neden öyle olduğu.
 ai: true
 lang: tr
+translationKey: dokploy-casaos
 ---
 
 Yıllar önce, [self-hosting üzerine genel bir yazı](/blog/self-hosting-kendin-barindirma/) yazmıştım: internette kullandığımız servisleri kendi sunucumuzda çalıştırmak ne demek, neden işe yarar, nasıl başlanır. O yazının üzerinden epey zaman geçti ve kurulumum tanınmayacak kadar değişti. Artık her şeyi tek bir kutuda çalıştırmıyorum; **iki ayrı makinem** ve bunları yönetmek için **iki ayrı arayüzüm** var. Bu yazıda o kurulumu anlatmak istiyorum — neyin nerede çalıştığını ve, daha önemlisi, *neden* orada çalıştığını.
@@ -29,7 +30,7 @@ Neden iki tane? Çünkü her işin doğal bir yeri var. Herkese açık olması g
 
 Eskiden her şeyi elle `docker-compose` dosyalarıyla yönetiyordum. Birkaç servise kadar gayet keyifli; ama uygulama sayısı artınca (şu an VPS'te ~50 container var) ortalık dağıldı. Hangi servis hangi portta, sertifikalar nasıl yenileniyor, bir şeyi güncellerken neyi bozarım — hepsi kafa karışıklığına dönüştü.
 
-Dokploy tam da burada devreye girdi. Açık kaynaklı, kendi sunucunda çalışan bir **PaaS** (Platform as a Service) — Vercel ya da Heroku'nun self-hosted hali gibi düşünün. Altında yine Docker ve **Traefik** (reverse proxy) var, ama bana tek bir arayüzden şunları veriyor:
+[**Dokploy**](https://github.com/Dokploy/dokploy) tam da burada devreye girdi. Açık kaynaklı, kendi sunucunda çalışan bir **PaaS** (Platform as a Service) — Vercel ya da Heroku'nun self-hosted hali gibi düşünün. Altında yine Docker ve [**Traefik**](https://github.com/traefik/traefik) (reverse proxy) var, ama bana tek bir arayüzden şunları veriyor:
 
 - Projeler ve uygulamalar — düzenli bir liste hâlinde,
 - Her uygulamaya otomatik alan adı ve **otomatik HTTPS** (Traefik + Let's Encrypt; sertifikayı ben hiç düşünmüyorum),
@@ -44,56 +45,56 @@ Dokploy panelinde projelere göre ayırdığım hâliyle, şu an VPS'te çalış
 
 **Okul**
 
-- **LittleLink Server** — öğrencilere yönelik bağlantı ve araç sayfası
+- [**LittleLink Server**](https://github.com/techno-tim/littlelink-server) — öğrencilere yönelik bağlantı ve araç sayfası
 
 **Kişisel**
 
-- **memos** (+ **memogram** Telegram köprüsü) — hızlı not defteri
-- **blinko** — yapay zekâ destekli not alma
-- **docmost** — wiki / bilgi tabanı
-- **Homepage** — widget'lı ana panel
-- **Homer** — sade bir başlangıç paneli
-- **changedetection.io** — web sayfası değişiklik takibi
-- **n8n** — otomasyon akışları
-- **domain-locker** — alan adı ve SSL son kullanma takibi (kendi geliştirdiğim araç)
-- **LittleLink** — kişisel "link in bio" sayfası
-- **wg-easy** — web arayüzlü WireGuard VPN
+- [**memos**](https://github.com/usememos/memos) (+ [**memogram**](https://github.com/rammiah/memogram) Telegram köprüsü) — hızlı not defteri
+- [**blinko**](https://github.com/blinkospace/blinko) — yapay zekâ destekli not alma
+- [**docmost**](https://github.com/docmost/docmost) — wiki / bilgi tabanı
+- [**Homepage**](https://github.com/gethomepage/homepage) — widget'lı ana panel
+- [**Homer**](https://github.com/bastienwirtz/homer) — sade bir başlangıç paneli
+- [**changedetection.io**](https://github.com/dgtlmoon/changedetection.io) — web sayfası değişiklik takibi
+- [**n8n**](https://github.com/n8n-io/n8n) — otomasyon akışları
+- [**domain-locker**](https://github.com/bcanata/domain-locker) — alan adı ve SSL son kullanma takibi (kendi geliştirdiğim araç)
+- [**LittleLink**](https://github.com/techno-tim/littlelink-server) — kişisel "link in bio" sayfası
+- [**wg-easy**](https://github.com/wg-easy/wg-easy) — web arayüzlü WireGuard VPN
 
 **Geliştirme**
 
-- **aprs** — amatör telsiz APRS aracı
-- **DMRListManager** — DMR (sayısal telsiz) kişi listesi yöneticisi
-- **PocketBase** — hafif backend / veritabanı
-- **13ft** — paywall sıyıran "sonra oku" aracı
-- **palmr** — dosya paylaşımı
-- **memos-mcp-server** — memos için MCP sunucusu
+- **aprs** — amatör telsiz APRS aracı (kendi aracım)
+- **DMRListManager** — DMR (sayısal telsiz) kişi listesi yöneticisi (kendi aracım)
+- [**PocketBase**](https://github.com/pocketbase/pocketbase) — hafif backend / veritabanı
+- [**13ft**](https://github.com/wasi-master/13ft) — paywall sıyıran "sonra oku" aracı
+- [**palmr**](https://github.com/kyantech/Palmr) — dosya paylaşımı
+- **memos-mcp-server** — memos için MCP sunucusu (kendi derlediğim)
 
 **Bakım**
 
-- **Beszel** (+ ajanı) — kaynak ve uptime izleme merkezi
-- **Cup** — container güncelleme denetimi
-- **Diun** — Docker imaj güncelleme bildirimi
-- **Uptime Kuma** — durum / uptime sayfası
-- **Portainer** — Docker yönetim arayüzü
-- **RustDesk** (hbbs + hbbr) — kendi uzak masaüstü relay sunucum
+- [**Beszel**](https://github.com/henrygd/beszel) (+ ajanı) — kaynak ve uptime izleme merkezi
+- [**Cup**](https://github.com/sergi0g/cup) — container güncelleme denetimi
+- [**Diun**](https://github.com/crazy-max/diun) — Docker imaj güncelleme bildirimi
+- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — durum / uptime sayfası
+- [**Portainer**](https://github.com/portainer/portainer) — Docker yönetim arayüzü
+- [**RustDesk**](https://github.com/rustdesk/rustdesk-server) (hbbs + hbbr) — kendi uzak masaüstü relay sunucum
 
 **Medya**
 
-- **Jellyfin** — medya sunucusu
-- **Radarr** — film koleksiyonu yöneticisi
-- **Sonarr** — dizi koleksiyonu yöneticisi
-- **Bazarr** — altyazı yönetimi (yabancı içeriği DeepSeek ile Türkçeye çeviriyor)
-- **qBittorrent** — torrent istemcisi
-- **watchstate** — Plex ↔ Jellyfin izleme durumu senkronu
-- **recyclarr** — TRaSH kalite rehberlerini Radarr/Sonarr'a uygular
-- **decluttarr** — takılan/istenmeyen indirmeleri kuyruktan temizler
-- **cross-seed** — cross-seeding otomasyonu
-- **Alternatrr** — Sonarr için alternatif başlık aracı
-- **whisper-openai-proxy** — Whisper tabanlı altyazı/çeviri proxy'si
-- **mediastarr** — medya arama/otomasyon aracı
-- **bookorbit** — e-kitap kütüphanesi
-- **Wizarr** — Jellyfin/Plex davet yöneticisi
-- **filebrowser** — web tabanlı dosya yöneticisi
+- [**Jellyfin**](https://github.com/jellyfin/jellyfin) — medya sunucusu
+- [**Radarr**](https://github.com/Radarr/Radarr) — film koleksiyonu yöneticisi
+- [**Sonarr**](https://github.com/Sonarr/Sonarr) — dizi koleksiyonu yöneticisi
+- [**Bazarr**](https://github.com/morpheus65535/bazarr) — altyazı yönetimi (yabancı içeriği DeepSeek ile Türkçeye çeviriyor)
+- [**qBittorrent**](https://github.com/qbittorrent/qBittorrent) — torrent istemcisi
+- [**watchstate**](https://github.com/arabcoders/watchstate) — Plex ↔ Jellyfin izleme durumu senkronu
+- [**recyclarr**](https://github.com/recyclarr/recyclarr) — TRaSH kalite rehberlerini Radarr/Sonarr'a uygular
+- [**decluttarr**](https://github.com/ManiMatter/decluttarr) — takılan/istenmeyen indirmeleri kuyruktan temizler
+- [**cross-seed**](https://github.com/cross-seed/cross-seed) — cross-seeding otomasyonu
+- [**Alternatrr**](https://github.com/theultimatec0der/alternatrr) — Sonarr için alternatif başlık aracı
+- **whisper-openai-proxy** — Whisper tabanlı altyazı/çeviri proxy'si (kendi aracım)
+- [**mediastarr**](https://github.com/kroeberd/mediastarr) — medya arama/otomasyon aracı
+- [**bookorbit**](https://github.com/bookorbit/bookorbit) — e-kitap kütüphanesi
+- [**Wizarr**](https://github.com/Wizarrrr/wizarr) — Jellyfin/Plex davet yöneticisi
+- [**filebrowser**](https://github.com/filebrowser/filebrowser) — web tabanlı dosya yöneticisi
 
 Bütün bunların altında bir de **Traefik** (ters vekil) ve **Dokploy**'un kendisi platform olarak dönüyor; ayrıca uygulamaların çoğu kendi PostgreSQL/Redis'iyle birlikte geliyor. Medya dosyalarının kendisi ise sunucuda *değil* — Google Drive'da durup `rclone` ile mount ediliyor; yani Jellyfin'in kütüphanesi buluttan akıyor. Medyayı burada tutmamın sebebi de bu: dosyalar zaten burada mount ve veri merkezi bant genişliği akışı sorunsuz kılıyor.
 
@@ -101,25 +102,25 @@ Ortak payda şu: bu servislerin hepsi ya herkese açık erişim ister ya da kesi
 
 ## CasaOS ve Raspberry Pi — ev tarafı
 
-CasaOS, Raspberry Pi gibi küçük makineler için yapılmış, son derece sade bir ev sunucusu arayüzü. Dokploy'un yanında neredeyse oyuncak gibi basit: bir "uygulama mağazası" mantığı var, tıkla-kur, bitti. Eve koyacağım birkaç servis için Dokploy'un tüm o makinesini kurmaya hiç gerek yoktu; CasaOS fazlasıyla yetti.
+[**CasaOS**](https://github.com/IceWhaleTech/CasaOS), Raspberry Pi gibi küçük makineler için yapılmış, son derece sade bir ev sunucusu arayüzü. Dokploy'un yanında neredeyse oyuncak gibi basit: bir "uygulama mağazası" mantığı var, tıkla-kur, bitti. Eve koyacağım birkaç servis için Dokploy'un tüm o makinesini kurmaya hiç gerek yoktu; CasaOS fazlasıyla yetti.
 
 Pi'de şu an çalışan servislerin tamamı:
 
-- **Pi-hole** — ağ çapında reklam ve izleyici engelleme; evdeki bütün cihazların DNS'i buradan geçiyor
-- **Home Assistant** — ev otomasyonu (ev cihazlarına dokunduğu için doğal yeri ev ağı)
-- **Plex** — ev tarafındaki medya sunucusu
-- **Prowlarr** — indexer (kaynak) yöneticisi
-- **Seerr** — medya istek yönetimi (Jellyseerr/Overseerr türevi)
-- **FlareSolverr** — Prowlarr'ın Cloudflare korumalarını aşması için çözücü
-- **FreshRSS** (+ MariaDB) — RSS okuyucu
-- **Karakeep** (web + Chrome + Meilisearch + Telegram botu) — yer imi ve "sonra oku" yöneticisi
-- **trakt-to-letterboxd** — izlediğim filmleri Trakt üzerinden Letterboxd'a aktaran araç
-- **Cloudflared** — Cloudflare tüneli
-- **Tailscale** — iki makineyi birleştiren özel ağ
-- **Portainer** — Docker yönetim arayüzü
-- **Uptime Kuma** — uptime izleme
-- **Cup** — güncelleme denetimi
-- **Beszel ajanı** (container değil, systemd ile) — VPS'teki Beszel merkezine rapor verir
+- [**Pi-hole**](https://github.com/pi-hole/pi-hole) — ağ çapında reklam ve izleyici engelleme; evdeki bütün cihazların DNS'i buradan geçiyor
+- [**Home Assistant**](https://github.com/home-assistant/core) — ev otomasyonu (ev cihazlarına dokunduğu için doğal yeri ev ağı)
+- [**Plex**](https://www.plex.tv/) — ev tarafındaki medya sunucusu
+- [**Prowlarr**](https://github.com/Prowlarr/Prowlarr) — indexer (kaynak) yöneticisi
+- [**Seerr**](https://github.com/seerr-team/seerr) — medya istek yönetimi (Jellyseerr/Overseerr türevi)
+- [**FlareSolverr**](https://github.com/FlareSolverr/FlareSolverr) — Prowlarr'ın Cloudflare korumalarını aşması için çözücü
+- [**FreshRSS**](https://github.com/FreshRSS/FreshRSS) (+ [MariaDB](https://mariadb.org/)) — RSS okuyucu
+- [**Karakeep**](https://github.com/karakeep-app/karakeep) (web + Chrome + Meilisearch + Telegram botu) — yer imi ve "sonra oku" yöneticisi
+- [**trakt-to-letterboxd**](https://github.com/louiscrc/trakt-to-letterboxd) — izlediğim filmleri Trakt üzerinden Letterboxd'a aktaran araç
+- [**Cloudflared**](https://github.com/cloudflare/cloudflared) — Cloudflare tüneli
+- [**Tailscale**](https://github.com/tailscale/tailscale) — iki makineyi birleştiren özel ağ
+- [**Portainer**](https://github.com/portainer/portainer) — Docker yönetim arayüzü
+- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — uptime izleme
+- [**Cup**](https://github.com/sergi0g/cup) — güncelleme denetimi
+- [**Beszel ajanı**](https://github.com/henrygd/beszel) (container değil, systemd ile) — VPS'teki Beszel merkezine rapor verir
 
 Buradaki yerleşimin mantığı şu: ev ağına ya da ev cihazlarına dokunan her şey (Pi-hole, Home Assistant), konut IP'si gerektiren işler ve evde tutmayı tercih ettiğim hafif servisler bu Pi'de. En çarpıcı örnek **Letterboxd senkronu**: Letterboxd, veri merkezi IP'lerinden yapılan otomatik girişleri bot koruması ile engelliyor — aynı aracı önce VPS'te çalıştırdım, giriş ekranını geçemedi; evdeki konut IP'sinin arkasında ise sorunsuz çalışıyor. (Otomatik giriş yine de inatçı olabildiğinden çoğu zaman en güvenilir yol, aracın ürettiği CSV'yi elle Letterboxd'a yüklemek oluyor.)
 
@@ -129,7 +130,7 @@ Evde bir Plex'im olsa da **asıl medya kütüphanesi ve otomasyon zinciri** (Jel
 
 İki makinenin de birbiriyle konuşması gerekiyor — örneğin VPS'teki Beszel merkezinin evdeki Pi'yi izlemesi için. Pi, NAT arkasında ve konut bağlantısında olduğu için onu dışarıdan doğrudan göremezsiniz.
 
-Çözüm **Tailscale** oldu: WireGuard tabanlı, neredeyse sıfır ayar isteyen bir VPN. İki makineyi de kendi özel sanal ağıma alıyor; artık VPS, Pi'ye sanki yan yanalarmış gibi (Tailscale IP'si üzerinden) bağlanabiliyor. Public bir alan adına da, port yönlendirmeye de gerek kalmıyor; trafik baştan sona şifreli. Beszel'in evdeki ajanı işte tam olarak böyle, Tailscale üzerinden izleniyor.
+Çözüm [**Tailscale**](https://tailscale.com/) oldu: WireGuard tabanlı, neredeyse sıfır ayar isteyen bir VPN. İki makineyi de kendi özel sanal ağıma alıyor; artık VPS, Pi'ye sanki yan yanalarmış gibi (Tailscale IP'si üzerinden) bağlanabiliyor. Public bir alan adına da, port yönlendirmeye de gerek kalmıyor; trafik baştan sona şifreli. Beszel'in evdeki ajanı işte tam olarak böyle, Tailscale üzerinden izleniyor.
 
 Tailscale'in hoşuma giden bir yan faydası da Plex'te ortaya çıkıyor. Plex, ev ağının *dışından* yayın yapabilmek için normalde Plex Pass (ücretli abonelik) ister. Ama Plex'e Tailscale üzerinden bağlandığımda sunucu beni aynı yerel ağdaymışım gibi gördüğü için bunu "uzaktan erişim" saymıyor — yani nerede olursam olayım, Plex Pass'e gerek kalmadan kütüphaneme erişebiliyorum. Plex'i evdeki Pi'de tutmamın sebeplerinden biri de tam olarak bu.
 
