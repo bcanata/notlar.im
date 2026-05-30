@@ -7,151 +7,148 @@ tags:
   - self-hosting
   - docker
 description: >-
-  2021'de self-hosting'e dair genel bir yazı yazmıştım. Aradan geçen zamanda
-  kurulumum değişti: artık iki ayrı makineyi, biri VPS'te Dokploy diğeri evde
-  CasaOS ile yönetiyorum. İşte neyin nerede çalıştığı ve neden öyle olduğu.
-ai: true
+  2021'de self-hosting üzerine yazdığım yazıdan bu yana sistemim baştan aşağı
+  değişti. Artık biri VPS'te Dokploy, diğeri evde CasaOS ile çalışan iki farklı
+  makineyi yönetiyorum. İşte neyin nerede, neden çalıştığının hikâyesi.
 lang: tr
 translationKey: dokploy-casaos
 ---
 
-Yıllar önce, [self-hosting üzerine genel bir yazı](/blog/self-hosting-kendin-barindirma/) yazmıştım: internette kullandığımız servisleri kendi sunucumuzda çalıştırmak ne demek, neden işe yarar, nasıl başlanır. O yazının üzerinden epey zaman geçti ve kurulumum tanınmayacak kadar değişti. Artık her şeyi tek bir kutuda çalıştırmıyorum; **iki ayrı makinem** ve bunları yönetmek için **iki ayrı arayüzüm** var. Bu yazıda o kurulumu anlatmak istiyorum — neyin nerede çalıştığını ve, daha önemlisi, *neden* orada çalıştığını.
+Yıllar önce, [self-hosting üzerine genel bir yazı](/blog/self-hosting-kendin-barindirma/) paylaşmıştım. İnternette kullandığımız servisleri kendi sunucumuzda çalıştırmanın mantığını, avantajlarını ve nasıl başlanacağını anlatmıştım. O günden bu yana köprünün altından çok sular aktı ve kurulumum artık çok başka bir hâl aldı. Artık her şeyi tek bir kutuya sığdırmıyorum; **iki farklı makine** ve bunları yönetmek için **iki farklı arayüz** kullanıyorum. Bu yazıda yeni kurulumumu, neyin nerede ve *neden* çalıştığını detaylandırmak istiyorum.
 
-## İki sunucu, iki rol
+## İki sunucu, iki farklı görev
 
-Kurulumun kalbinde iki makine var:
+Sistemin merkezinde iki ana makine bulunuyor:
 
-- **Bir VPS** (Virtual Private Server, Sanal Özel Sunucu). Fransa'da, bir veri merkezinde duruyor; eski ama hâlâ dimdik ayakta olan bir Intel Xeon ve 8 GB RAM. Önemli olan teknik özellikleri değil, *konumu*: 7/24 açık, sabit IP'li, geniş ve simetrik bant genişliğine sahip. Üzerinde **Dokploy** çalışıyor.
-- **Bir Raspberry Pi 5** (8 GB). Evde, oturma odasında. Ev internetine bağlı, NAT arkasında, konut (residential) IP'li. Üzerinde **CasaOS** çalışıyor.
+- **Bir VPS** (Virtual Private Server). Fransa'da bir veri merkezinde duran, eski ama emektar bir Intel Xeon ve 8 GB RAM. Teknik özelliklerinden ziyade asıl önemli olan konumu: 7/24 kesintisiz çalışması, sabit bir IP'ye sahip olması ve yüksek, simetrik bant genişliği sunması. Üzerinde **Dokploy** çalışıyor.
+- **Bir Raspberry Pi 5** (8 GB). Evde, oturma odasında. Standart ev internetine bağlı, NAT arkasında ve ev tipi IP'ye sahip. Üzerinde ise **CasaOS** kurulu.
 
-Neden iki tane? Çünkü her işin doğal bir yeri var. Herkese açık olması gereken, bant genişliği isteyen, ağır ve kesintisiz çalışması gereken her şey VPS'te. Eve özgü olan, düşük güçle yetinen ya da — ilginç bir şekilde — *konut IP'si gerektiren* işler ise evdeki Pi'de. Bu ayrımın ne kadar somut olabileceğini birazdan Letterboxd örneğinde göreceksiniz.
+Peki neden iki tane? Çünkü her işin kendine has bir yeri var. Herkese açık olması gereken, yüksek bant genişliği isteyen veya kesintisiz çalışması kritik olan her şey VPS'te. Eve özgü işler, düşük güç tüketen servisler veya —ilginç bir şekilde— sadece *ev IP'si ile çalışan* görevler ise evdeki Pi'de. Bu ayrımın ne kadar mantıklı olduğunu birazdan Letterboxd örneğinde daha iyi anlayacaksınız.
 
-## Dokploy nedir, neden düz Docker yerine onu kullanıyorum?
+## Neden sadece Docker değil de Dokploy?
 
-Eskiden her şeyi elle `docker-compose` dosyalarıyla yönetiyordum. Birkaç servise kadar gayet keyifli; ama uygulama sayısı artınca (şu an VPS'te ~50 container var) ortalık dağıldı. Hangi servis hangi portta, sertifikalar nasıl yenileniyor, bir şeyi güncellerken neyi bozarım — hepsi kafa karışıklığına dönüştü.
+Eskiden her şeyi manuel olarak `docker-compose` dosyalarıyla yönetiyordum. Üç beş servis varken keyifliydi; ancak uygulama sayısı artınca (şu an VPS'te 50'ye yakın konteyner var) ortalık karışmaya başladı. Hangi servis hangi portu kullanıyor, SSL sertifikaları yenilendi mi, bir şeyi güncellerken diğerini bozar mıyım gibi sorular tam bir kafa karışıklığına dönüştü.
 
-[**Dokploy**](https://github.com/Dokploy/dokploy) tam da burada devreye girdi. Açık kaynaklı, kendi sunucunda çalışan bir **PaaS** (Platform as a Service) — Vercel ya da Heroku'nun self-hosted hali gibi düşünün. Altında yine Docker ve [**Traefik**](https://github.com/traefik/traefik) (reverse proxy) var, ama bana tek bir arayüzden şunları veriyor:
+[**Dokploy**](https://github.com/Dokploy/dokploy) işte bu noktada kurtarıcı oldu. Açık kaynaklı ve kendi sunucunuza kurabileceğiniz bir **PaaS** (Platform as a Service) — Vercel veya Heroku'nun kendi kontrolünüzdeki hali gibi düşünebilirsiniz. Arka planda yine Docker ve [**Traefik**](https://github.com/traefik/traefik) (reverse proxy) kullanıyor ama bana şu kolaylıkları sağlıyor:
 
-- Projeler ve uygulamalar — düzenli bir liste hâlinde,
-- Her uygulamaya otomatik alan adı ve **otomatik HTTPS** (Traefik + Let's Encrypt; sertifikayı ben hiç düşünmüyorum),
-- Dağıtım (deployment) geçmişi ve tek tıkla **geri alma** (rollback),
-- Loglar, ortam değişkenleri, yeniden dağıtım — hepsi yerinde.
+- Projeleri ve uygulamaları düzenli bir liste hâlinde görebiliyorum.
+- Her uygulamaya otomatik alan adı ve **otomatik HTTPS** (Traefik + Let's Encrypt sayesinde sertifikaları artık hiç düşünmüyorum).
+- Deployment geçmişi tutuyor ve tek tıkla **geri alma** (rollback) imkânı veriyor.
+- Loglar, ortam değişkenleri ve yeniden dağıtım işlemleri tek bir panelde.
 
-Projelerimi konuya göre ayırdım: *Okul*, *Kişisel*, *Geliştirme*, *Bakım* ve *Medya*. Bu ayrım tamamen düzen için; hepsi aynı sunucuda dönüyor, sadece zihnimde (ve panelde) gruplanmış oluyorlar.
+Projeleri kategorilere ayırdım: *Okul*, *Kişisel*, *Geliştirme*, *Bakım* ve *Medya*. Bu ayrım tamamen düzen için; hepsi aynı sunucuda çalışıyor ama zihnimde ve panelde gruplanmış oluyorlar.
 
-## VPS'te neler çalışıyor?
+## VPS üzerinde neler koşturuyorum?
 
-Dokploy panelinde projelere göre ayırdığım hâliyle, şu an VPS'te çalışan servislerin tamamı:
+Dokploy panelinde kategorize ettiğim şekliyle, VPS üzerinde çalışan servisler şunlar:
 
 **Okul**
 
-- [**LittleLink Server**](https://github.com/techno-tim/littlelink-server) — öğrencilere yönelik bağlantı ve araç sayfası
+- [**LittleLink Server**](https://github.com/techno-tim/littlelink-server) — Öğrenciler için hazırladığım bağlantı ve araç sayfası.
 
 **Kişisel**
 
-- [**memos**](https://github.com/usememos/memos) (+ [**memogram**](https://github.com/rammiah/memogram) Telegram köprüsü) — hızlı not defteri
-- [**blinko**](https://github.com/blinkospace/blinko) — yapay zekâ destekli not alma
-- [**docmost**](https://github.com/docmost/docmost) — wiki / bilgi tabanı
-- [**Homepage**](https://github.com/gethomepage/homepage) — widget'lı ana panel
-- [**Homer**](https://github.com/bastienwirtz/homer) — sade bir başlangıç paneli
-- [**changedetection.io**](https://github.com/dgtlmoon/changedetection.io) — web sayfası değişiklik takibi
-- [**n8n**](https://github.com/n8n-io/n8n) — otomasyon akışları
-- [**domain-locker**](https://github.com/bcanata/domain-locker) — alan adı ve SSL son kullanma takibi (kendi geliştirdiğim araç)
-- [**LittleLink**](https://github.com/techno-tim/littlelink-server) — kişisel "link in bio" sayfası
-- [**wg-easy**](https://github.com/wg-easy/wg-easy) — web arayüzlü WireGuard VPN
+- [**memos**](https://github.com/usememos/memos) (+ [**memogram**](https://github.com/rammiah/memogram) Telegram köprüsü) — Hızlı not defteri.
+- [**blinko**](https://github.com/blinkospace/blinko) — Yapay zekâ destekli not alma uygulaması.
+- [**docmost**](https://github.com/docmost/docmost) — Wiki ve bilgi tabanı.
+- [**Homepage**](https://github.com/gethomepage/homepage) — Widget destekli ana panel.
+- [**Homer**](https://github.com/bastienwirtz/homer) — Sade bir başlangıç paneli.
+- [**changedetection.io**](https://github.com/dgtlmoon/changedetection.io) — Web sayfası değişiklik takibi.
+- [**n8n**](https://github.com/n8n-io/n8n) — Otomasyon akışları.
+- [**domain-locker**](https://github.com/bcanata/domain-locker) — Alan adı ve SSL bitiş takibi (kendi geliştirdiğim araç).
+- [**LittleLink**](https://github.com/techno-tim/littlelink-server) — Kişisel "link in bio" sayfası.
+- [**wg-easy**](https://github.com/wg-easy/wg-easy) — Web arayüzlü WireGuard VPN.
 
 **Geliştirme**
 
-- **aprs** — amatör telsiz APRS aracı (kendi aracım)
-- **DMRListManager** — DMR (sayısal telsiz) kişi listesi yöneticisi (kendi aracım)
-- [**PocketBase**](https://github.com/pocketbase/pocketbase) — hafif backend / veritabanı
-- [**13ft**](https://github.com/wasi-master/13ft) — paywall sıyıran "sonra oku" aracı
-- [**palmr**](https://github.com/kyantech/Palmr) — dosya paylaşımı
-- **memos-mcp-server** — memos için MCP sunucusu (kendi derlediğim)
+- **aprs** — Amatör telsiz APRS aracı (kendi projem).
+- **DMRListManager** — DMR kişi listesi yöneticisi (kendi projem).
+- [**PocketBase**](https://github.com/pocketbase/pocketbase) — Hafif backend ve veritabanı.
+- [**13ft**](https://github.com/wasi-master/13ft) — Paywall engelini aşan "sonra oku" aracı.
+- [**palmr**](https://github.com/kyantech/Palmr) — Kolay dosya paylaşımı.
+- **memos-mcp-server** — Memos için MCP sunucusu.
 
 **Bakım**
 
-- [**Beszel**](https://github.com/henrygd/beszel) (+ ajanı) — kaynak ve uptime izleme merkezi
-- [**Cup**](https://github.com/sergi0g/cup) — container güncelleme denetimi
-- [**Diun**](https://github.com/crazy-max/diun) — Docker imaj güncelleme bildirimi
-- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — durum / uptime sayfası
-- [**Portainer**](https://github.com/portainer/portainer) — Docker yönetim arayüzü
-- [**RustDesk**](https://github.com/rustdesk/rustdesk-server) (hbbs + hbbr) — kendi uzak masaüstü relay sunucum
+- [**Beszel**](https://github.com/henrygd/beszel) (+ ajanı) — Sistem kaynaklarını ve uptime durumunu izleme merkezi.
+- [**Cup**](https://github.com/sergi0g/cup) — Konteyner güncelleme denetimi.
+- [**Diun**](https://github.com/crazy-max/diun) — Docker imaj güncelleme bildirimleri.
+- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — Durum ve uptime sayfası.
+- [**Portainer**](https://github.com/portainer/portainer) — Docker yönetim arayüzü.
+- [**RustDesk**](https://github.com/rustdesk/rustdesk-server) (hbbs + hbbr) — Kendi uzak masaüstü relay sunucum.
 
 **Medya**
 
-- [**Jellyfin**](https://github.com/jellyfin/jellyfin) — medya sunucusu
-- [**Radarr**](https://github.com/Radarr/Radarr) — film koleksiyonu yöneticisi
-- [**Sonarr**](https://github.com/Sonarr/Sonarr) — dizi koleksiyonu yöneticisi
-- [**Bazarr**](https://github.com/morpheus65535/bazarr) — altyazı yönetimi (yabancı içeriği DeepSeek ile Türkçeye çeviriyor)
-- [**qBittorrent**](https://github.com/qbittorrent/qBittorrent) — torrent istemcisi
-- [**watchstate**](https://github.com/arabcoders/watchstate) — Plex ↔ Jellyfin izleme durumu senkronu
-- [**recyclarr**](https://github.com/recyclarr/recyclarr) — TRaSH kalite rehberlerini Radarr/Sonarr'a uygular
-- [**decluttarr**](https://github.com/ManiMatter/decluttarr) — takılan/istenmeyen indirmeleri kuyruktan temizler
-- [**cross-seed**](https://github.com/cross-seed/cross-seed) — cross-seeding otomasyonu
-- [**Alternatrr**](https://github.com/theultimatec0der/alternatrr) — Sonarr için alternatif başlık aracı
-- **whisper-openai-proxy** — Whisper tabanlı altyazı/çeviri proxy'si (kendi aracım)
-- [**mediastarr**](https://github.com/kroeberd/mediastarr) — medya arama/otomasyon aracı
-- [**bookorbit**](https://github.com/bookorbit/bookorbit) — e-kitap kütüphanesi
-- [**Wizarr**](https://github.com/Wizarrrr/wizarr) — Jellyfin/Plex davet yöneticisi
-- [**filebrowser**](https://github.com/filebrowser/filebrowser) — web tabanlı dosya yöneticisi
+- [**Jellyfin**](https://github.com/jellyfin/jellyfin) — Medya sunucusu.
+- [**Radarr**](https://github.com/Radarr/Radarr) — Film kütüphanesi yöneticisi.
+- [**Sonarr**](https://github.com/Sonarr/Sonarr) — Dizi kütüphanesi yöneticisi.
+- [**Bazarr**](https://github.com/morpheus65535/bazarr) — Altyazı yönetimi (yabancı içerikleri DeepSeek kullanarak Türkçeye çeviriyor).
+- [**qBittorrent**](https://github.com/qbittorrent/qBittorrent) — Torrent istemcisi.
+- [**watchstate**](https://github.com/arabcoders/watchstate) — Plex ile Jellyfin izleme durumunu senkronize eder.
+- [**recyclarr**](https://github.com/recyclarr/recyclarr) — TRaSH kalite rehberlerini otomatik uygular.
+- [**decluttarr**](https://github.com/ManiMatter/decluttarr) — Takılan indirmeleri temizler.
+- [**cross-seed**](https://github.com/cross-seed/cross-seed) — Cross-seeding otomasyonu.
+- [**Alternatrr**](https://github.com/theultimatec0der/alternatrr) — Sonarr için alternatif başlık aracı.
+- **whisper-openai-proxy** — Whisper tabanlı altyazı ve çeviri proxy'si (kendi aracım).
+- [**mediastarr**](https://github.com/kroeberd/mediastarr) — Medya otomasyon aracı.
+- [**bookorbit**](https://github.com/bookorbit/bookorbit) — E-kitap kütüphanesi.
+- [**Wizarr**](https://github.com/Wizarrrr/wizarr) — Jellyfin/Plex davet yöneticisi.
+- [**filebrowser**](https://github.com/filebrowser/filebrowser) — Web tabanlı dosya yöneticisi.
 
-Bütün bunların altında bir de **Traefik** (ters vekil) ve **Dokploy**'un kendisi platform olarak dönüyor; ayrıca uygulamaların çoğu kendi PostgreSQL/Redis'iyle birlikte geliyor. Medya dosyalarının kendisi ise sunucuda *değil* — Google Drive'da durup `rclone` ile mount ediliyor; yani Jellyfin'in kütüphanesi buluttan akıyor. Medyayı burada tutmamın sebebi de bu: dosyalar zaten burada mount ve veri merkezi bant genişliği akışı sorunsuz kılıyor.
+Tüm bu yapının arkasında Traefik (reverse proxy) ve Dokploy'un kendisi platform görevini üstleniyor. Uygulamaların çoğu ise kendi PostgreSQL veya Redis veritabanlarıyla birlikte çalışıyor. İşin medya kısmında ise dosyaları sunucuda tutmuyorum; her şey Google Drive üzerinde duruyor ve `rclone` ile sunucuya bağlanıyor. Yani Jellyfin kütüphanesi doğrudan buluttan akıyor. Medya yönetimini VPS'te tutmamın asıl sebebi de bu: Dosyalar zaten burada bağlı ve veri merkezinin yüksek bant genişliği sayesinde akış pürüzsüz oluyor.
 
-Ortak payda şu: bu servislerin hepsi ya herkese açık erişim ister ya da kesintisiz çalışmalı — ikisi de bir veri merkezi sunucusunun en iyi yaptığı iş.
+Özetle, dışarıdan erişilmesi gereken veya kesintisiz çalışması beklenen her şeyi veri merkezinde tutuyorum.
 
-## CasaOS ve Raspberry Pi — ev tarafı
+## CasaOS ve Raspberry Pi — Ev tarafı
 
-[**CasaOS**](https://github.com/IceWhaleTech/CasaOS), Raspberry Pi gibi küçük makineler için yapılmış, son derece sade bir ev sunucusu arayüzü. Dokploy'un yanında neredeyse oyuncak gibi basit: bir "uygulama mağazası" mantığı var, tıkla-kur, bitti. Eve koyacağım birkaç servis için Dokploy'un tüm o makinesini kurmaya hiç gerek yoktu; CasaOS fazlasıyla yetti.
+[**CasaOS**](https://github.com/IceWhaleTech/CasaOS), Raspberry Pi gibi ufak cihazlar için geliştirilmiş, oldukça sade bir ev sunucusu arayüzü. Dokploy ile kıyaslayınca neredeyse çocuk oyuncağı gibi kalıyor. "Uygulama mağazası" mantığıyla çalışıyor; tek tıkla kurulum yapıp geçiyorsunuz. Evde kullanacağım birkaç basit servis için Dokploy gibi ağır bir sistemi kurmaya gerek yoktu, CasaOS işimi fazlasıyla gördü.
 
-Pi'de şu an çalışan servislerin tamamı:
+Pi üzerinde koşan servisler şunlar:
 
-- [**Pi-hole**](https://github.com/pi-hole/pi-hole) — ağ çapında reklam ve izleyici engelleme; evdeki bütün cihazların DNS'i buradan geçiyor
-- [**Home Assistant**](https://github.com/home-assistant/core) — ev otomasyonu (ev cihazlarına dokunduğu için doğal yeri ev ağı)
-- [**Plex**](https://www.plex.tv/) — ev tarafındaki medya sunucusu
-- [**Prowlarr**](https://github.com/Prowlarr/Prowlarr) — indexer (kaynak) yöneticisi
-- [**Seerr**](https://github.com/seerr-team/seerr) — medya istek yönetimi (Jellyseerr/Overseerr türevi)
-- [**FlareSolverr**](https://github.com/FlareSolverr/FlareSolverr) — Prowlarr'ın Cloudflare korumalarını aşması için çözücü
-- [**FreshRSS**](https://github.com/FreshRSS/FreshRSS) (+ [MariaDB](https://mariadb.org/)) — RSS okuyucu
-- [**Karakeep**](https://github.com/karakeep-app/karakeep) (web + Chrome + Meilisearch + Telegram botu) — yer imi ve "sonra oku" yöneticisi
-- [**trakt-to-letterboxd**](https://github.com/louiscrc/trakt-to-letterboxd) — izlediğim filmleri Trakt üzerinden Letterboxd'a aktaran araç
-- [**Cloudflared**](https://github.com/cloudflare/cloudflared) — Cloudflare tüneli
-- [**Tailscale**](https://github.com/tailscale/tailscale) — iki makineyi birleştiren özel ağ
-- [**Portainer**](https://github.com/portainer/portainer) — Docker yönetim arayüzü
-- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — uptime izleme
-- [**Cup**](https://github.com/sergi0g/cup) — güncelleme denetimi
-- [**Beszel ajanı**](https://github.com/henrygd/beszel) (container değil, systemd ile) — VPS'teki Beszel merkezine rapor verir
+- [**Pi-hole**](https://github.com/pi-hole/pi-hole) — Ağ genelinde reklam engelleme.
+- [**Home Assistant**](https://github.com/home-assistant/core) — Ev otomasyonu (evdeki cihazlara eriştiği için yeri burası).
+- [**Plex**](https://www.plex.tv/) — Ev tarafındaki medya sunucusu.
+- [**Prowlarr**](https://github.com/Prowlarr/Prowlarr) — Kaynak (indexer) yöneticisi.
+- [**Seerr**](https://github.com/seerr-team/seerr) — Medya istek yönetim paneli.
+- [**FlareSolverr**](https://github.com/FlareSolverr/FlareSolverr) — Cloudflare engellerini aşmak için.
+- [**FreshRSS**](https://github.com/FreshRSS/FreshRSS) — RSS okuyucu.
+- [**Karakeep**](https://github.com/karakeep-app/karakeep) — Yer imi ve "sonra oku" yöneticisi.
+- [**trakt-to-letterboxd**](https://github.com/louiscrc/trakt-to-letterboxd) — İzlenen filmleri Letterboxd'a aktaran araç.
+- [**Cloudflared**](https://github.com/cloudflare/cloudflared) — Cloudflare tüneli.
+- [**Tailscale**](https://github.com/tailscale/tailscale) — İki makineyi birleştiren özel ağ.
+- [**Portainer**](https://github.com/portainer/portainer) — Docker yönetimi.
+- [**Uptime Kuma**](https://github.com/louislam/uptime-kuma) — Yerel uptime takibi.
+- [**Beszel ajanı**](https://github.com/henrygd/beszel) — VPS'teki ana merkeze rapor veriyor.
 
-Buradaki yerleşimin mantığı şu: ev ağına ya da ev cihazlarına dokunan her şey (Pi-hole, Home Assistant), konut IP'si gerektiren işler ve evde tutmayı tercih ettiğim hafif servisler bu Pi'de. En çarpıcı örnek **Letterboxd senkronu**: Letterboxd, veri merkezi IP'lerinden yapılan otomatik girişleri bot koruması ile engelliyor — aynı aracı önce VPS'te çalıştırdım, giriş ekranını geçemedi; evdeki konut IP'sinin arkasında ise sorunsuz çalışıyor. (Otomatik giriş yine de inatçı olabildiğinden çoğu zaman en güvenilir yol, aracın ürettiği CSV'yi elle Letterboxd'a yüklemek oluyor.)
+Buradaki yerleşimin mantığı çok basit: Ev ağına veya cihazlarına dokunan her şey (Pi-hole, Home Assistant) ve ev IP'si gerektiren işler burada. En çarpıcı örnek **Letterboxd senkronu**: Letterboxd, veri merkezi IP'lerinden gelen otomatik girişleri bot korumasına takıyor. Aynı aracı VPS üzerinde denediğimde giriş ekranını bir türlü aşamamıştım; fakat evdeki standart kullanıcı IP'si ile sorunsuz çalışıyor.
 
-Evde bir Plex'im olsa da **asıl medya kütüphanesi ve otomasyon zinciri** (Jellyfin + Radarr/Sonarr/Bazarr) bilerek VPS'te yaşıyor: Pi'nin ARM işlemcisi transcode'da zayıf, ev bağlantısının yükleme hızı sınırlı ve dosyalar zaten Drive'da. Yani ağır işi veri merkezine, eve dönük ve hafif işi Pi'ye bırakıyorum.
+Evde bir Plex'im olsa da asıl medya kütüphanesi ve otomasyon zinciri (Jellyfin + Radarr/Sonarr) bilerek VPS'te yaşıyor. Çünkü Pi'nin işlemcisi transcode (format dönüştürme) konusunda zayıf ve ev internetimin yükleme (upload) hızı sınırlı. Yani ağır işleri veri merkezine, eve dönük hafif işleri Pi'ye bırakıyorum.
 
 ## İki makineyi nasıl birbirine bağladım: Tailscale
 
-İki makinenin de birbiriyle konuşması gerekiyor — örneğin VPS'teki Beszel merkezinin evdeki Pi'yi izlemesi için. Pi, NAT arkasında ve konut bağlantısında olduğu için onu dışarıdan doğrudan göremezsiniz.
+İki makinenin de birbiriyle konuşması gerekiyor. Örneğin VPS'teki Beszel'in evdeki Pi'yi izlemesi lazım. Ancak Pi, NAT arkasında olduğu için dışarıdan doğrudan erişilemez durumda.
 
-Çözüm [**Tailscale**](https://tailscale.com/) oldu: WireGuard tabanlı, neredeyse sıfır ayar isteyen bir VPN. İki makineyi de kendi özel sanal ağıma alıyor; artık VPS, Pi'ye sanki yan yanalarmış gibi (Tailscale IP'si üzerinden) bağlanabiliyor. Public bir alan adına da, port yönlendirmeye de gerek kalmıyor; trafik baştan sona şifreli. Beszel'in evdeki ajanı işte tam olarak böyle, Tailscale üzerinden izleniyor.
+Çözümü [**Tailscale**](https://tailscale.com/)'de buldum: WireGuard tabanlı, neredeyse hiç yapılandırma gerektirmeyen bir VPN. İki makineyi de kendi özel sanal ağıma dahil ediyor. Böylece VPS, Pi'ye sanki aynı odadalarmış gibi kendi özel IP'si üzerinden erişebiliyor. Ne dışa açık bir alan adına ne de port yönlendirmeye gerek kalıyor; tüm trafik uçtan uca şifreli akıyor.
 
-Tailscale'in hoşuma giden bir yan faydası da Plex'te ortaya çıkıyor. Plex, ev ağının *dışından* yayın yapabilmek için normalde Plex Pass (ücretli abonelik) ister. Ama Plex'e Tailscale üzerinden bağlandığımda sunucu beni aynı yerel ağdaymışım gibi gördüğü için bunu "uzaktan erişim" saymıyor — yani nerede olursam olayım, Plex Pass'e gerek kalmadan kütüphaneme erişebiliyorum. Plex'i evdeki Pi'de tutmamın sebeplerinden biri de tam olarak bu.
+Tailscale'in bir diğer harika yanı da Plex'te ortaya çıkıyor. Plex, ev ağının dışından yayın yapabilmek için normalde ücretli abonelik (Plex Pass) ister. Ancak Plex'e Tailscale üzerinden bağlandığımda sunucu beni aynı yerel ağdaymışım gibi gördüğü için bunu "uzak erişim" saymıyor. Yani nerede olursam olayım, Plex Pass'e gerek kalmadan kütüphaneme erişebiliyorum.
 
-## Güncelleme, izleme, bakım nasıl yürüyor?
+## Güncelleme ve bakım süreci
 
-- **Cup**, hangi container'ların yeni sürümü olduğunu söylüyor. Burada öğrendiğim küçük bir tuzak var: Cup, diskte duran *eski* image'ları da listeliyor. Yani "güncelleme var" dediklerinin bir kısmı hayalet — container çoktan güncellenmiş, eski image öylece duruyor. Düzenli bir `docker image prune` ile bunları temizleyince liste dürüstleşiyor.
-- **Güncelleme yaparken** sırayı bozmuyorum: önce yeni image'ı çekiyorum, sonra compose'u güncelleyip yeniden dağıtıyorum. Büyük sürüm atlamalarında (örneğin bir uygulamanın v1'den v2'ye geçişi) önce verinin yedeğini alıyorum — bazı veritabanı göçleri (migration) tek yönlüdür, geri dönüşü yoktur.
-- **Beszel** ise kaynak kullanımı ve uptime izleme için; hafif, sade, tam istediğim kadar.
+- [**Cup**](https://github.com/sergi0g/cup), hangi konteynerların yeni sürümü olduğunu söylüyor. Ancak burada küçük bir detay var: Cup bazen diskte kalan eski imajları da listeye dahil edebiliyor. Yani "güncelleme var" uyarısı verenlerin bir kısmı aslında güncellenmiş konteynerların hayaletleri olabiliyor. Düzenli olarak `docker image prune` çalıştırınca liste normale dönüyor.
+- Büyük versiyon geçişlerinde (örneğin v1'den v2'ye geçiş) mutlaka verilerin yedeğini alıyorum. Bazı veritabanı göçleri (migration) tek yönlüdür ve geri dönüşü olmayabilir.
+- **Beszel** ise kaynak kullanımı ve uptime izleme için kullanıyorum; hafif, sade ve tam ihtiyacım olanı veriyor.
 
-## Yol boyu öğrendiklerim
+## Bu süreçte öğrendiklerim
 
-Birkaç yıl içinde biriktirdiğim, keşke baştan bilseydim dediğim notlar:
+Yıllar içinde biriktirdiğim ve keşke baştan bilseydim dediğim bazı notlar:
 
-- **Her işin doğal bir yeri var.** Konut IP'si isteyen bir şeyi veri merkezine zorlamak (Letterboxd örneği) sadece baş ağrısı getiriyor. Önce "bu iş nerede yaşamalı?" diye sorun.
-- **Bulutu mount etmek harika, ama limitlere dikkat.** Google Drive'ı `rclone` ile bağlamak çok pratik; fakat iki ayrı makineden aynı anda bağlayıp tarayınca API limitlerine takılıp geçici yasak yiyebiliyorsunuz.
-- **"Güncelleme var" her zaman gerçek değil.** Hayalet image'lar yüzünden listeye körlemesine güvenmeyin; çalışan sürümle diskteki image'ı ayırt edin.
-- **Büyük güncellemede önce yedek, sonra log.** Migration'ı izleyin; bir şey ters giderse erken yakalayın.
-- **Basit olan kazanır.** Ev tarafında Dokploy'un tüm ağırlığına ihtiyacım yoktu; CasaOS yetti de arttı. Aracı işe göre seçin, modaya göre değil.
+- **Her işin doğal bir yeri var.** Ev IP'si isteyen bir şeyi veri merkezinde çalıştırmaya zorlamak sadece vakit kaybı. Önce "bu iş nerede yaşamalı?" diye sormak gerekiyor.
+- **Bulutu mount etmek harika ama limitlere dikkat.** Google Drive'ı `rclone` ile bağlamak çok pratik; ancak aynı anda çok fazla tarama yapınca API limitlerine takılıp geçici yasak yiyebiliyorsunuz.
+- **Basit olan kazanır.** Ev tarafında Dokploy gibi karmaşık bir yapıya hiç ihtiyacım yoktu; CasaOS fazlasıyla yetti. Aracı ihtiyaca göre seçmek en doğrusu.
 
 ## Özetle
 
-Bugünkü kurulumum aslında tek bir cümleye sığıyor: **herkese açık, ağır ve kesintisiz olan her şey veri merkezindeki VPS'te Dokploy ile; eve özgü, hafif ve konut IP'si isteyen her şey evdeki Pi'de CasaOS ile; ikisi de Tailscale ile aynı özel ağda.**
+Bugünkü kurulumum aslında tek bir cümleye sığıyor: **Dışa açık, ağır ve kesintisiz çalışması gereken her şey veri merkezindeki VPS'te Dokploy ile; eve özel, hafif ve standart kullanıcı IP'si gerektiren işler ise evdeki Raspberry Pi üzerinde CasaOS ile çalışıyor. Tailscale sayesinde de hepsi sanki tek bir ağdaymış gibi birbirine bağlı.**
 
-2021'deki "her şeyi tek kutuda çalıştır" halimden, "her işi doğal yerine koy" haline evrildim. Self-hosting'in güzel yanı da bu zaten: kurulum, ihtiyaçlarınızla birlikte büyüyor ve şekil değiştiriyor. Kendi düzeninizi kuruyorsanız ya da takıldığınız bir yer varsa, yazın — konuşmayı severim.
+2021'deki "her şeyi tek kutuda çalıştır" halimden, "her işi olması gereken yere koy" aşamasına geldim. Self-hosting'in en güzel yanı da bu: İhtiyaçlarınızla birlikte sisteminiz de büyüyor ve şekil değiştiriyor. Kendi düzeninizi kuruyorsanız veya merak ettiğiniz bir nokta olursa yorumlarda buluşalım.
+
