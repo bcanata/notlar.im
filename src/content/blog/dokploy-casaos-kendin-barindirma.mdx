@@ -40,25 +40,90 @@ Projelerimi konuya göre ayırdım: *Okul*, *Kişisel*, *Geliştirme*, *Bakım* 
 
 ## VPS'te neler çalışıyor?
 
-Kabaca üç öbek var:
+Dokploy panelinde projelere göre ayırdığım hâliyle, şu an VPS'te çalışan servislerin tamamı:
 
-- **Medya:** Jellyfin (ve Plex), Radarr / Sonarr / Bazarr, Prowlarr, qBittorrent, watchstate. Burada ufak bir sürpriz var: medya dosyalarının kendisi aslında sunucuda *değil* — Google Drive'da duruyor ve `rclone` ile sunucuya mount edilmiş durumda. Yani Jellyfin'in "kütüphanesi" bir buluttan akıyor. Medyayı VPS'te tutmamın sebebi de bu: dosyalar zaten burada mount, üstelik veri merkezi bant genişliği uzaktan izlemeyi sorunsuz kılıyor.
-- **Kişisel:** memos (hızlı not defteri), bu blogun bazı parçaları, bir Homepage paneli, n8n (otomasyon akışları), changedetection (web sayfası takibi), FreshRSS.
-- **Bakım / altyapı:** Traefik'in kendisi, Beszel (izleme), Cup (güncelleme bildirimi), Portainer, WireGuard.
+**Okul**
 
-Ortak nokta şu: bunların hepsi ya herkese açık erişim ister ya da kesintisiz çalışmalı. İkisi de bir veri merkezi sunucusunun en iyi yaptığı şey.
+- **LittleLink Server** — öğrencilere yönelik bağlantı ve araç sayfası
+
+**Kişisel**
+
+- **memos** (+ **memogram** Telegram köprüsü) — hızlı not defteri
+- **blinko** — yapay zekâ destekli not alma
+- **docmost** — wiki / bilgi tabanı
+- **Homepage** — widget'lı ana panel
+- **Homer** — sade bir başlangıç paneli
+- **changedetection.io** — web sayfası değişiklik takibi
+- **n8n** — otomasyon akışları
+- **domain-locker** — alan adı ve SSL son kullanma takibi (kendi geliştirdiğim araç)
+- **LittleLink** — kişisel "link in bio" sayfası
+- **wg-easy** — web arayüzlü WireGuard VPN
+
+**Geliştirme**
+
+- **aprs** — amatör telsiz APRS aracı
+- **DMRListManager** — DMR (sayısal telsiz) kişi listesi yöneticisi
+- **PocketBase** — hafif backend / veritabanı
+- **13ft** — paywall sıyıran "sonra oku" aracı
+- **palmr** — dosya paylaşımı
+- **memos-mcp-server** — memos için MCP sunucusu
+
+**Bakım**
+
+- **Beszel** (+ ajanı) — kaynak ve uptime izleme merkezi
+- **Cup** — container güncelleme denetimi
+- **Diun** — Docker imaj güncelleme bildirimi
+- **Uptime Kuma** — durum / uptime sayfası
+- **Portainer** — Docker yönetim arayüzü
+- **RustDesk** (hbbs + hbbr) — kendi uzak masaüstü relay sunucum
+
+**Medya**
+
+- **Jellyfin** — medya sunucusu
+- **Radarr** — film koleksiyonu yöneticisi
+- **Sonarr** — dizi koleksiyonu yöneticisi
+- **Bazarr** — altyazı yönetimi (yabancı içeriği DeepSeek ile Türkçeye çeviriyor)
+- **qBittorrent** — torrent istemcisi
+- **watchstate** — Plex ↔ Jellyfin izleme durumu senkronu
+- **recyclarr** — TRaSH kalite rehberlerini Radarr/Sonarr'a uygular
+- **decluttarr** — takılan/istenmeyen indirmeleri kuyruktan temizler
+- **cross-seed** — cross-seeding otomasyonu
+- **Alternatrr** — Sonarr için alternatif başlık aracı
+- **whisper-openai-proxy** — Whisper tabanlı altyazı/çeviri proxy'si
+- **mediastarr** — medya arama/otomasyon aracı
+- **bookorbit** — e-kitap kütüphanesi
+- **Wizarr** — Jellyfin/Plex davet yöneticisi
+- **filebrowser** — web tabanlı dosya yöneticisi
+
+Bütün bunların altında bir de **Traefik** (ters vekil) ve **Dokploy**'un kendisi platform olarak dönüyor; ayrıca uygulamaların çoğu kendi PostgreSQL/Redis'iyle birlikte geliyor. Medya dosyalarının kendisi ise sunucuda *değil* — Google Drive'da durup `rclone` ile mount ediliyor; yani Jellyfin'in kütüphanesi buluttan akıyor. Medyayı burada tutmamın sebebi de bu: dosyalar zaten burada mount ve veri merkezi bant genişliği akışı sorunsuz kılıyor.
+
+Ortak payda şu: bu servislerin hepsi ya herkese açık erişim ister ya da kesintisiz çalışmalı — ikisi de bir veri merkezi sunucusunun en iyi yaptığı iş.
 
 ## CasaOS ve Raspberry Pi — ev tarafı
 
 CasaOS, Raspberry Pi gibi küçük makineler için yapılmış, son derece sade bir ev sunucusu arayüzü. Dokploy'un yanında neredeyse oyuncak gibi basit: bir "uygulama mağazası" mantığı var, tıkla-kur, bitti. Eve koyacağım birkaç servis için Dokploy'un tüm o makinesini kurmaya hiç gerek yoktu; CasaOS fazlasıyla yetti.
 
-Pi'de ne çalıştığından çok, *neden orada* çalıştığı önemli:
+Pi'de şu an çalışan servislerin tamamı:
 
-- **Pi-hole** — ağ çapında reklam ve izleyici engelleyici. Evdeki bütün cihazların DNS'i buradan geçiyor. Bunun doğal yeri zaten ev: ev ağının DNS sunucusu, ev ağında durmalı.
-- **Letterboxd senkronu** — izlediğim filmleri Trakt üzerinden Letterboxd'a aktaran küçük bir araç. İşte size "konut IP'si gerektiren iş"in en net örneği: Letterboxd, veri merkezi IP'lerinden yapılan otomatik girişleri bot koruması ile engelliyor. Aynı aracı VPS'te çalıştırdım — giriş ekranını geçemedi. Evdeki Pi'de, konut IP'sinin arkasında ise sorun çıkmıyor. (Açıkçası buradaki otomatik giriş hâlâ inatçı; çoğu zaman en güvenilir yol, aracın ürettiği CSV'yi elle Letterboxd'a yüklemek oluyor. Ama veriyi üreten taraf burada, evde.)
-- **FreshRSS**, bir **Beszel ajanı** (VPS'teki Beszel merkezi bu Pi'yi uzaktan izliyor) ve benzeri küçük, eve dönük servisler.
+- **Pi-hole** — ağ çapında reklam ve izleyici engelleme; evdeki bütün cihazların DNS'i buradan geçiyor
+- **Home Assistant** — ev otomasyonu (ev cihazlarına dokunduğu için doğal yeri ev ağı)
+- **Plex** — ev tarafındaki medya sunucusu
+- **Prowlarr** — indexer (kaynak) yöneticisi
+- **Seerr** — medya istek yönetimi (Jellyseerr/Overseerr türevi)
+- **FlareSolverr** — Prowlarr'ın Cloudflare korumalarını aşması için çözücü
+- **FreshRSS** (+ MariaDB) — RSS okuyucu
+- **Karakeep** (web + Chrome + Meilisearch + Telegram botu) — yer imi ve "sonra oku" yöneticisi
+- **trakt-to-letterboxd** — izlediğim filmleri Trakt üzerinden Letterboxd'a aktaran araç
+- **Cloudflared** — Cloudflare tüneli
+- **Tailscale** — iki makineyi birleştiren özel ağ
+- **Portainer** — Docker yönetim arayüzü
+- **Uptime Kuma** — uptime izleme
+- **Cup** — güncelleme denetimi
+- **Beszel ajanı** (container değil, systemd ile) — VPS'teki Beszel merkezine rapor verir
 
-Peki neden Pi bir *medya sunucusu* değil? Çünkü olmamalı: ARM işlemci transcode (kod dönüştürme) işinde zayıf, ev bağlantısının yükleme (upload) hızı sınırlı, üstelik medya zaten Drive'da. Yani Pi'ye Jellyfin kurmak hem yavaş hem de anlamsız olurdu. Her işin doğal yeri var demiştik ya — medyanınki kesinlikle VPS.
+Buradaki yerleşimin mantığı şu: ev ağına ya da ev cihazlarına dokunan her şey (Pi-hole, Home Assistant), konut IP'si gerektiren işler ve evde tutmayı tercih ettiğim hafif servisler bu Pi'de. En çarpıcı örnek **Letterboxd senkronu**: Letterboxd, veri merkezi IP'lerinden yapılan otomatik girişleri bot koruması ile engelliyor — aynı aracı önce VPS'te çalıştırdım, giriş ekranını geçemedi; evdeki konut IP'sinin arkasında ise sorunsuz çalışıyor. (Otomatik giriş yine de inatçı olabildiğinden çoğu zaman en güvenilir yol, aracın ürettiği CSV'yi elle Letterboxd'a yüklemek oluyor.)
+
+Evde bir Plex'im olsa da **asıl medya kütüphanesi ve otomasyon zinciri** (Jellyfin + Radarr/Sonarr/Bazarr) bilerek VPS'te yaşıyor: Pi'nin ARM işlemcisi transcode'da zayıf, ev bağlantısının yükleme hızı sınırlı ve dosyalar zaten Drive'da. Yani ağır işi veri merkezine, eve dönük ve hafif işi Pi'ye bırakıyorum.
 
 ## İki makineyi nasıl birbirine bağladım: Tailscale
 
