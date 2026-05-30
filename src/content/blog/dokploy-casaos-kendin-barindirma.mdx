@@ -1,0 +1,89 @@
+---
+title: Dokploy ve CasaOS ile Kendi Sunucularımı Yönetmek
+date: '2026-05-31'
+updated: '2026-05-31'
+tags:
+  - internet
+  - self-hosting
+  - docker
+description: >-
+  2021'de self-hosting'e dair genel bir yazı yazmıştım. Aradan geçen zamanda
+  kurulumum değişti: artık iki ayrı makineyi, biri VPS'te Dokploy diğeri evde
+  CasaOS ile yönetiyorum. İşte neyin nerede çalıştığı ve neden öyle olduğu.
+ai: true
+lang: tr
+---
+
+Yıllar önce, [self-hosting üzerine genel bir yazı](/blog/self-hosting-kendin-barindirma/) yazmıştım: internette kullandığımız servisleri kendi sunucumuzda çalıştırmak ne demek, neden işe yarar, nasıl başlanır. O yazının üzerinden epey zaman geçti ve kurulumum tanınmayacak kadar değişti. Artık her şeyi tek bir kutuda çalıştırmıyorum; **iki ayrı makinem** ve bunları yönetmek için **iki ayrı arayüzüm** var. Bu yazıda o kurulumu anlatmak istiyorum — neyin nerede çalıştığını ve, daha önemlisi, *neden* orada çalıştığını.
+
+## İki sunucu, iki rol
+
+Kurulumun kalbinde iki makine var:
+
+- **Bir VPS** (Virtual Private Server, Sanal Özel Sunucu). Fransa'da, bir veri merkezinde duruyor; eski ama hâlâ dimdik ayakta olan bir Intel Xeon ve 8 GB RAM. Önemli olan teknik özellikleri değil, *konumu*: 7/24 açık, sabit IP'li, geniş ve simetrik bant genişliğine sahip. Üzerinde **Dokploy** çalışıyor.
+- **Bir Raspberry Pi 5** (8 GB). Evde, oturma odasında. Ev internetine bağlı, NAT arkasında, konut (residential) IP'li. Üzerinde **CasaOS** çalışıyor.
+
+Neden iki tane? Çünkü her işin doğal bir yeri var. Herkese açık olması gereken, bant genişliği isteyen, ağır ve kesintisiz çalışması gereken her şey VPS'te. Eve özgü olan, düşük güçle yetinen ya da — ilginç bir şekilde — *konut IP'si gerektiren* işler ise evdeki Pi'de. Bu ayrımın ne kadar somut olabileceğini birazdan Letterboxd örneğinde göreceksiniz.
+
+## Dokploy nedir, neden düz Docker yerine onu kullanıyorum?
+
+Eskiden her şeyi elle `docker-compose` dosyalarıyla yönetiyordum. Birkaç servise kadar gayet keyifli; ama uygulama sayısı artınca (şu an VPS'te ~50 container var) ortalık dağıldı. Hangi servis hangi portta, sertifikalar nasıl yenileniyor, bir şeyi güncellerken neyi bozarım — hepsi kafa karışıklığına dönüştü.
+
+Dokploy tam da burada devreye girdi. Açık kaynaklı, kendi sunucunda çalışan bir **PaaS** (Platform as a Service) — Vercel ya da Heroku'nun self-hosted hali gibi düşünün. Altında yine Docker ve **Traefik** (reverse proxy) var, ama bana tek bir arayüzden şunları veriyor:
+
+- Projeler ve uygulamalar — düzenli bir liste hâlinde,
+- Her uygulamaya otomatik alan adı ve **otomatik HTTPS** (Traefik + Let's Encrypt; sertifikayı ben hiç düşünmüyorum),
+- Dağıtım (deployment) geçmişi ve tek tıkla **geri alma** (rollback),
+- Loglar, ortam değişkenleri, yeniden dağıtım — hepsi yerinde.
+
+Projelerimi konuya göre ayırdım: *Okul*, *Kişisel*, *Geliştirme*, *Bakım* ve *Medya*. Bu ayrım tamamen düzen için; hepsi aynı sunucuda dönüyor, sadece zihnimde (ve panelde) gruplanmış oluyorlar.
+
+## VPS'te neler çalışıyor?
+
+Kabaca üç öbek var:
+
+- **Medya:** Jellyfin (ve Plex), Radarr / Sonarr / Bazarr, Prowlarr, qBittorrent, watchstate. Burada ufak bir sürpriz var: medya dosyalarının kendisi aslında sunucuda *değil* — Google Drive'da duruyor ve `rclone` ile sunucuya mount edilmiş durumda. Yani Jellyfin'in "kütüphanesi" bir buluttan akıyor. Medyayı VPS'te tutmamın sebebi de bu: dosyalar zaten burada mount, üstelik veri merkezi bant genişliği uzaktan izlemeyi sorunsuz kılıyor.
+- **Kişisel:** memos (hızlı not defteri), bu blogun bazı parçaları, bir Homepage paneli, n8n (otomasyon akışları), changedetection (web sayfası takibi), FreshRSS.
+- **Bakım / altyapı:** Traefik'in kendisi, Beszel (izleme), Cup (güncelleme bildirimi), Portainer, WireGuard.
+
+Ortak nokta şu: bunların hepsi ya herkese açık erişim ister ya da kesintisiz çalışmalı. İkisi de bir veri merkezi sunucusunun en iyi yaptığı şey.
+
+## CasaOS ve Raspberry Pi — ev tarafı
+
+CasaOS, Raspberry Pi gibi küçük makineler için yapılmış, son derece sade bir ev sunucusu arayüzü. Dokploy'un yanında neredeyse oyuncak gibi basit: bir "uygulama mağazası" mantığı var, tıkla-kur, bitti. Eve koyacağım birkaç servis için Dokploy'un tüm o makinesini kurmaya hiç gerek yoktu; CasaOS fazlasıyla yetti.
+
+Pi'de ne çalıştığından çok, *neden orada* çalıştığı önemli:
+
+- **Pi-hole** — ağ çapında reklam ve izleyici engelleyici. Evdeki bütün cihazların DNS'i buradan geçiyor. Bunun doğal yeri zaten ev: ev ağının DNS sunucusu, ev ağında durmalı.
+- **Letterboxd senkronu** — izlediğim filmleri Trakt üzerinden Letterboxd'a aktaran küçük bir araç. İşte size "konut IP'si gerektiren iş"in en net örneği: Letterboxd, veri merkezi IP'lerinden yapılan otomatik girişleri bot koruması ile engelliyor. Aynı aracı VPS'te çalıştırdım — giriş ekranını geçemedi. Evdeki Pi'de, konut IP'sinin arkasında ise sorun çıkmıyor. (Açıkçası buradaki otomatik giriş hâlâ inatçı; çoğu zaman en güvenilir yol, aracın ürettiği CSV'yi elle Letterboxd'a yüklemek oluyor. Ama veriyi üreten taraf burada, evde.)
+- **FreshRSS**, bir **Beszel ajanı** (VPS'teki Beszel merkezi bu Pi'yi uzaktan izliyor) ve benzeri küçük, eve dönük servisler.
+
+Peki neden Pi bir *medya sunucusu* değil? Çünkü olmamalı: ARM işlemci transcode (kod dönüştürme) işinde zayıf, ev bağlantısının yükleme (upload) hızı sınırlı, üstelik medya zaten Drive'da. Yani Pi'ye Jellyfin kurmak hem yavaş hem de anlamsız olurdu. Her işin doğal yeri var demiştik ya — medyanınki kesinlikle VPS.
+
+## İki makineyi nasıl birbirine bağladım: Tailscale
+
+İki makinenin de birbiriyle konuşması gerekiyor — örneğin VPS'teki Beszel merkezinin evdeki Pi'yi izlemesi için. Pi, NAT arkasında ve konut bağlantısında olduğu için onu dışarıdan doğrudan göremezsiniz.
+
+Çözüm **Tailscale** oldu: WireGuard tabanlı, neredeyse sıfır ayar isteyen bir VPN. İki makineyi de kendi özel sanal ağıma alıyor; artık VPS, Pi'ye sanki yan yanalarmış gibi (Tailscale IP'si üzerinden) bağlanabiliyor. Public bir alan adına da, port yönlendirmeye de gerek kalmıyor; trafik baştan sona şifreli. Beszel'in evdeki ajanı işte tam olarak böyle, Tailscale üzerinden izleniyor.
+
+## Güncelleme, izleme, bakım nasıl yürüyor?
+
+- **Cup**, hangi container'ların yeni sürümü olduğunu söylüyor. Burada öğrendiğim küçük bir tuzak var: Cup, diskte duran *eski* image'ları da listeliyor. Yani "güncelleme var" dediklerinin bir kısmı hayalet — container çoktan güncellenmiş, eski image öylece duruyor. Düzenli bir `docker image prune` ile bunları temizleyince liste dürüstleşiyor.
+- **Güncelleme yaparken** sırayı bozmuyorum: önce yeni image'ı çekiyorum, sonra compose'u güncelleyip yeniden dağıtıyorum. Büyük sürüm atlamalarında (örneğin bir uygulamanın v1'den v2'ye geçişi) önce verinin yedeğini alıyorum — bazı veritabanı göçleri (migration) tek yönlüdür, geri dönüşü yoktur.
+- **Beszel** ise kaynak kullanımı ve uptime izleme için; hafif, sade, tam istediğim kadar.
+
+## Yol boyu öğrendiklerim
+
+Birkaç yıl içinde biriktirdiğim, keşke baştan bilseydim dediğim notlar:
+
+- **Her işin doğal bir yeri var.** Konut IP'si isteyen bir şeyi veri merkezine zorlamak (Letterboxd örneği) sadece baş ağrısı getiriyor. Önce "bu iş nerede yaşamalı?" diye sorun.
+- **Bulutu mount etmek harika, ama limitlere dikkat.** Google Drive'ı `rclone` ile bağlamak çok pratik; fakat iki ayrı makineden aynı anda bağlayıp tarayınca API limitlerine takılıp geçici yasak yiyebiliyorsunuz.
+- **"Güncelleme var" her zaman gerçek değil.** Hayalet image'lar yüzünden listeye körlemesine güvenmeyin; çalışan sürümle diskteki image'ı ayırt edin.
+- **Büyük güncellemede önce yedek, sonra log.** Migration'ı izleyin; bir şey ters giderse erken yakalayın.
+- **Basit olan kazanır.** Ev tarafında Dokploy'un tüm ağırlığına ihtiyacım yoktu; CasaOS yetti de arttı. Aracı işe göre seçin, modaya göre değil.
+
+## Özetle
+
+Bugünkü kurulumum aslında tek bir cümleye sığıyor: **herkese açık, ağır ve kesintisiz olan her şey veri merkezindeki VPS'te Dokploy ile; eve özgü, hafif ve konut IP'si isteyen her şey evdeki Pi'de CasaOS ile; ikisi de Tailscale ile aynı özel ağda.**
+
+2021'deki "her şeyi tek kutuda çalıştır" halimden, "her işi doğal yerine koy" haline evrildim. Self-hosting'in güzel yanı da bu zaten: kurulum, ihtiyaçlarınızla birlikte büyüyor ve şekil değiştiriyor. Kendi düzeninizi kuruyorsanız ya da takıldığınız bir yer varsa, yazın — konuşmayı severim.
