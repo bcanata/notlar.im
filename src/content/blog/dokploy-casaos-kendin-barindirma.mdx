@@ -131,6 +131,8 @@ Evde bir Plex'im olsa da **asıl medya kütüphanesi ve otomasyon zinciri** (Jel
 
 Çözüm **Tailscale** oldu: WireGuard tabanlı, neredeyse sıfır ayar isteyen bir VPN. İki makineyi de kendi özel sanal ağıma alıyor; artık VPS, Pi'ye sanki yan yanalarmış gibi (Tailscale IP'si üzerinden) bağlanabiliyor. Public bir alan adına da, port yönlendirmeye de gerek kalmıyor; trafik baştan sona şifreli. Beszel'in evdeki ajanı işte tam olarak böyle, Tailscale üzerinden izleniyor.
 
+Tailscale'in hoşuma giden bir yan faydası da Plex'te ortaya çıkıyor. Plex, ev ağının *dışından* yayın yapabilmek için normalde Plex Pass (ücretli abonelik) ister. Ama Plex'e Tailscale üzerinden bağlandığımda sunucu beni aynı yerel ağdaymışım gibi gördüğü için bunu "uzaktan erişim" saymıyor — yani nerede olursam olayım, Plex Pass'e gerek kalmadan kütüphaneme erişebiliyorum. Plex'i evdeki Pi'de tutmamın sebeplerinden biri de tam olarak bu.
+
 ## Güncelleme, izleme, bakım nasıl yürüyor?
 
 - **Cup**, hangi container'ların yeni sürümü olduğunu söylüyor. Burada öğrendiğim küçük bir tuzak var: Cup, diskte duran *eski* image'ları da listeliyor. Yani "güncelleme var" dediklerinin bir kısmı hayalet — container çoktan güncellenmiş, eski image öylece duruyor. Düzenli bir `docker image prune` ile bunları temizleyince liste dürüstleşiyor.
