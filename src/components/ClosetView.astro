@@ -76,10 +76,24 @@ const data = books.map((b) => ({ s: b.slug, t: b.title, a: b.author, c: b.cover,
     }
     .closet .panel {
         background:
-            repeating-linear-gradient(transparent 0 var(--row), rgba(0,0,0,0.5) var(--row) calc(var(--row) + 14px)),
-            linear-gradient(90deg, #4b3925, #5c4730 50%, #3c2c1c);
-        backface-visibility: hidden;
-        box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.55);
+            repeating-linear-gradient(90deg, rgba(0,0,0,0.13) 0 2px, transparent 2px 28px),
+            linear-gradient(90deg, #4a3826, #5b4631 50%, #3a2b1c);
+        box-shadow: inset 0 0 170px rgba(0, 0, 0, 0.62);
+    }
+    .closet .shelf {
+        transform-style: preserve-3d;
+        background: linear-gradient(#6a5238, #3a2c1d);
+        border-radius: 2px;
+        box-shadow: 0 16px 24px -10px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+    .closet .shelf-top {
+        position: absolute;
+        left: 0;
+        bottom: 100%;
+        height: 30px;
+        background: linear-gradient(#71583c, #4a3826);
+        transform-origin: bottom;
+        transform: rotateX(74deg);
     }
     .closet .floor {
         background: linear-gradient(#241a11, #120d08);
@@ -172,57 +186,54 @@ const data = books.map((b) => ({ s: b.slug, t: b.title, a: b.author, c: b.cover,
     const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
     // ---- geometry (tunable) ----
-    const HALF = 300;       // half aisle width (distance to each wall)
-    const NEAR = 200;       // nearest shelf depth — kept well in front of the eye
-    const PITCH = 76;       // depth between spines
-    const BOOK_H = 150;     // spine height
-    const ROW_PITCH = 176;  // vertical distance between shelves
+    const GAP = 5;          // gap between spines on a shelf
+    const BOOK_H = 152;     // spine height
+    const ROW_PITCH = 196;  // vertical distance between shelves
+    const BOARD_H = 12;     // shelf board thickness
 
     let built = false;
-    let look = { x: 0, y: 0 };
-    let walk = 0;
-    let maxWalk = 0;
+    let look = { x: 0, y: 0 };   // normalised cursor offset (-0.5..0.5)
+    let dolly = 0;               // translateZ (wheel = lean in/out)
+    let panX = 0, panY = 0;      // how far the wall can pan on each axis
     let raf = 0;
 
     const $ = (id: string) => document.getElementById(id)!;
+    const scene = $('closet-scene');
 
     function initCloset() {
         if (built) return;
         built = true;
         const world = $('closet-world');
         const data: CBook[] = JSON.parse($('closet-data').textContent || '[]');
+        const sr = scene.getBoundingClientRect();
 
-        const perWall = Math.ceil(data.length / 2);
-        const rows = clamp(Math.round(perWall / 34), 2, 4);
-        const perShelf = Math.max(1, Math.ceil(perWall / rows));
-        const DEPTH = perShelf * PITCH;
-        const WALLH = rows * ROW_PITCH;
-        const CZ = NEAR + DEPTH / 2;       // centre depth (negated when applied)
-        maxWalk = Math.max(0, DEPTH - 280);
+        // A wall of shelves facing the camera. Books pack left→right, wrapping to
+        // the next shelf — slightly wider than the viewport so you pan across it.
+        const wallW = Math.max(720, Math.round(sr.width * 1.18));
+        const rows: { b: CBook; thick: number; x: number }[][] = [[]];
+        let cursor = 0;
+        for (const b of data) {
+            const thick = clamp(Math.round((b.p || 240) / 9), 18, 52);
+            if (cursor + thick > wallW && rows[rows.length - 1].length) { rows.push([]); cursor = 0; }
+            rows[rows.length - 1].push({ b, thick, x: cursor });
+            cursor += thick + GAP;
+        }
+        const wallH = rows.length * ROW_PITCH;
+        panX = Math.max(0, (wallW - sr.width) / 2 + 24);
+        panY = Math.max(0, (wallH - sr.height) / 2 + 24);
         world.style.setProperty('--row', ROW_PITCH + 'px');
 
-        // Enclosure placed directly in world space (all at negative Z so nothing
-        // crosses the eye): two side panels with shelf lines, plus floor + ceiling.
-        world.appendChild(panel(-1, DEPTH, WALLH, CZ));
-        world.appendChild(panel(1, DEPTH, WALLH, CZ));
-        world.appendChild(plane(HALF * 2, DEPTH, WALLH / 2, CZ));   // floor
-        world.appendChild(plane(HALF * 2, DEPTH, -WALLH / 2, CZ));  // ceiling
-
-        // Spines: first half on the left wall, second half on the right.
-        const place = (books: CBook[], sign: number) => {
-            books.forEach((b, i) => {
-                const r = Math.floor(i / perShelf);
-                const col = i % perShelf;
-                const thick = clamp(Math.round((b.p || 240) / 11), 16, 46);
-                const x = sign * (HALF - 1);
-                const y = -WALLH / 2 + r * ROW_PITCH + ROW_PITCH / 2;
-                const z = -(NEAR + col * PITCH + thick / 2);
-                world.appendChild(makeSpine(b, x, y, z, sign < 0 ? 90 : -90, thick));
-            });
-        };
-        place(data.slice(0, perWall), -1);
-        place(data.slice(perWall), 1);
-
+        // Wood back wall, then a shelf board + its spines for each row.
+        world.appendChild(backWall(wallW + 200, wallH + 200));
+        rows.forEach((row, r) => {
+            const rowTop = -wallH / 2 + r * ROW_PITCH;
+            world.appendChild(shelfBoard(wallW, rowTop + BOOK_H + 16));
+            for (const { b, thick, x } of row) {
+                const cx = -wallW / 2 + x + thick / 2;
+                const cy = rowTop + BOOK_H / 2 + 6;
+                world.appendChild(makeSpine(b, cx, cy, thick));
+            }
+        });
         apply();
     }
 
@@ -235,27 +246,31 @@ const data = books.map((b) => ({ s: b.slug, t: b.title, a: b.author, c: b.cover,
         el.style.marginTop = -h / 2 + 'px';
     }
 
-    function panel(sign: number, depth: number, h: number, cz: number): HTMLElement {
+    function backWall(w: number, h: number): HTMLElement {
         const p = document.createElement('div');
         p.className = 'panel';
-        centre(p, depth, h);
-        p.style.transform = `translate3d(${sign * HALF}px, 0px, ${-cz}px) rotateY(${sign < 0 ? 90 : -90}deg)`;
+        centre(p, w, h);
+        p.style.transform = 'translate3d(0px, 0px, -52px)';
         return p;
     }
 
-    function plane(w: number, depth: number, y: number, cz: number): HTMLElement {
-        const el = document.createElement('div');
-        el.className = 'floor';
-        centre(el, w, depth);
-        el.style.transform = `translate3d(0px, ${y}px, ${-cz}px) rotateX(90deg)`;
-        return el;
+    function shelfBoard(w: number, y: number): HTMLElement {
+        const b = document.createElement('div');
+        b.className = 'shelf';
+        centre(b, w, BOARD_H);
+        b.style.transform = `translate3d(0px, ${y}px, 16px)`;
+        const top = document.createElement('div'); // top surface receding under the books
+        top.className = 'shelf-top';
+        top.style.width = w + 'px';
+        b.appendChild(top);
+        return b;
     }
 
-    function makeSpine(b: CBook, x: number, y: number, z: number, ry: number, thick: number): HTMLElement {
+    function makeSpine(b: CBook, x: number, y: number, thick: number): HTMLElement {
         const spine = document.createElement('div');
         spine.className = 'spine';
         centre(spine, thick, BOOK_H);
-        spine.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${ry}deg)`;
+        spine.style.transform = `translate3d(${x}px, ${y}px, 0px)`; // faces the camera
         spine.dataset.slug = b.s;
         spine.dataset.title = b.t;
         spine.dataset.author = b.a || '';
@@ -264,7 +279,8 @@ const data = books.map((b) => ({ s: b.slug, t: b.title, a: b.author, c: b.cover,
         const face = document.createElement('div');
         face.className = 'spine-face';
         const base = tintFor(b.t);
-        face.style.background = `linear-gradient(90deg, ${shade(base, 14)}, ${shade(base, -22)})`;
+        // left→right sheen so the spine reads as a rounded book spine
+        face.style.background = `linear-gradient(90deg, ${shade(base, -26)}, ${shade(base, 18)} 42%, ${shade(base, -10)} 70%, ${shade(base, -34)})`;
         const title = document.createElement('span');
         title.className = 'spine-title';
         title.textContent = b.t;
@@ -282,23 +298,24 @@ const data = books.map((b) => ({ s: b.slug, t: b.title, a: b.author, c: b.cover,
     }
 
     function apply() {
-        const world = $('closet-world');
-        world.style.transform = `translateZ(${walk}px) rotateX(${look.x}deg) rotateY(${look.y}deg)`;
+        const tiltY = look.x * 12;   // subtle parallax
+        const tiltX = look.y * -9;
+        const px = -look.x * panX * 2;
+        const py = -look.y * panY * 2;
+        $('closet-world').style.transform =
+            `translateZ(${dolly}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translate3d(${px}px, ${py}px, 0px)`;
     }
 
-    // ---- interaction ----
-    const scene = $('closet-scene');
+    // ---- interaction: mouse pans/tilts across the wall, wheel leans in ----
     scene.addEventListener('pointermove', (e) => {
         const r = scene.getBoundingClientRect();
-        const nx = (e.clientX - r.left) / r.width - 0.5;
-        const ny = (e.clientY - r.top) / r.height - 0.5;
-        look.y = -nx * 42;
-        look.x = clamp(ny * 22 + 4, -16, 30);
+        look.x = (e.clientX - r.left) / r.width - 0.5;
+        look.y = (e.clientY - r.top) / r.height - 0.5;
         if (!raf) raf = requestAnimationFrame(() => { raf = 0; apply(); });
     });
     scene.addEventListener('wheel', (e) => {
         e.preventDefault();
-        walk = clamp(walk + e.deltaY * 0.6, 0, maxWalk);
+        dolly = clamp(dolly - e.deltaY * 0.5, -240, 220);
         apply();
     }, { passive: false });
 
