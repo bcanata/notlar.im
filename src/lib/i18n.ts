@@ -74,6 +74,13 @@ const DICT = {
         book_status: 'Durum',
         book_added: 'Eklendi',
         book_openlibrary: "Open Library'de gör",
+        book_location: 'Konum',
+        book_rating: 'Puan',
+        book_lent: 'Ödünçte',
+        book_copies: '{n} kopya',
+        read_okunmadi: 'Okunmadı',
+        read_okunuyor: 'Okunuyor',
+        read_okundu: 'Okundu',
 
         reviews_title: 'Mekanlar',
         reviews_tagline:
@@ -176,6 +183,13 @@ const DICT = {
         book_status: 'Status',
         book_added: 'Added',
         book_openlibrary: 'View on Open Library',
+        book_location: 'Location',
+        book_rating: 'Rating',
+        book_lent: 'On loan',
+        book_copies: '{n} copies',
+        read_okunmadi: 'Unread',
+        read_okunuyor: 'Reading',
+        read_okundu: 'Read',
 
         reviews_title: 'Places',
         reviews_tagline:

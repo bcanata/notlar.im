@@ -1,0 +1,578 @@
+---
+export const prerender = false; // private, server-rendered, guarded by middleware
+
+import Page from '../../layouts/Page.astro';
+import { listBooks, listBookcases } from '../../lib/books';
+
+const db = Astro.locals.runtime.env.DB;
+const books = await listBooks(db);
+const bookcases = await listBookcases(db);
+const lang = 'tr' as const;
+
+const READING = [
+    { v: 'okunmadi', label: 'Okunmadı' },
+    { v: 'okunuyor', label: 'Okunuyor' },
+    { v: 'okundu', label: 'Okundu' },
+];
+const locSummary = (b: { copies: { bookcase: string | null; shelf: string | null }[] }) =>
+    [...new Set(b.copies.map((c) => [c.bookcase, c.shelf].filter(Boolean).join(' · ')).filter(Boolean))];
+---
+
+<Page title="Kitaplık Yönetimi" lang={lang} noindex>
+    <section class="mb-8">
+        <h1 class="display-title text-3xl">Kitaplık Yönetimi</h1>
+        <p class="mt-2 text-[var(--color-ink-soft)]">
+            ISBN tarayın veya elle girin. Aynı kitabı tekrar tararsanız yeni bir <strong>kopya</strong> eklenir.
+            <span class="text-[var(--color-ink-mute)]">(Toplam <span id="book-total">{books.length}</span> kitap)</span>
+        </p>
+    </section>
+
+    <datalist id="bookcase-options">
+        {bookcases.map((bc) => <option value={bc} />)}
+    </datalist>
+
+    {/* ---- Scanner ---- */}
+    <section class="mb-8 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-soft)] p-4 sm:p-6">
+        <div class="flex flex-wrap items-center gap-3">
+            <button id="scan-start" type="button" class="rounded-md bg-[var(--color-accent)] px-4 py-2 text-sm font-medium text-white hover:opacity-90">📷 ISBN Tara</button>
+            <button id="scan-stop" type="button" class="hidden rounded-md border border-[var(--color-rule)] px-4 py-2 text-sm hover:bg-[var(--color-paper)]">Durdur</button>
+            <form id="manual-form" class="flex flex-1 items-center gap-2">
+                <input id="manual-isbn" type="text" inputmode="numeric" placeholder="ISBN elle gir (örn. 9789754030365)" autocomplete="off" class="min-w-0 flex-1 rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm focus:border-[var(--color-ink-soft)] focus:outline-none" />
+                <button type="submit" class="rounded-md border border-[var(--color-rule)] px-4 py-2 text-sm hover:bg-[var(--color-paper)]">Ara</button>
+            </form>
+        </div>
+
+        {/* Shelving mode: pick a target cube once, then every scan lands there with no confirm. */}
+        <div class="mt-3 flex flex-wrap items-center gap-3 rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] p-2">
+            <label class="flex items-center gap-2 text-sm"><input id="shelving-toggle" type="checkbox" class="size-4" /> Raflama modu</label>
+            <div id="shelving-target" class="hidden flex-1 items-center gap-2">
+                <input id="shelving-bookcase" list="bookcase-options" placeholder="Kitaplık (örn. Kallax)" class="min-w-0 flex-1 rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm focus:outline-none" />
+                <input id="shelving-shelf" placeholder="Raf (örn. C3 ön)" class="min-w-0 flex-1 rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm focus:outline-none" />
+            </div>
+            <span class="text-xs text-[var(--color-ink-mute)]">Açıkken tarananlar onaysız bu konuma eklenir.</span>
+        </div>
+
+        <video id="scan-video" class="mt-4 hidden aspect-video w-full max-w-md rounded-md bg-black object-cover" muted playsinline></video>
+        <p id="scan-status" class="mt-3 text-sm text-[var(--color-ink-mute)]" aria-live="polite"></p>
+    </section>
+
+    {/* ---- Confirm / add (hidden until a lookup returns) ---- */}
+    <section id="confirm" class="mb-10 hidden rounded-lg border border-[var(--color-accent)]/40 bg-[var(--color-paper-soft)] p-4 sm:p-6">
+        <div class="flex flex-col gap-5 sm:flex-row">
+            <div class="shrink-0 sm:w-32">
+                <div class="relative aspect-[2/3] overflow-hidden rounded-sm bg-[var(--color-paper)] ring-1 ring-black/5">
+                    <img id="c-cover" alt="" class="hidden h-full w-full object-cover" />
+                </div>
+            </div>
+            <div class="min-w-0 flex-1">
+                <p id="c-exists" class="mb-3 hidden rounded bg-amber-100 px-3 py-2 text-sm text-amber-900 dark:bg-amber-900/30 dark:text-amber-200"></p>
+                <label class="block text-xs text-[var(--color-ink-mute)]">Başlık
+                    <input id="c-title" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-base focus:outline-none" />
+                </label>
+                <label class="mt-3 block text-xs text-[var(--color-ink-mute)]">Yazar
+                    <input id="c-author" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm focus:outline-none" />
+                </label>
+                <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <label class="block text-xs text-[var(--color-ink-mute)]">Yayınevi
+                        <input id="c-publisher" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm focus:outline-none" />
+                    </label>
+                    <label class="block text-xs text-[var(--color-ink-mute)]">Yıl
+                        <input id="c-year" inputmode="numeric" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm tabular-nums focus:outline-none" />
+                    </label>
+                    <label class="block text-xs text-[var(--color-ink-mute)]">Sayfa
+                        <input id="c-pages" inputmode="numeric" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm tabular-nums focus:outline-none" />
+                    </label>
+                    <label class="block text-xs text-[var(--color-ink-mute)]">ISBN
+                        <input id="c-isbn" readonly class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm tabular-nums text-[var(--color-ink-mute)] focus:outline-none" />
+                    </label>
+                </div>
+                <div class="mt-3 grid grid-cols-2 gap-3">
+                    <label class="block text-xs text-[var(--color-ink-mute)]">Kitaplık (bu kopya)
+                        <input id="c-bookcase" list="bookcase-options" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm focus:outline-none" />
+                    </label>
+                    <label class="block text-xs text-[var(--color-ink-mute)]">Raf
+                        <input id="c-shelf" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm focus:outline-none" />
+                    </label>
+                </div>
+                <div class="mt-5 flex gap-3">
+                    <button id="c-add" type="button" class="rounded-md bg-[var(--color-accent)] px-5 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-40">Kütüphaneye Ekle</button>
+                    <button id="c-cancel" type="button" class="rounded-md border border-[var(--color-rule)] px-4 py-2 text-sm hover:bg-[var(--color-paper)]">İptal</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {/* ---- Edit (hidden until a row's Düzenle is clicked) ---- */}
+    <section id="edit" class="mb-10 hidden rounded-lg border border-[var(--color-ink-soft)]/40 bg-[var(--color-paper-soft)] p-4 sm:p-6">
+        <div class="mb-3 flex items-center justify-between">
+            <h2 class="display-title text-lg">Kitabı düzenle</h2>
+            <a id="e-view" href="#" target="_blank" class="text-xs text-[var(--color-accent)] underline">Sayfayı aç ↗</a>
+        </div>
+        <label class="block text-xs text-[var(--color-ink-mute)]">Başlık
+            <input id="e-title" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-base focus:outline-none" />
+        </label>
+        <label class="mt-3 block text-xs text-[var(--color-ink-mute)]">Yazar
+            <input id="e-author" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm focus:outline-none" />
+        </label>
+        <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <label class="block text-xs text-[var(--color-ink-mute)]">Yayınevi
+                <input id="e-publisher" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm focus:outline-none" />
+            </label>
+            <label class="block text-xs text-[var(--color-ink-mute)]">Yıl
+                <input id="e-year" inputmode="numeric" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm tabular-nums focus:outline-none" />
+            </label>
+            <label class="block text-xs text-[var(--color-ink-mute)]">Sayfa
+                <input id="e-pages" inputmode="numeric" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm tabular-nums focus:outline-none" />
+            </label>
+            <label class="block text-xs text-[var(--color-ink-mute)]">Durum
+                <select id="e-status" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm focus:outline-none">
+                    <option value="">—</option>
+                    {READING.map((r) => <option value={r.v}>{r.label}</option>)}
+                </select>
+            </label>
+            <label class="block text-xs text-[var(--color-ink-mute)]">Puan
+                <select id="e-rating" class="mt-1 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-2 py-1.5 text-sm focus:outline-none">
+                    <option value="">—</option>
+                    {[1, 2, 3, 4, 5].map((n) => <option value={n}>{'★'.repeat(n)}</option>)}
+                </select>
+            </label>
+        </div>
+        <div class="mt-4 flex flex-wrap items-center gap-3">
+            <button id="e-save" type="button" class="rounded-md bg-[var(--color-accent)] px-5 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-40">Kitabı Kaydet</button>
+            <button id="e-cancel" type="button" class="rounded-md border border-[var(--color-rule)] px-4 py-2 text-sm hover:bg-[var(--color-paper)]">Kapat</button>
+            <span id="e-status-msg" class="text-xs text-[var(--color-ink-mute)]"></span>
+        </div>
+
+        {/* Copies — each physical copy: location + loan (admin-only). Rendered by JS. */}
+        <div class="mt-5 border-t border-[var(--color-rule)] pt-4">
+            <div class="mb-2 flex items-center justify-between">
+                <h3 class="text-sm font-medium">Kopyalar</h3>
+                <button id="e-add-copy" type="button" class="rounded border border-[var(--color-rule)] px-2 py-1 text-xs hover:bg-[var(--color-paper)]">+ Kopya ekle</button>
+            </div>
+            <div id="e-copies" class="space-y-3"></div>
+        </div>
+    </section>
+
+    {/* ---- Browse by location (X-ray into a cube, back row included) ---- */}
+    <section class="mb-8">
+        <details class="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-soft)] p-4">
+            <summary class="cursor-pointer text-sm font-medium">📍 Konuma göre gör <span class="text-[var(--color-ink-mute)]">(arka sıra dahil)</span></summary>
+            <div class="mt-3">
+                <select id="loc-bookcase" class="w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] px-3 py-2 text-sm focus:outline-none sm:w-64">
+                    <option value="">Kitaplık seç…</option>
+                    {bookcases.map((bc) => <option value={bc}>{bc}</option>)}
+                </select>
+            </div>
+            <div id="loc-results" class="mt-3 text-sm"></div>
+        </details>
+    </section>
+
+    {/* ---- Existing books ---- */}
+    <section>
+        <input id="admin-filter" type="search" placeholder="Listede ara (başlık, yazar, kitaplık, raf)…" autocomplete="off" class="mb-4 w-full rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-4 py-2 text-sm focus:border-[var(--color-ink-soft)] focus:outline-none" />
+        <ul id="admin-list" class="divide-y divide-[var(--color-rule)]">
+            {books.map((b) => {
+                const locs = locSummary(b);
+                return (
+                    <li class="admin-row flex items-center gap-3 py-2" data-search={b.search} data-slug={b.slug}>
+                        <div class="h-12 w-8 shrink-0 overflow-hidden rounded-sm bg-[var(--color-paper-soft)] ring-1 ring-black/5">
+                            {b.cover && <img src={b.cover} alt="" loading="lazy" class="h-full w-full object-cover" />}
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <a href={`/kitaplik/${b.slug}`} class="block truncate text-sm hover:text-[var(--color-accent)]">{b.title}</a>
+                            <p class="truncate text-xs text-[var(--color-ink-mute)]">
+                                {[b.author, b.year].filter(Boolean).join(' · ')}
+                                {locs.length > 0 && <span> · 📍 {locs.join(' · ')}</span>}
+                                {b.copies.length > 1 && <span> · {b.copies.length} kopya</span>}
+                                {b.isLent && <span class="text-amber-700 dark:text-amber-400"> · 📕 Ödünçte</span>}
+                            </p>
+                        </div>
+                        <button type="button" class="row-edit shrink-0 rounded px-2 py-1 text-xs text-[var(--color-accent)] hover:bg-[var(--color-paper-soft)]">Düzenle</button>
+                        <button type="button" class="row-del shrink-0 rounded px-2 py-1 text-xs text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40">Sil</button>
+                    </li>
+                );
+            })}
+        </ul>
+    </section>
+</Page>
+
+<script>
+    import { BrowserMultiFormatReader } from '@zxing/browser';
+    import { DecodeHintType, BarcodeFormat } from '@zxing/library';
+
+    const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T | null;
+    const val = (id: string) => ($(id) as HTMLInputElement).value.trim();
+    const set = (id: string, v: unknown) => { ($(id) as HTMLInputElement).value = v == null ? '' : String(v); };
+    function esc(s: string) {
+        return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+    }
+
+    const status = $('scan-status')!;
+    const video = $<HTMLVideoElement>('scan-video')!;
+    const startBtn = $('scan-start')!;
+    const stopBtn = $('scan-stop')!;
+    const confirm = $('confirm')!;
+    const editPanel = $('edit')!;
+    const total = $('book-total')!;
+
+    let controls: { stop: () => void } | null = null;
+    function setStatus(msg: string) { status.textContent = msg; }
+    function confirm2(msg: string) { return window.confirm(msg); }
+
+    // Shelving mode: scans land in a pre-set cube with no confirm step.
+    const shelvingToggle = $<HTMLInputElement>('shelving-toggle')!;
+    const shelvingOn = () => shelvingToggle.checked;
+    shelvingToggle.addEventListener('change', () => {
+        $('shelving-target')!.classList.toggle('hidden', !shelvingOn());
+        $('shelving-target')!.classList.toggle('flex', shelvingOn());
+    });
+    let lastCode = '';
+    let lastScanAt = 0;
+
+    // ---- scanning ----
+    const hints = new Map();
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [
+        BarcodeFormat.EAN_13, BarcodeFormat.EAN_8, BarcodeFormat.UPC_A, BarcodeFormat.UPC_E,
+    ]);
+    async function startScan() {
+        try {
+            setStatus('Kamera başlatılıyor…');
+            video.classList.remove('hidden');
+            startBtn.classList.add('hidden');
+            stopBtn.classList.remove('hidden');
+            const reader = new BrowserMultiFormatReader(hints);
+            controls = await reader.decodeFromConstraints(
+                { video: { facingMode: { ideal: 'environment' } } }, video,
+                (result) => {
+                    if (!result) return;
+                    const code = result.getText();
+                    if (shelvingOn()) {
+                        // Keep the camera running; debounce repeats of the same code.
+                        const now = Date.now();
+                        if (code === lastCode && now - lastScanAt < 2500) return;
+                        lastCode = code; lastScanAt = now;
+                        setStatus(`Tarandı: ${code}`);
+                        lookup(code);
+                    } else {
+                        setStatus(`Tarandı: ${code}`);
+                        stopScan();
+                        lookup(code);
+                    }
+                },
+            );
+            setStatus('Barkodu kameraya gösterin…');
+        } catch { setStatus('Kamera açılamadı. ISBN’i elle girebilirsiniz.'); stopScan(); }
+    }
+    function stopScan() {
+        controls?.stop(); controls = null;
+        video.classList.add('hidden'); stopBtn.classList.add('hidden'); startBtn.classList.remove('hidden');
+    }
+    startBtn.addEventListener('click', startScan);
+    stopBtn.addEventListener('click', () => { stopScan(); setStatus(''); });
+    $<HTMLFormElement>('manual-form')!.addEventListener('submit', (e) => { e.preventDefault(); const v = val('manual-isbn'); if (v) lookup(v); });
+
+    // ---- lookup + add (add-copy when the ISBN already exists) ----
+    let pending: { isbn: string } | null = null;
+
+    async function lookup(isbn: string) {
+        setStatus('Aranıyor…');
+        if (!shelvingOn()) { confirm.classList.add('hidden'); editPanel.classList.add('hidden'); }
+        try {
+            const res = await fetch(`/api/admin/lookup?isbn=${encodeURIComponent(isbn)}`);
+            const data: any = await res.json();
+            if (!res.ok) { setStatus(data.error === 'invalid_isbn' ? 'Geçersiz ISBN.' : 'Arama başarısız.'); return; }
+            // Shelving mode: a known/found book is auto-added to the target cube.
+            // A not-found ISBN still needs a manual title, so it falls through to confirm.
+            if (shelvingOn() && (data.found || data.exists)) { await shelveAdd(data); return; }
+            if (!data.found && !data.exists) setStatus(`“${isbn}” için kayıt bulunamadı. Başlığı elle girip yine de ekleyebilirsiniz.`);
+            renderConfirm(data);
+        } catch { setStatus('Ağ hatası.'); }
+    }
+
+    async function shelveAdd(data: any) {
+        const m = data.meta || {};
+        const bookcase = val('shelving-bookcase');
+        const shelf = val('shelving-shelf');
+        try {
+            const res = await fetch('/api/admin/books', {
+                method: 'POST', headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    isbn: data.isbn, title: m.title || '',
+                    author: m.author || '', publisher: m.publisher || '', year: m.year || '', pages: m.pages || '',
+                    bookcase, shelf,
+                }),
+            });
+            const d: any = await res.json();
+            if (res.ok) {
+                upsertRow(d.book, !d.addedCopy);
+                if (!d.addedCopy) total.textContent = String(Number(total.textContent || '0') + 1);
+                const where = [bookcase, shelf].filter(Boolean).join(' · ') || '—';
+                setStatus(`${d.addedCopy ? '📕 Kopya' : '✓ Eklendi'}: ${d.book.title} → ${where}`);
+            } else {
+                setStatus(`Eklenemedi: ${m.title || data.isbn}`);
+            }
+        } catch { setStatus('Ağ hatası.'); }
+        set('manual-isbn', '');
+    }
+    function renderConfirm(data: any) {
+        const m = data.meta || {};
+        pending = { isbn: data.isbn };
+        set('c-title', m.title); set('c-author', m.author);
+        set('c-publisher', m.publisher); set('c-year', m.year); set('c-pages', m.pages);
+        set('c-isbn', m.isbn13 || m.isbn10 || data.isbn);
+        set('c-bookcase', ''); set('c-shelf', '');
+        const cover = $<HTMLImageElement>('c-cover')!;
+        if (m.coverUrl) { cover.src = m.coverUrl; cover.classList.remove('hidden'); } else cover.classList.add('hidden');
+
+        const existsEl = $('c-exists')!;
+        const addBtn = $<HTMLButtonElement>('c-add')!;
+        const titleInput = $<HTMLInputElement>('c-title')!;
+        if (data.exists) {
+            existsEl.innerHTML = `Bu kitap zaten kütüphanede — girdiğiniz konuma <strong>yeni bir kopya</strong> eklenecek. <a class="underline" href="/kitaplik/${data.existingSlug}">Kitabı aç →</a>`;
+            existsEl.classList.remove('hidden');
+            addBtn.textContent = 'Kopya Ekle';
+            titleInput.readOnly = true; // bibliographic fields belong to the existing book
+        } else {
+            existsEl.classList.add('hidden');
+            addBtn.textContent = 'Kütüphaneye Ekle';
+            titleInput.readOnly = false;
+        }
+        addBtn.disabled = false;
+        confirm.classList.remove('hidden');
+        confirm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    $('c-cancel')!.addEventListener('click', () => { confirm.classList.add('hidden'); pending = null; setStatus(''); });
+    $('c-add')!.addEventListener('click', async () => {
+        if (!pending) return;
+        const addBtn = $<HTMLButtonElement>('c-add')!;
+        const title = val('c-title');
+        if (!title) { setStatus('Başlık gerekli.'); return; }
+        addBtn.disabled = true; setStatus('Kaydediliyor…');
+        try {
+            const res = await fetch('/api/admin/books', {
+                method: 'POST', headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    isbn: pending.isbn, title,
+                    author: val('c-author'), publisher: val('c-publisher'),
+                    year: val('c-year'), pages: val('c-pages'),
+                    bookcase: val('c-bookcase'), shelf: val('c-shelf'),
+                }),
+            });
+            const data: any = await res.json();
+            if (res.ok) {
+                upsertRow(data.book, !data.addedCopy);
+                if (!data.addedCopy) total.textContent = String(Number(total.textContent || '0') + 1);
+                confirm.classList.add('hidden'); pending = null; set('manual-isbn', '');
+                setStatus(data.addedCopy ? `Kopya eklendi: ${data.book.title}` : `Eklendi: ${data.book.title}`);
+            } else {
+                setStatus('Kaydedilemedi.'); addBtn.disabled = false;
+            }
+        } catch { setStatus('Ağ hatası.'); addBtn.disabled = false; }
+    });
+
+    // ---- shared row rendering (book has copies[]) ----
+    function rowInner(b: any): string {
+        const cover = b.cover ? `<img src="${esc(b.cover)}" alt="" loading="lazy" class="h-full w-full object-cover" />` : '';
+        const sub = [b.author, b.year].filter(Boolean).join(' · ');
+        const locs = [...new Set((b.copies || []).map((c: any) => [c.bookcase, c.shelf].filter(Boolean).join(' · ')).filter(Boolean))];
+        const isLent = (b.copies || []).some((c: any) => c.isLent || c.lent_to);
+        const n = (b.copies || []).length;
+        const locPart = locs.length ? ` · 📍 ${esc(locs.join(' · '))}` : '';
+        const copiesPart = n > 1 ? ` · ${n} kopya` : '';
+        const lentPart = isLent ? ` · <span class="text-amber-700 dark:text-amber-400">📕 Ödünçte</span>` : '';
+        return `
+            <div class="h-12 w-8 shrink-0 overflow-hidden rounded-sm bg-[var(--color-paper-soft)] ring-1 ring-black/5">${cover}</div>
+            <div class="min-w-0 flex-1">
+                <a href="/kitaplik/${esc(b.slug)}" class="block truncate text-sm hover:text-[var(--color-accent)]">${esc(b.title)}</a>
+                <p class="truncate text-xs text-[var(--color-ink-mute)]">${esc(sub)}${locPart}${copiesPart}${lentPart}</p>
+            </div>
+            <button type="button" class="row-edit shrink-0 rounded px-2 py-1 text-xs text-[var(--color-accent)] hover:bg-[var(--color-paper-soft)]">Düzenle</button>
+            <button type="button" class="row-del shrink-0 rounded px-2 py-1 text-xs text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40">Sil</button>`;
+    }
+    function upsertRow(b: any, prepend = false) {
+        const list = $('admin-list')!;
+        let li = list.querySelector<HTMLLIElement>(`.admin-row[data-slug="${CSS.escape(b.slug)}"]`);
+        if (!li) {
+            li = document.createElement('li');
+            li.className = 'admin-row flex items-center gap-3 py-2';
+            li.dataset.slug = b.slug;
+            if (prepend) list.insertBefore(li, list.firstChild); else list.appendChild(li);
+        }
+        const locs = (b.copies || []).flatMap((c: any) => [c.bookcase, c.shelf]).filter(Boolean).join(' ');
+        li.dataset.search = [b.title, b.author, b.publisher, locs].filter(Boolean).join(' ').toLocaleLowerCase('tr');
+        li.innerHTML = rowInner(b);
+    }
+
+    // ---- edit (work fields + copies) ----
+    let editingSlug: string | null = null;
+
+    function copyBlock(c: any): string {
+        const id = c?.id ?? '';
+        return `
+        <div class="copy-block rounded-md border border-[var(--color-rule)] bg-[var(--color-paper)] p-3" data-copy-id="${id}">
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                <input class="cp-bookcase rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm" list="bookcase-options" placeholder="Kitaplık" value="${esc(c?.bookcase || '')}" />
+                <input class="cp-shelf rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm" placeholder="Raf" value="${esc(c?.shelf || '')}" />
+                <input class="cp-copy-note rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm" placeholder="Kopya notu (imzalı…)" value="${esc(c?.copy_note || '')}" />
+            </div>
+            <div class="mt-2 grid grid-cols-1 gap-2 rounded bg-amber-50/40 p-2 dark:bg-amber-900/10 sm:grid-cols-3">
+                <input class="cp-lent-to rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm" placeholder="Kimde (boşsa rafta)" value="${esc(c?.lent_to || '')}" />
+                <input class="cp-lent-at rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm" type="date" value="${esc(c?.lent_at || '')}" />
+                <input class="cp-lent-note rounded border border-[var(--color-rule)] bg-[var(--color-paper-soft)] px-2 py-1 text-sm" placeholder="Ödünç notu" value="${esc(c?.lent_note || '')}" />
+            </div>
+            <div class="mt-2 flex gap-2">
+                <button type="button" class="cp-save rounded bg-[var(--color-accent)] px-3 py-1 text-xs font-medium text-white hover:opacity-90">Kopyayı Kaydet</button>
+                <button type="button" class="cp-return rounded border border-amber-400 px-2 py-1 text-xs text-amber-800 hover:bg-amber-100 dark:text-amber-300 dark:hover:bg-amber-900/30">İade</button>
+                <button type="button" class="cp-del rounded px-2 py-1 text-xs text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40">Sil</button>
+            </div>
+        </div>`;
+    }
+    function renderCopies(book: any) {
+        $('e-copies')!.innerHTML = (book.copies || []).map(copyBlock).join('');
+    }
+
+    async function openEdit(slug: string) {
+        setStatus('');
+        try {
+            const res = await fetch(`/api/admin/books?slug=${encodeURIComponent(slug)}`);
+            const data: any = await res.json();
+            if (!res.ok) { setStatus('Kitap yüklenemedi.'); return; }
+            const b = data.book;
+            editingSlug = b.slug;
+            ($('e-view') as HTMLAnchorElement).href = `/kitaplik/${b.slug}`;
+            set('e-title', b.title); set('e-author', b.author);
+            set('e-publisher', b.publisher); set('e-year', b.year); set('e-pages', b.pages);
+            set('e-status', b.status || ''); set('e-rating', b.rating || '');
+            $('e-status-msg')!.textContent = '';
+            renderCopies(b);
+            confirm.classList.add('hidden');
+            editPanel.classList.remove('hidden');
+            editPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch { setStatus('Ağ hatası.'); }
+    }
+    $('e-cancel')!.addEventListener('click', () => { editPanel.classList.add('hidden'); editingSlug = null; });
+
+    $('e-save')!.addEventListener('click', async () => {
+        if (!editingSlug) return;
+        const title = val('e-title');
+        if (!title) { $('e-status-msg')!.textContent = 'Başlık gerekli.'; return; }
+        const btn = $<HTMLButtonElement>('e-save')!;
+        btn.disabled = true; $('e-status-msg')!.textContent = 'Kaydediliyor…';
+        try {
+            const res = await fetch('/api/admin/books', {
+                method: 'PUT', headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    slug: editingSlug, title,
+                    author: val('e-author'), publisher: val('e-publisher'),
+                    year: val('e-year'), pages: val('e-pages'),
+                    status: val('e-status'), rating: val('e-rating'),
+                }),
+            });
+            const data: any = await res.json();
+            if (res.ok) { upsertRow(data.book); $('e-status-msg')!.textContent = 'Kaydedildi.'; }
+            else $('e-status-msg')!.textContent = 'Kaydedilemedi.';
+        } catch { $('e-status-msg')!.textContent = 'Ağ hatası.'; }
+        finally { btn.disabled = false; }
+    });
+
+    // Add a blank copy form.
+    $('e-add-copy')!.addEventListener('click', () => {
+        $('e-copies')!.insertAdjacentHTML('beforeend', copyBlock(null));
+    });
+
+    // Copy block actions (delegated).
+    $('e-copies')!.addEventListener('click', async (e) => {
+        const target = e.target as HTMLElement;
+        const block = target.closest('.copy-block') as HTMLElement | null;
+        if (!block || !editingSlug) return;
+        const copyId = block.dataset.copyId || '';
+        const q = (sel: string) => (block.querySelector(sel) as HTMLInputElement)?.value.trim() ?? '';
+
+        if (target.closest('.cp-return')) {
+            (block.querySelector('.cp-lent-to') as HTMLInputElement).value = '';
+            (block.querySelector('.cp-lent-at') as HTMLInputElement).value = '';
+            (block.querySelector('.cp-lent-note') as HTMLInputElement).value = '';
+            return;
+        }
+        if (target.closest('.cp-del')) {
+            if (!copyId) { block.remove(); return; } // unsaved
+            if (!confirm2('Bu kopya silinsin mi?')) return;
+            const res = await fetch(`/api/admin/copies?id=${encodeURIComponent(copyId)}`, { method: 'DELETE' });
+            const data: any = await res.json();
+            if (res.ok) { renderCopies(data.book); upsertRow(data.book); } else setStatus('Kopya silinemedi.');
+            return;
+        }
+        if (target.closest('.cp-save')) {
+            const payload: any = {
+                bookcase: q('.cp-bookcase'), shelf: q('.cp-shelf'), copy_note: q('.cp-copy-note'),
+                lent_to: q('.cp-lent-to'), lent_at: q('.cp-lent-at'), lent_note: q('.cp-lent-note'),
+            };
+            let res: Response;
+            if (copyId) {
+                payload.id = Number(copyId);
+                res = await fetch('/api/admin/copies', { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+            } else {
+                payload.slug = editingSlug;
+                res = await fetch('/api/admin/copies', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+            }
+            const data: any = await res.json();
+            if (res.ok) { renderCopies(data.book); upsertRow(data.book); $('e-status-msg')!.textContent = 'Kopya kaydedildi.'; }
+            else setStatus('Kopya kaydedilemedi.');
+        }
+    });
+
+    // ---- list actions (delegated) ----
+    $('admin-list')!.addEventListener('click', async (e) => {
+        const target = e.target as HTMLElement;
+        const row = target.closest('.admin-row') as HTMLElement | null;
+        if (!row) return;
+        const slug = row.dataset.slug!;
+        if (target.closest('.row-edit')) {
+            openEdit(slug);
+        } else if (target.closest('.row-del')) {
+            const title = row.querySelector('a')?.textContent || slug;
+            if (!confirm2(`“${title}” (tüm kopyalarıyla) silinsin mi?`)) return;
+            const res = await fetch(`/api/admin/books?slug=${encodeURIComponent(slug)}`, { method: 'DELETE' });
+            if (res.ok) { row.remove(); total.textContent = String(Math.max(0, Number(total.textContent || '1') - 1)); }
+            else setStatus('Silinemedi.');
+        }
+    });
+
+    // ---- browse by location (shows a cube's contents, back row included) ----
+    $('loc-bookcase')!.addEventListener('change', async (e) => {
+        const bc = (e.target as HTMLSelectElement).value;
+        const out = $('loc-results')!;
+        if (!bc) { out.innerHTML = ''; return; }
+        out.textContent = 'Yükleniyor…';
+        try {
+            const res = await fetch(`/api/admin/copies?bookcase=${encodeURIComponent(bc)}`);
+            const data: any = await res.json();
+            if (!res.ok) { out.textContent = 'Yüklenemedi.'; return; }
+            if (!data.copies.length) { out.textContent = 'Bu kitaplıkta kopya yok.'; return; }
+            const groups: Record<string, any[]> = {};
+            for (const c of data.copies) (groups[c.shelf || '(raf belirtilmemiş)'] ??= []).push(c);
+            out.innerHTML = Object.entries(groups).map(([shelf, items]) =>
+                `<div class="mb-3"><div class="text-xs font-medium text-[var(--color-ink-mute)]">${esc(shelf)} · ${items.length}</div>` +
+                `<ul class="mt-1 divide-y divide-[var(--color-rule)]">` +
+                items.map((c) =>
+                    `<li class="flex items-center gap-2 py-1"><a href="/kitaplik/${esc(c.slug)}" class="min-w-0 flex-1 truncate hover:text-[var(--color-accent)]">${esc(c.title)}</a>` +
+                    (c.copy_note ? `<span class="shrink-0 text-xs text-[var(--color-ink-mute)]">${esc(c.copy_note)}</span>` : '') +
+                    (c.lent_to ? `<span class="shrink-0 text-xs text-amber-700 dark:text-amber-400">📕 ${esc(c.lent_to)}</span>` : '') +
+                    `</li>`).join('') +
+                `</ul></div>`,
+            ).join('');
+        } catch { out.textContent = 'Ağ hatası.'; }
+    });
+
+    // ---- list filter ----
+    function foldTr(s: string) {
+        return s.toLocaleLowerCase('tr').replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i')
+            .replace(/i̇/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u');
+    }
+    $('admin-filter')!.addEventListener('input', (e) => {
+        const query = foldTr((e.target as HTMLInputElement).value.trim());
+        for (const row of Array.from(document.querySelectorAll<HTMLElement>('.admin-row'))) {
+            row.style.display = !query || (row.dataset.search || '').includes(query) ? '' : 'none';
+        }
+    });
+</script>

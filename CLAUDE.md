@@ -14,9 +14,14 @@ This is a **fresh Astro 5 rebuild** of an earlier Docusaurus site at the same do
 - `pnpm dev` — Astro dev server at `http://localhost:4321`.
 - `pnpm build` — runs `astro check` (type-checks frontmatter + content) then `astro build` into `./dist`.
 - `pnpm preview` — serves the built site for a final look.
-- `pnpm deploy` — build + `wrangler deploy`.
+- `pnpm deploy` — build + `wrangler deploy`. **No longer a pure static upload** — it deploys a Worker (the `@astrojs/cloudflare` adapter) with D1 + R2 bindings. Most pages are still prerendered; only the library + `/admin` routes are server-rendered.
 - `pnpm deploy:dry` — build + `wrangler deploy --dry-run` (use before any production deploy).
 - `pnpm import` — re-runs the one-shot Docusaurus → Astro importer. Idempotent. Reads from `../notlar.im-docusaurus-backup/`.
+- **Library (D1) commands:**
+  - `pnpm enrich-books` — (legacy) rebuild `src/data/books.json` + covers from the CSV. The live catalogue now lives in D1; this is only used to regenerate the seed.
+  - `pnpm export-books-sql` — regenerate `db/seed.sql` from `books.json` (preserving the original slugs).
+  - `pnpm db:schema:remote` / `pnpm db:seed:remote` — apply `db/schema.sql` / `db/seed.sql` to the production D1 (`:local` variants seed the dev DB used by `pnpm dev`).
+  - `pnpm upload-covers-r2` — one-shot: upload `public/covers/*.jpg` into the R2 bucket (already run during the D1 migration; `public/covers/` has since been removed).
 
 ## Architecture
 
@@ -34,7 +39,22 @@ This is a **fresh Astro 5 rebuild** of an earlier Docusaurus site at the same do
 - **`src/layouts/Page.astro`** — single top-level layout with nav, footer, OG/Twitter meta, RSS link. All pages use it.
 - **`src/styles/global.css`** — Tailwind v4 entry + `.prose` class for rendered markdown body. Bespoke not `@tailwindcss/typography`; keeps the rules small and editable.
 - **`scripts/import-from-docusaurus.mjs`** — one-shot importer. Documented inline. Run via `pnpm import`. Handles Docusaurus quirks (`<!--truncate-->`, epoch-as-draft-sentinel dates, `⚠️ Taslak` titles).
-- **`wrangler.jsonc`** — Cloudflare Workers Static Assets config. `workers_dev: true` initially; custom-domain routes for `notlar.im` + `www.notlar.im` are commented out until we're ready to flip DNS off the old host.
+- **`wrangler.jsonc`** — Worker config. The site is a Worker (`main: ./dist/_worker.js/index.js`) with Static Assets (`assets.binding: ASSETS`), a D1 binding (`DB` → `notlar-library`), an R2 binding (`COVERS` → `notlar-covers`), and the `notlar.im` / `www.notlar.im` custom-domain routes (live). `public/.assetsignore` keeps `_worker.js`/`_routes.json` from being uploaded as public assets.
+
+## Kitaplık (library): D1 + R2 + /admin
+
+The library is **not** content-collection markdown — it's structured data in Cloudflare D1, the one piece of the site that's server-rendered.
+
+- **Source of truth:** D1 database `notlar-library`, table `books` (`db/schema.sql`). Originally seeded (182 books) from `src/data/library.csv` → `books.json` → `db/seed.sql`. The CSV/`books.json` are now just the historical seed; edits happen through `/admin` (or SQL).
+- **Covers:** R2 bucket `notlar-covers`, one object per ISBN (`<isbn>.jpg`), served by `src/pages/covers/[...key].ts` with an immutable cache header. (The old in-repo `public/covers/` was migrated into R2 and deleted.)
+- **Reads (`src/lib/books.ts`):** `listBooks`/`getBookBySlug`/`findByIsbn` query `Astro.locals.runtime.env.DB`. Slug rule is unchanged (ISBN-13 → ISBN-10 → title-slug, `-n` on collision) and persisted in the `slug` column, so existing book URLs survive.
+- **Books + copies model (important):** a book is a **bibliographic record** (`books`: title/author/isbn/publisher/year/pages/description/cover, plus `status` as a reading-status enum `okunmadi`/`okunuyor`/`okundu` and `rating` 1–5 — these are about the *work*). Each **physical copy** is a row in `copies` (FK `book_id`) carrying `bookcase`/`shelf` (location), `lent_to`/`lent_at`/`lent_note` (current loan), `copy_note` ("imzalı", "2. baskı"). A book can have several copies in different places, one lent and one not.
+- **Visibility:** two read shapes in `books.ts`. The **public** shape (`listBooks`/`getBookBySlug` → `Book`/`BookWithSlug`) gives `copies: PublicCopy[]` (location + per-copy `isLent` only) and a book-level `isLent` — it never exposes `lent_to`/`lent_note`. The **admin** shape (`getBookForAdmin` → `AdminBook`) carries full per-copy loan + notes. Work edits → `updateBook`; copy add/edit/delete → `addCopy`/`updateCopy`/`deleteCopy` (clearing `lent_to` returns a copy and nulls its loan). Deleting a book also deletes its copies (handled in code, not relying on FK cascade).
+- **Migrations:** `0002_home_library.sql` (location/loan/rating/notes), `0003_copies.sql` (split into books+copies, backfilling one copy per book, dropping the moved columns from `books`). Apply with `pnpm db:migrate:remote` / `pnpm db:copies:remote`; **local D1 rejects multi-statement DDL files**, so apply those statements individually with `--command`.
+- **SSR pages (`export const prerender = false`):** `kitaplik.astro`, `en/library.astro`, `kitaplik/[slug].astro`, `en/library/[slug].astro`, `covers/[...key].ts`, `admin/index.astro`, `api/admin/*`. A missing slug renders an inline 404 state (you can't `Astro.rewrite` to the prerendered `/404`).
+- **`/admin`** (`src/pages/admin/index.astro`, Turkish-only, `noindex`): a ZXing camera scanner → `GET /api/admin/lookup?isbn=` (Open Library + Google Books fallback, `src/lib/openlibrary.ts`) → confirm (optionally shelve) → `POST /api/admin/books`. **Re-scanning a known ISBN adds another copy** to that book (no more 409). Each list row has **Düzenle** → `GET /api/admin/books?slug=` populates an edit panel: work fields (`PUT /api/admin/books`) + a per-copy section where each copy's location/loan/copy-note is managed via `/api/admin/copies` (`POST` add, `PUT` update, `DELETE` remove). `DELETE /api/admin/books?slug=` removes the book, all copies, and the cover. Bookcase names come from a `<datalist>` (`listBookcases`) for consistent naming.
+- **Auth (`src/middleware.ts`):** `/admin*` + `/api/admin*` require a valid Cloudflare Access JWT (verified against `CF_ACCESS_TEAM_DOMAIN` + `CF_ACCESS_AUD`). **Fail-closed:** until those vars are set it returns 503, so the admin is never accidentally open (closes the `*.workers.dev` bypass too). Local `pnpm dev` skips the check.
+- **Local dev:** `platformProxy` gives `pnpm dev` a local D1/R2 — seed it with `pnpm db:schema:local && pnpm db:seed:local`. Note R2 **binary** doesn't round-trip through the dev proxy (you'll see miniflare "Cannot stringify non-POJOs"); verify cover read/write with `wrangler dev --remote` instead.
 
 ## Conventions
 
@@ -65,6 +85,10 @@ No sidebar config. No plugin churn. No CMS.
 - **Real OG image.** Currently no preview image; sites that unfurl will use the favicon. Add a 1200×630 PNG at `public/og-default.png` and reference it in `src/layouts/Page.astro`.
 - **MDX components.** If you want admonitions / callouts (`<Note>`, `<Warning>`), add them as Astro components under `src/components/` and `import` them at the top of any `.mdx`.
 - **Pagination on /blog and /notlar.** Currently they list everything. Fine at 24 + 4 entries; add pagination if it grows past ~80.
+- **Cloudflare Access for `/admin` (REQUIRED before the admin is usable).** The middleware fails closed, so `/admin` returns 503 until this is done:
+  1. Zero Trust dashboard → Access → Applications → add a self-hosted app for `notlar.im/admin*` (and `notlar.im/api/admin*`), policy = allow your email.
+  2. Copy the app's **Application Audience (AUD) tag** and your team domain (`<team>.cloudflareaccess.com`) into the `vars` block of `wrangler.jsonc` (`CF_ACCESS_AUD`, `CF_ACCESS_TEAM_DOMAIN`), then `pnpm exec wrangler types` + `pnpm deploy`.
+- **Admin editing.** `/admin` can scan-add and delete; editing an existing book's fields isn't built yet (add a `PUT /api/admin/books`).
 
 ## Don't
 

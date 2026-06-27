@@ -1,0 +1,7 @@
+# Copied to dist/ on every build. The @astrojs/cloudflare adapter emits a
+# Pages-style layout, but we deploy as a Worker with Static Assets
+# (wrangler deploy + main). These must NOT be uploaded as public assets:
+#   _worker.js   — the Worker code itself (served via `main`, not assets)
+#   _routes.json — Pages-only routing manifest, ignored by the Workers runtime
+_worker.js
+_routes.json

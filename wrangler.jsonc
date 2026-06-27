@@ -8,10 +8,55 @@
   "observability": {
     "enabled": true
   },
+  // The site is no longer pure static assets: the @astrojs/cloudflare adapter
+  // emits a Worker (dist/_worker.js) that prerenders most pages but
+  // server-renders the library + /admin routes. Static assets are served via
+  // the ASSETS binding; anything not in dist falls through to the Worker.
+  "main": "./dist/_worker.js/index.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    // The library + admin routes are server-rendered (no static asset). With
+    // `404-page`, an HTML navigation to a path with no asset can be served the
+    // static 404 instead of falling through to the Worker (most visible behind
+    // Cloudflare Access). Force the Worker to run first for every dynamic route
+    // so SSR always wins; everything else stays asset-served.
+    "run_worker_first": [
+      "/admin",
+      "/api/admin/*",
+      "/kitaplik",
+      "/kitaplik/*",
+      "/en/library",
+      "/en/library/*",
+      "/covers/*"
+    ]
+  },
+  // Library catalogue (books) — the source of truth that /kitaplik, /library
+  // and /admin read & write. Seeded once from src/data/library.csv.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "notlar-library",
+      "database_id": "1328e637-613e-4c2d-b156-307c7a9c6b31"
+    }
+  ],
+  // Book cover images, fetched from Open Library at scan time and served via
+  // the /covers/<key> route. Replaces the old in-repo public/covers/.
+  "r2_buckets": [
+    {
+      "binding": "COVERS",
+      "bucket_name": "notlar-covers"
+    }
+  ],
+  // Cloudflare Access (Zero Trust) protects /admin* and /api/admin* at the
+  // edge. The middleware additionally verifies the Access JWT against these.
+  // Fill CF_ACCESS_AUD after creating the Access application in the dashboard
+  // (Zero Trust → Access → Applications → your app → Application Audience tag).
+  "vars": {
+    "CF_ACCESS_TEAM_DOMAIN": "bcadev.cloudflareaccess.com",
+    "CF_ACCESS_AUD": "f7ed8d7acc673fdf3835f4e818955217206b7b39e3a82001bc019f93d021b4bb"
   },
   "routes": [
     { "pattern": "notlar.im", "custom_domain": true },

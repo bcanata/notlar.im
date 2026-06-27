@@ -1,37 +1,60 @@
 ---
+export const prerender = false; // looks the book up in D1 by slug
+
 import Page from '../../layouts/Page.astro';
-import { allBooks, type BookWithSlug } from '../../lib/books';
+import { getBookBySlug } from '../../lib/books';
 import { t } from '../../lib/i18n';
 
-export function getStaticPaths() {
-    return allBooks().map((book) => ({
-        params: { slug: book.slug },
-        props: { book },
-    }));
-}
-
-const { book } = Astro.props as { book: BookWithSlug };
 const lang = 'tr' as const;
-const isbn = book.isbn13 || book.isbn10;
+const { slug } = Astro.params;
+const book = slug ? await getBookBySlug(Astro.locals.runtime.env.DB, slug) : null;
+// Can't rewrite an on-demand route to the prerendered /404, so render a
+// not-found state inline with a real 404 status instead.
+if (!book) Astro.response.status = 404;
+
+const isbn = book ? book.isbn13 || book.isbn10 : null;
 const olUrl = isbn ? `https://openlibrary.org/isbn/${isbn}` : null;
 
+const copyCount = book ? book.copies.length : 0;
+const locations = book
+    ? [...new Set(book.copies.map((c) => [c.bookcase, c.shelf].filter(Boolean).join(' · ')).filter(Boolean))]
+    : [];
+
 const meta: { label: string; value: string }[] = [];
-if (book.publisher) meta.push({ label: t(lang, 'book_publisher'), value: book.publisher });
-if (book.year) meta.push({ label: t(lang, 'book_year'), value: String(book.year) });
-if (book.pages) meta.push({ label: t(lang, 'book_pages'), value: String(book.pages) });
-if (book.isbn13) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn13 });
-else if (book.isbn10) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn10 });
+if (book) {
+    if (locations.length) meta.push({ label: t(lang, 'book_location'), value: locations.join('; ') });
+    if (book.publisher) meta.push({ label: t(lang, 'book_publisher'), value: book.publisher });
+    if (book.year) meta.push({ label: t(lang, 'book_year'), value: String(book.year) });
+    if (book.pages) meta.push({ label: t(lang, 'book_pages'), value: String(book.pages) });
+    if (book.isbn13) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn13 });
+    else if (book.isbn10) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn10 });
+}
+
+// Reading-status label (literal keys keep t()'s typing happy) + star string.
+const reading = !book ? null
+    : book.status === 'okunuyor' ? t(lang, 'read_okunuyor')
+    : book.status === 'okundu' ? t(lang, 'read_okundu')
+    : book.status === 'okunmadi' ? t(lang, 'read_okunmadi')
+    : null;
+const stars = book?.rating ? '★'.repeat(book.rating) + '☆'.repeat(Math.max(0, 5 - book.rating)) : null;
 ---
 
 <Page
-    title={book.title}
-    description={book.description ?? `${book.title}${book.author ? ' — ' + book.author : ''}`}
+    title={book ? book.title : 'Kitap bulunamadı'}
+    description={book ? (book.description ?? `${book.title}${book.author ? ' — ' + book.author : ''}`) : undefined}
     lang={lang}
+    noindex={!book}
 >
     <p class="mb-8 text-sm">
         <a href="/kitaplik" class="text-[var(--color-ink-soft)] hover:text-[var(--color-ink)] hover:underline">{t(lang, 'books_back')}</a>
     </p>
 
+    {!book ? (
+        <section class="py-12">
+            <h1 class="display-title text-3xl">Kitap bulunamadı</h1>
+            <p class="mt-3 text-[var(--color-ink-soft)]">Aradığınız kitap kütüphanede yok.</p>
+        </section>
+    ) : (
     <article class="flex flex-col gap-8 sm:flex-row sm:gap-10">
         <div class="shrink-0 sm:w-56">
             <div class="relative aspect-[2/3] overflow-hidden rounded-sm shadow-[0_4px_16px_rgba(0,0,0,0.16)] ring-1 ring-black/5">
@@ -53,6 +76,23 @@ else if (book.isbn10) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn1
             <h1 class="post-title text-3xl leading-tight sm:text-4xl">{book.title}</h1>
             {book.author && (
                 <p class="mt-2 text-lg text-[var(--color-ink-soft)]">{book.author}</p>
+            )}
+
+            {(reading || stars || book.isLent) && (
+                <div class="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                    {reading && (
+                        <span class="rounded-full bg-[var(--color-paper-soft)] px-2.5 py-0.5 text-[var(--color-ink-soft)] ring-1 ring-[var(--color-rule)]">{reading}</span>
+                    )}
+                    {stars && (
+                        <span class="rounded-full bg-[var(--color-paper-soft)] px-2.5 py-0.5 text-[var(--color-accent)] ring-1 ring-[var(--color-rule)]" title={`${book.rating}/5`}>{stars}</span>
+                    )}
+                    {book.isLent && (
+                        <span class="rounded-full bg-amber-100 px-2.5 py-0.5 text-amber-900 ring-1 ring-amber-200 dark:bg-amber-900/30 dark:text-amber-200 dark:ring-amber-800/50">{t(lang, 'book_lent')}</span>
+                    )}
+                    {copyCount > 1 && (
+                        <span class="rounded-full bg-[var(--color-paper-soft)] px-2.5 py-0.5 text-[var(--color-ink-soft)] ring-1 ring-[var(--color-rule)]">{t(lang, 'book_copies', { n: String(copyCount) })}</span>
+                    )}
+                </div>
             )}
 
             {meta.length > 0 && (
@@ -79,4 +119,5 @@ else if (book.isbn10) meta.push({ label: t(lang, 'book_isbn'), value: book.isbn1
             )}
         </div>
     </article>
+    )}
 </Page>

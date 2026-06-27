@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -11,6 +12,17 @@ const SITE = 'https://notlar.im';
 
 export default defineConfig({
     site: SITE,
+    /*
+     * Output stays 'static' (the default): every page is prerendered at build
+     * time as before. The handful of routes that need a live D1/R2 binding —
+     * the library feed, per-book pages, /admin and /api/admin — opt out with
+     * `export const prerender = false`. The Cloudflare adapter compiles those
+     * into the Worker; `platformProxy` wires the wrangler.jsonc bindings (DB,
+     * COVERS) into `astro dev` so local dev hits a local D1/R2.
+     */
+    adapter: cloudflare({
+        platformProxy: { enabled: true },
+    }),
     i18n: {
         defaultLocale: 'tr',
         locales: ['tr', 'en'],
@@ -40,6 +52,14 @@ export default defineConfig({
     integrations: [mdx(), sitemap()],
     vite: {
         plugins: [tailwindcss()],
+        ssr: {
+            // canvaskit-wasm (via astro-og-canvas, used by the build-time
+            // /og/<slug>.png prerender) relies on the CJS __dirname global to
+            // locate its .wasm. Once the Cloudflare adapter bundles it into the
+            // ESM worker, __dirname is undefined and the prerender crashes.
+            // Keeping it external loads it as a real Node module at build time.
+            external: ['canvaskit-wasm'],
+        },
     },
     markdown: {
         /*
