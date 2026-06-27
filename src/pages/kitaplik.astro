@@ -3,6 +3,7 @@ export const prerender = false; // reads the live D1 catalogue
 
 import Page from '../layouts/Page.astro';
 import BookGrid from '../components/BookGrid.astro';
+import ClosetView from '../components/ClosetView.astro';
 import { listBooks } from '../lib/books';
 import { t } from '../lib/i18n';
 
@@ -17,16 +18,49 @@ const books = await listBooks(Astro.locals.runtime.env.DB);
     lang={lang}
     altLangUrl="/en/library"
 >
-    <section class="mb-8">
-        <h1 class="display-title text-3xl">{t(lang, 'books_title')}</h1>
+    <section class="mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <h1 class="display-title text-3xl">{t(lang, 'books_title')}</h1>
+            <div class="inline-flex rounded-full border border-[var(--color-rule)] bg-[var(--color-paper-soft)] p-0.5 text-sm" role="tablist">
+                <button id="view-covers" type="button" class="rounded-full px-3 py-1 font-medium" aria-selected="true">Kapak</button>
+                <button id="view-spines" type="button" class="rounded-full px-3 py-1 text-[var(--color-ink-soft)]" aria-selected="false">Sırt</button>
+            </div>
+        </div>
         <p class="mt-2 max-w-prose text-[var(--color-ink-soft)]">{t(lang, 'books_tagline')}</p>
     </section>
 
-    <BookGrid
-        books={books}
-        base="/kitaplik"
-        searchPlaceholder={t(lang, 'books_search_placeholder')}
-        countLabel={t(lang, 'books_count', { n: '{n}' })}
-        noResultsLabel={t(lang, 'books_no_results')}
-    />
+    <div id="covers-view">
+        <BookGrid
+            books={books}
+            base="/kitaplik"
+            searchPlaceholder={t(lang, 'books_search_placeholder')}
+            countLabel={t(lang, 'books_count', { n: '{n}' })}
+            noResultsLabel={t(lang, 'books_no_results')}
+        />
+    </div>
+
+    <ClosetView books={books} />
 </Page>
+
+<script>
+    const coversBtn = document.getElementById('view-covers')!;
+    const spinesBtn = document.getElementById('view-spines')!;
+    const coversView = document.getElementById('covers-view')!;
+    const closet = document.getElementById('closet')!;
+
+    function select(spines: boolean) {
+        coversView.hidden = spines;
+        closet.hidden = !spines;
+        coversBtn.setAttribute('aria-selected', String(!spines));
+        spinesBtn.setAttribute('aria-selected', String(spines));
+        coversBtn.classList.toggle('bg-[var(--color-paper)]', !spines);
+        coversBtn.classList.toggle('text-[var(--color-ink-soft)]', spines);
+        spinesBtn.classList.toggle('bg-[var(--color-paper)]', spines);
+        spinesBtn.classList.toggle('text-[var(--color-ink-soft)]', !spines);
+        if (spines) (window as any).initCloset?.();
+    }
+    coversBtn.addEventListener('click', () => select(false));
+    spinesBtn.addEventListener('click', () => select(true));
+    // Honour #closet (or #spines) in the URL for a direct link to the shelf view.
+    if (location.hash === '#closet' || location.hash === '#spines') select(true);
+</script>

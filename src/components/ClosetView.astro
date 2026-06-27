@@ -1,0 +1,345 @@
+---
+/*
+ * "Closet" — an immersive, CSS-3D walk-in view of the library. Spines stand on
+ * shelves down a two-walled aisle; the mouse looks around, scroll/drag walks
+ * deeper, and clicking a spine pulls the case to inspect the cover.
+ *
+ * No 3D engine — just `perspective` + transformed DOM, the same technique as the
+ * Criterion Closet reference. Built lazily on first activation (see init()).
+ *
+ * Data is embedded as compact JSON; the client computes spine colour (a stable
+ * tint), thickness (from page count) and 3D placement.
+ */
+import type { BookWithSlug } from '../lib/books';
+
+interface Props {
+    books: BookWithSlug[];
+}
+const { books } = Astro.props;
+
+// Compact payload: slug, title, author, cover, pages.
+const data = books.map((b) => ({ s: b.slug, t: b.title, a: b.author, c: b.cover, p: b.pages }));
+---
+
+<div id="closet" class="closet" hidden>
+    <div class="closet-scene" id="closet-scene">
+        <div class="closet-world" id="closet-world"></div>
+    </div>
+    <p class="closet-hint">Fareyle bak · kaydırarak ilerle · sırta tıkla</p>
+
+    <div class="closet-case" id="closet-case" hidden>
+        <div class="cc-backdrop" data-cc-close></div>
+        <div class="cc-card" role="dialog" aria-modal="true">
+            <div class="cc-cover" id="cc-cover"></div>
+            <div class="cc-meta">
+                <h3 id="cc-title"></h3>
+                <p id="cc-author"></p>
+                <a id="cc-link" class="cc-link" href="#">Kitap sayfası →</a>
+            </div>
+            <button class="cc-close" id="cc-close" aria-label="Kapat" data-cc-close>×</button>
+        </div>
+    </div>
+</div>
+
+<script type="application/json" id="closet-data" set:html={JSON.stringify(data)}></script>
+
+<style is:global>
+    /* Global (not Astro-scoped): the spines are created at runtime via JS, so
+       they can't carry the component's scoped attribute. Everything generic is
+       namespaced under .closet to avoid leaking into the rest of the site. */
+    .closet { position: relative; }
+    .closet-scene {
+        position: relative;
+        height: min(78vh, 720px);
+        overflow: hidden;
+        border-radius: 12px;
+        background:
+            radial-gradient(120% 95% at 50% 48%, #4a3a28 0%, #261d14 52%, #100b07 100%);
+        perspective: 820px;
+        perspective-origin: 50% 50%;
+        cursor: grab;
+        touch-action: none;
+        box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7);
+    }
+    .closet-scene:active { cursor: grabbing; }
+    .closet-world {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+        will-change: transform;
+    }
+    .closet .panel, .closet .floor, .closet .spine {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: center;
+    }
+    .closet .panel {
+        background:
+            repeating-linear-gradient(transparent 0 var(--row), rgba(0,0,0,0.5) var(--row) calc(var(--row) + 14px)),
+            linear-gradient(90deg, #4b3925, #5c4730 50%, #3c2c1c);
+        backface-visibility: hidden;
+        box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.55);
+    }
+    .closet .floor {
+        background: linear-gradient(#241a11, #120d08);
+    }
+    .closet .spine {
+        cursor: pointer;
+        overflow: hidden; /* clip the title to our box so it can't corrupt the 3D projection */
+        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.15s;
+        color: rgba(255, 255, 255, 0.92);
+    }
+    .closet .spine-face {
+        position: absolute;
+        inset: 0;
+        border-radius: 1px 2px 2px 1px;
+        box-shadow: inset -3px 0 6px rgba(0, 0, 0, 0.45), inset 2px 0 2px rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .closet .spine-title {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        white-space: nowrap;
+        font: 600 11px/1 var(--font-sans, system-ui);
+        letter-spacing: 0.02em;
+        max-height: 92%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        padding: 6px 0;
+    }
+    .closet .spine:hover { filter: brightness(1.4); z-index: 1; }
+
+    /* Pulled case overlay */
+    .closet-case { position: absolute; inset: 0; display: grid; place-items: center; z-index: 5; }
+    .cc-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(2px); }
+    .cc-card {
+        position: relative;
+        display: flex;
+        gap: 1.25rem;
+        max-width: 30rem;
+        margin: 1rem;
+        padding: 1.25rem;
+        border-radius: 12px;
+        background: var(--color-paper, #fbf8f2);
+        color: var(--color-ink, #1a1612);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+    .cc-cover {
+        flex: 0 0 7.5rem;
+        aspect-ratio: 2 / 3;
+        border-radius: 4px;
+        overflow: hidden;
+        background: var(--color-paper-soft, #efeae0);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        display: flex; align-items: center; justify-content: center;
+    }
+    .cc-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .cc-meta { min-width: 0; align-self: center; }
+    .cc-meta h3 { font-size: 1.1rem; line-height: 1.25; }
+    .cc-meta p { margin-top: 0.25rem; color: var(--color-ink-soft, #5a534a); font-size: 0.9rem; }
+    .cc-link { display: inline-block; margin-top: 0.75rem; color: var(--color-accent, #9a3b2e); text-decoration: underline; font-size: 0.9rem; }
+    .cc-close {
+        position: absolute; top: 0.4rem; right: 0.6rem;
+        font-size: 1.4rem; line-height: 1; color: var(--color-ink-mute, #8a8278);
+        background: none; border: none; cursor: pointer;
+    }
+    .closet-hint {
+        margin-top: 0.6rem;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--color-ink-mute);
+    }
+    .closet [hidden], #closet[hidden] { display: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+        .closet-world, .closet .spine { transition: none; }
+    }
+</style>
+
+<script>
+    interface CBook { s: string; t: string; a: string | null; c: string | null; p: number | null; }
+
+    const TINTS = ['#7c4a36', '#5f5f33', '#3f5d4a', '#4a4a6e', '#6e3f4f', '#345463', '#6e5e30', '#503f5f', '#704638', '#3a5a5a'];
+    function tintFor(s: string): string {
+        let h = 0;
+        for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+        return TINTS[h % TINTS.length];
+    }
+    const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+
+    // ---- geometry (tunable) ----
+    const HALF = 300;       // half aisle width (distance to each wall)
+    const NEAR = 200;       // nearest shelf depth — kept well in front of the eye
+    const PITCH = 76;       // depth between spines
+    const BOOK_H = 150;     // spine height
+    const ROW_PITCH = 176;  // vertical distance between shelves
+
+    let built = false;
+    let look = { x: 0, y: 0 };
+    let walk = 0;
+    let maxWalk = 0;
+    let raf = 0;
+
+    const $ = (id: string) => document.getElementById(id)!;
+
+    function initCloset() {
+        if (built) return;
+        built = true;
+        const world = $('closet-world');
+        const data: CBook[] = JSON.parse($('closet-data').textContent || '[]');
+
+        const perWall = Math.ceil(data.length / 2);
+        const rows = clamp(Math.round(perWall / 34), 2, 4);
+        const perShelf = Math.max(1, Math.ceil(perWall / rows));
+        const DEPTH = perShelf * PITCH;
+        const WALLH = rows * ROW_PITCH;
+        const CZ = NEAR + DEPTH / 2;       // centre depth (negated when applied)
+        maxWalk = Math.max(0, DEPTH - 280);
+        world.style.setProperty('--row', ROW_PITCH + 'px');
+
+        // Enclosure placed directly in world space (all at negative Z so nothing
+        // crosses the eye): two side panels with shelf lines, plus floor + ceiling.
+        world.appendChild(panel(-1, DEPTH, WALLH, CZ));
+        world.appendChild(panel(1, DEPTH, WALLH, CZ));
+        world.appendChild(plane(HALF * 2, DEPTH, WALLH / 2, CZ));   // floor
+        world.appendChild(plane(HALF * 2, DEPTH, -WALLH / 2, CZ));  // ceiling
+
+        // Spines: first half on the left wall, second half on the right.
+        const place = (books: CBook[], sign: number) => {
+            books.forEach((b, i) => {
+                const r = Math.floor(i / perShelf);
+                const col = i % perShelf;
+                const thick = clamp(Math.round((b.p || 240) / 11), 16, 46);
+                const x = sign * (HALF - 1);
+                const y = -WALLH / 2 + r * ROW_PITCH + ROW_PITCH / 2;
+                const z = -(NEAR + col * PITCH + thick / 2);
+                world.appendChild(makeSpine(b, x, y, z, sign < 0 ? 90 : -90, thick));
+            });
+        };
+        place(data.slice(0, perWall), -1);
+        place(data.slice(perWall), 1);
+
+        apply();
+    }
+
+    // Centre an element on the scene's mid-point via margins, then place it
+    // purely in 3D (mixing percentage + 3D translate breaks the projection).
+    function centre(el: HTMLElement, w: number, h: number) {
+        el.style.width = w + 'px';
+        el.style.height = h + 'px';
+        el.style.marginLeft = -w / 2 + 'px';
+        el.style.marginTop = -h / 2 + 'px';
+    }
+
+    function panel(sign: number, depth: number, h: number, cz: number): HTMLElement {
+        const p = document.createElement('div');
+        p.className = 'panel';
+        centre(p, depth, h);
+        p.style.transform = `translate3d(${sign * HALF}px, 0px, ${-cz}px) rotateY(${sign < 0 ? 90 : -90}deg)`;
+        return p;
+    }
+
+    function plane(w: number, depth: number, y: number, cz: number): HTMLElement {
+        const el = document.createElement('div');
+        el.className = 'floor';
+        centre(el, w, depth);
+        el.style.transform = `translate3d(0px, ${y}px, ${-cz}px) rotateX(90deg)`;
+        return el;
+    }
+
+    function makeSpine(b: CBook, x: number, y: number, z: number, ry: number, thick: number): HTMLElement {
+        const spine = document.createElement('div');
+        spine.className = 'spine';
+        centre(spine, thick, BOOK_H);
+        spine.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${ry}deg)`;
+        spine.dataset.slug = b.s;
+        spine.dataset.title = b.t;
+        spine.dataset.author = b.a || '';
+        spine.dataset.cover = b.c || '';
+
+        const face = document.createElement('div');
+        face.className = 'spine-face';
+        const base = tintFor(b.t);
+        face.style.background = `linear-gradient(90deg, ${shade(base, 14)}, ${shade(base, -22)})`;
+        const title = document.createElement('span');
+        title.className = 'spine-title';
+        title.textContent = b.t;
+        face.appendChild(title);
+        spine.appendChild(face);
+        return spine;
+    }
+
+    function shade(hex: string, amt: number): string {
+        const n = parseInt(hex.slice(1), 16);
+        const r = clamp((n >> 16) + amt, 0, 255);
+        const g = clamp(((n >> 8) & 255) + amt, 0, 255);
+        const b = clamp((n & 255) + amt, 0, 255);
+        return `rgb(${r},${g},${b})`;
+    }
+
+    function apply() {
+        const world = $('closet-world');
+        world.style.transform = `translateZ(${walk}px) rotateX(${look.x}deg) rotateY(${look.y}deg)`;
+    }
+
+    // ---- interaction ----
+    const scene = $('closet-scene');
+    scene.addEventListener('pointermove', (e) => {
+        const r = scene.getBoundingClientRect();
+        const nx = (e.clientX - r.left) / r.width - 0.5;
+        const ny = (e.clientY - r.top) / r.height - 0.5;
+        look.y = -nx * 42;
+        look.x = clamp(ny * 22 + 4, -16, 30);
+        if (!raf) raf = requestAnimationFrame(() => { raf = 0; apply(); });
+    });
+    scene.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        walk = clamp(walk + e.deltaY * 0.6, 0, maxWalk);
+        apply();
+    }, { passive: false });
+
+    // Click a spine → pull it forward and open the case.
+    scene.addEventListener('click', (e) => {
+        const spine = (e.target as HTMLElement).closest('.spine') as HTMLElement | null;
+        if (!spine) return;
+        openCase(spine);
+    });
+
+    function openCase(spine: HTMLElement) {
+        const cover = spine.dataset.cover;
+        const ccCover = $('cc-cover');
+        const placeholder = () => {
+            ccCover.innerHTML = `<span style="padding:.5rem;font:600 .8rem/1.2 var(--font-sans);text-align:center">${escapeHtml(spine.dataset.title || '')}</span>`;
+        };
+        if (cover) {
+            ccCover.innerHTML = '';
+            const img = document.createElement('img');
+            img.alt = '';
+            img.onerror = placeholder; // missing cover → show the title, not a broken icon
+            img.src = cover;
+            ccCover.appendChild(img);
+        } else {
+            placeholder();
+        }
+        $('cc-title').textContent = spine.dataset.title || '';
+        $('cc-author').textContent = spine.dataset.author || '';
+        ($('cc-link') as HTMLAnchorElement).href = `/kitaplik/${spine.dataset.slug}`;
+        $('closet-case').hidden = false;
+    }
+    function closeCase() { $('closet-case').hidden = true; }
+    $('closet-case').addEventListener('click', (e) => {
+        if ((e.target as HTMLElement).hasAttribute('data-cc-close')) closeCase();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCase(); });
+
+    function escapeHtml(s: string) {
+        return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
+    }
+
+    // Expose for the /kitaplik view toggle.
+    (window as any).initCloset = initCloset;
+</script>
