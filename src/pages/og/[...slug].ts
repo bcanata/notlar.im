@@ -10,27 +10,35 @@
 
 import { getCollection } from 'astro:content';
 import { OGImageRoute } from 'astro-og-canvas';
+import { t } from '../../lib/i18n';
 
 const posts = await getCollection('blog', (p) => !p.data.draft);
 
-const pages = Object.fromEntries(
-    posts.map((p) => [
-        p.id,
-        {
-            title: p.data.title,
-            description: p.data.description ?? p.data.excerpt ?? '',
-            lang: p.data.lang,
-            date: p.data.date.toISOString(),
-        },
-    ]),
-);
+const pages = {
+    ...Object.fromEntries(
+        posts.map((p) => [
+            p.id,
+            {
+                title: p.data.title,
+                description: p.data.description ?? p.data.excerpt ?? '',
+                lang: p.data.lang,
+                date: p.data.date.toISOString(),
+            },
+        ]),
+    ),
+    // Site-wide fallback card: Page.astro points non-article pages at /og/_default.png.
+    _default: {
+        title: 'notlar.im',
+        byline: t('tr', 'site_tagline'),
+    },
+};
 
 export const { getStaticPaths, GET } = await OGImageRoute({
     pages,
     param: 'slug',
     getImageOptions: (_path, page) => ({
         title: page.title,
-        description: 'notlar.im',
+        description: page.byline ?? 'notlar.im',
         bgGradient: [
             [255, 255, 255],
             [245, 245, 245],
@@ -41,17 +49,18 @@ export const { getStaticPaths, GET } = await OGImageRoute({
             side: 'inline-start',
         },
         padding: 80,
+        fonts: ['./src/fonts/Roboto-Regular.ttf', './src/fonts/Roboto-Bold.ttf'],
         font: {
             title: {
                 size: 64,
-                families: ['Georgia', 'Times New Roman', 'serif'],
+                families: ['Roboto'],
                 weight: 'Bold',
                 color: [17, 17, 17],
                 lineHeight: 1.15,
             },
             description: {
                 size: 28,
-                families: ['Helvetica', 'Arial', 'sans-serif'],
+                families: ['Roboto'],
                 color: [120, 120, 120],
                 lineHeight: 1.3,
             },
