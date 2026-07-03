@@ -14,7 +14,7 @@ This is a **fresh Astro 5 rebuild** of an earlier Docusaurus site at the same do
 - `pnpm dev` — Astro dev server at `http://localhost:4321`.
 - `pnpm build` — runs `astro check` (type-checks frontmatter + content) then `astro build` into `./dist`.
 - `pnpm preview` — serves the built site for a final look.
-- `pnpm deploy` — build + `wrangler deploy`. **No longer a pure static upload** — it deploys a Worker (the `@astrojs/cloudflare` adapter) with D1 + R2 bindings. Most pages are still prerendered; only the library + `/admin` routes are server-rendered.
+- `pnpm run deploy` — build + `wrangler deploy`. **Must be `pnpm run deploy`, not bare `pnpm deploy`** — `deploy` is a reserved pnpm builtin (workspace deploy) and fails with `ERR_PNPM_CANNOT_DEPLOY`. **No longer a pure static upload** — it deploys a Worker (the `@astrojs/cloudflare` adapter) with D1 + R2 bindings. Most pages are still prerendered; only the library + `/admin` routes are server-rendered.
 - `pnpm deploy:dry` — build + `wrangler deploy --dry-run` (use before any production deploy).
 - `pnpm import` — re-runs the one-shot Docusaurus → Astro importer. Idempotent. Reads from `../notlar.im-docusaurus-backup/`.
 - **Library (D1) commands:**
@@ -75,19 +75,19 @@ The whole point of this rebuild was that editing was too painful on Docusaurus. 
 1. Open any `.mdx` file in `src/content/blog/` or `src/content/notlar/`.
 2. Frontmatter is small. Body is plain Markdown (MDX optional if you need a component).
 3. Save. `pnpm dev` hot-reloads.
-4. Commit. `pnpm deploy`. Done.
+4. Commit. `pnpm run deploy`. Done.
 
 No sidebar config. No plugin churn. No CMS.
 
 ## Deferred work
 
-- **Custom-domain flip.** `notlar.im` + `www.notlar.im` DNS currently points elsewhere. When we're ready: uncomment the `routes` block in `wrangler.jsonc` and `pnpm deploy`. Cloudflare will repoint DNS at the same time — there's a brief outage moment.
+- **Custom-domain flip.** `notlar.im` + `www.notlar.im` DNS currently points elsewhere. When we're ready: uncomment the `routes` block in `wrangler.jsonc` and `pnpm run deploy`. Cloudflare will repoint DNS at the same time — there's a brief outage moment.
 - **Real OG image.** Currently no preview image; sites that unfurl will use the favicon. Add a 1200×630 PNG at `public/og-default.png` and reference it in `src/layouts/Page.astro`.
 - **MDX components.** If you want admonitions / callouts (`<Note>`, `<Warning>`), add them as Astro components under `src/components/` and `import` them at the top of any `.mdx`.
 - **Pagination on /blog and /notlar.** Currently they list everything. Fine at 24 + 4 entries; add pagination if it grows past ~80.
 - **Cloudflare Access for `/admin` (REQUIRED before the admin is usable).** The middleware fails closed, so `/admin` returns 503 until this is done:
   1. Zero Trust dashboard → Access → Applications → add a self-hosted app for `notlar.im/admin*` (and `notlar.im/api/admin*`), policy = allow your email.
-  2. Copy the app's **Application Audience (AUD) tag** and your team domain (`<team>.cloudflareaccess.com`) into the `vars` block of `wrangler.jsonc` (`CF_ACCESS_AUD`, `CF_ACCESS_TEAM_DOMAIN`), then `pnpm exec wrangler types` + `pnpm deploy`.
+  2. Copy the app's **Application Audience (AUD) tag** and your team domain (`<team>.cloudflareaccess.com`) into the `vars` block of `wrangler.jsonc` (`CF_ACCESS_AUD`, `CF_ACCESS_TEAM_DOMAIN`), then `pnpm exec wrangler types` + `pnpm run deploy`.
 - **Admin editing.** `/admin` can scan-add and delete; editing an existing book's fields isn't built yet (add a `PUT /api/admin/books`).
 
 ## Don't
