@@ -35,6 +35,8 @@ const { lang } = Astro.props;
 
     function open() {
         if (!modal) return;
+        // PagefindUI is lazy — first open triggers the actual JS/CSS fetch.
+        (window as unknown as { __initPagefind?: () => void }).__initPagefind?.();
         if (typeof modal.showModal === 'function') modal.showModal();
         else modal.setAttribute('open', '');
         // Try to focus the search input after PagefindUI mounts. The UI is

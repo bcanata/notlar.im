@@ -1,5 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
+import { person } from '../lib/jsonld';
 ---
 
 <Page
@@ -7,6 +8,7 @@ import Page from '../layouts/Page.astro';
     description="Buğra Canata kimdir — yazılımcı, amatör telsizci (TA1JS), bisikletçi."
     lang="tr"
     altLangUrl="/en/about"
+    schema={person()}
 >
     <section class="prose">
         <h1>Ben Kimim?</h1>

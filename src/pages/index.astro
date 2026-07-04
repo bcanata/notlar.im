@@ -4,6 +4,7 @@ import AiBadge from '../components/AiBadge.astro';
 import { buildFeed } from '../lib/feed';
 import { t } from '../lib/i18n';
 import { tagSlug } from '../lib/tags';
+import { webSite } from '../lib/jsonld';
 
 const lang = 'tr' as const;
 const feed = await buildFeed(lang);
@@ -20,6 +21,7 @@ const dateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
     description={t(lang, 'site_tagline')}
     lang={lang}
     altLangUrl="/en"
+    schema={webSite(lang)}
 >
     {/*
       Hero. The nav already carries the "notlar.im" wordmark, so the hero

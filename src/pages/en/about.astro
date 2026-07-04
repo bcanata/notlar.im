@@ -1,5 +1,6 @@
 ---
 import Page from '../../layouts/Page.astro';
+import { person } from '../../lib/jsonld';
 ---
 
 <Page
@@ -7,6 +8,7 @@ import Page from '../../layouts/Page.astro';
     description="Buğra Canata — freelance developer, amateur radio operator (TA1JS), cyclist."
     lang="en"
     altLangUrl="/hakkimda"
+    schema={person()}
 >
     <section class="prose">
         <h1>About</h1>

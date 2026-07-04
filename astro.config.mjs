@@ -49,7 +49,20 @@ export default defineConfig({
         '/en/blog/cycling-mobile-apps-en': '/en/blog/cycling-apps',
         '/en/notlar/cycling-mobile-apps-en': '/en/blog/cycling-apps',
     },
-    integrations: [mdx(), sitemap()],
+    integrations: [
+        mdx(),
+        /*
+         * Keep the private surfaces out of the sitemap. Deliberately NOT using
+         * the plugin's `i18n` option: it synthesizes alternates by swapping
+         * the locale prefix on the same path, but TR and EN posts have
+         * different slugs (/blog/bisiklet-uygulamalari vs
+         * /en/blog/cycling-apps), so it would emit hreflang links to URLs
+         * that don't exist. Page-level hreflang tags cover this instead.
+         */
+        sitemap({
+            filter: (page) => !page.includes('/admin') && !page.includes('/api/'),
+        }),
+    ],
     vite: {
         plugins: [tailwindcss()],
         ssr: {

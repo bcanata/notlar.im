@@ -17,9 +17,18 @@ interface Props {
     /** DOM id suffix to allow multiple boxes on one page (modal + page). */
     id?: string;
     autofocus?: boolean;
+    /**
+     * Initialise PagefindUI on page load. Only the standalone search pages
+     * (/ara, /en/search) set this; the site-wide modal's box waits until the
+     * modal first opens, so regular page views never fetch the Pagefind JS.
+     */
+    eager?: boolean;
 }
-const { lang, id = 'default', autofocus = false } = Astro.props;
-const mountId = `search-${id}`;
+const { lang, id = 'default', autofocus = false, eager = false } = Astro.props;
+// `pagefind-` prefix, not `search-`: the modal box (id="modal") would
+// otherwise collide with the <dialog id="search-modal"> wrapper and
+// PagefindUI would mount into the dialog root instead of this div.
+const mountId = `pagefind-${id}`;
 ---
 
 <div
@@ -27,6 +36,7 @@ const mountId = `search-${id}`;
     class="pagefind-mount"
     data-pagefind-lang={lang}
     data-autofocus={autofocus ? '1' : '0'}
+    data-search-eager={eager ? '1' : '0'}
 ></div>
 
 <script>
@@ -36,19 +46,26 @@ const mountId = `search-${id}`;
      * the small DOM glue.
      */
     type PagefindUIOptions = Record<string, unknown>;
+    interface PagefindUIInstance {
+        triggerSearch?: (term: string) => void;
+    }
     interface PagefindUIConstructor {
-        new (options: PagefindUIOptions): unknown;
+        new (options: PagefindUIOptions): PagefindUIInstance;
     }
     declare global {
         interface Window {
             PagefindUI?: PagefindUIConstructor;
+            __initPagefind?: () => void;
         }
     }
 
-    async function loadPagefindUI(): Promise<PagefindUIConstructor | null> {
-        if (window.PagefindUI) return window.PagefindUI;
+    // Single in-flight promise so concurrent init calls (modal open + trigger
+    // hover) never inject the script/CSS twice.
+    let pagefindLoad: Promise<PagefindUIConstructor | null> | null = null;
+    function loadPagefindUI(): Promise<PagefindUIConstructor | null> {
+        if (window.PagefindUI) return Promise.resolve(window.PagefindUI);
         // The Pagefind script attaches `PagefindUI` to `window` on load.
-        await new Promise<void>((resolve, reject) => {
+        pagefindLoad ??= new Promise<void>((resolve, reject) => {
             const s = document.createElement('script');
             s.src = '/pagefind/pagefind-ui.js';
             s.onload = () => resolve();
@@ -59,12 +76,13 @@ const mountId = `search-${id}`;
             css.rel = 'stylesheet';
             css.href = '/pagefind/pagefind-ui.css';
             document.head.appendChild(css);
-        });
-        return window.PagefindUI ?? null;
+        }).then(() => window.PagefindUI ?? null);
+        return pagefindLoad;
     }
 
-    const mounts = document.querySelectorAll<HTMLDivElement>('.pagefind-mount');
-    if (mounts.length > 0) {
+    function initPagefind() {
+        const mounts = document.querySelectorAll<HTMLDivElement>('.pagefind-mount');
+        if (mounts.length === 0) return;
         loadPagefindUI()
             .then((UI) => {
                 if (!UI) return;
@@ -72,7 +90,7 @@ const mountId = `search-${id}`;
                     if (el.dataset.pagefindMounted === '1') return;
                     el.dataset.pagefindMounted = '1';
                     const lang = el.dataset.pagefindLang || 'tr';
-                    new UI({
+                    const ui = new UI({
                         element: '#' + el.id,
                         showImages: false,
                         showSubResults: true,
@@ -97,6 +115,12 @@ const mountId = `search-${id}`;
                             : undefined,
                         filters: { lang: [lang] },
                     });
+                    // Standalone search pages accept ?q= — this is what the
+                    // WebSite SearchAction JSON-LD points at.
+                    if (el.dataset.searchEager === '1') {
+                        const q = new URLSearchParams(location.search).get('q');
+                        if (q) ui.triggerSearch?.(q);
+                    }
                 });
             })
             .catch(() => {
@@ -105,6 +129,13 @@ const mountId = `search-${id}`;
                         '<p style="color:var(--color-ink-mute);font-size:.875rem">Arama dizini henüz oluşturulmadı. <code>pnpm build</code> sonrası kullanılabilir. / Search index not built yet — available after <code>pnpm build</code>.</p>';
                 });
             });
+    }
+
+    // Expose for lazy callers (SearchModal open, nav-trigger warm-up), then
+    // run immediately only when an eager mount (standalone search page) exists.
+    window.__initPagefind = initPagefind;
+    if (document.querySelector('.pagefind-mount[data-search-eager="1"]')) {
+        initPagefind();
     }
 </script>
 

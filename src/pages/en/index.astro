@@ -4,6 +4,7 @@ import AiBadge from '../../components/AiBadge.astro';
 import { buildFeed } from '../../lib/feed';
 import { t } from '../../lib/i18n';
 import { tagSlug } from '../../lib/tags';
+import { webSite } from '../../lib/jsonld';
 
 const lang = 'en' as const;
 const feed = await buildFeed(lang);
@@ -20,6 +21,7 @@ const dateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
     description={t(lang, 'site_tagline')}
     lang={lang}
     altLangUrl="/"
+    schema={webSite(lang)}
 >
     <section class="mb-14 mt-2 sm:mt-6">
         <p class="mb-3 text-xs uppercase tracking-[0.2em] text-[var(--color-ink-mute)]">{t(lang, 'home_kicker')}</p>

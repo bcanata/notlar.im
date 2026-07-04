@@ -11,5 +11,5 @@ const lang = 'en' as const;
         <h1 class="text-2xl font-semibold tracking-tight">{t(lang, 'search_title')}</h1>
         <p class="mt-2 text-sm text-[var(--color-ink-soft)]">{t(lang, 'search_kbd_hint')}</p>
     </section>
-    <SearchBox lang={lang} id="page" autofocus />
+    <SearchBox lang={lang} id="page" autofocus eager />
 </Page>

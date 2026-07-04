@@ -29,7 +29,7 @@ const pages = {
     // Site-wide fallback card: Page.astro points non-article pages at /og/_default.png.
     _default: {
         title: 'notlar.im',
-        byline: t('tr', 'site_tagline'),
+        description: t('tr', 'site_tagline'),
     },
 };
 
@@ -38,7 +38,7 @@ export const { getStaticPaths, GET } = await OGImageRoute({
     param: 'slug',
     getImageOptions: (_path, page) => ({
         title: page.title,
-        description: page.byline ?? 'notlar.im',
+        description: page.description || 'notlar.im',
         bgGradient: [
             [255, 255, 255],
             [245, 245, 245],

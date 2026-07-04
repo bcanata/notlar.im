@@ -6,6 +6,7 @@ import readingTime from 'reading-time';
 import { tagSlug } from '../../../lib/tags';
 import { t } from '../../../lib/i18n';
 import { relatedPosts, adjacentPosts } from '../../../lib/related';
+import { blogPosting } from '../../../lib/jsonld';
 
 export async function getStaticPaths() {
     const all = await getCollection('blog');
@@ -47,6 +48,7 @@ interface Props {
 const { post, newer, older, related, minutes, altLangUrl } = Astro.props as Props;
 const { Content } = await render(post);
 const lang = 'en' as const;
+const postUrl = new URL(`/en/blog/${post.id}`, Astro.site ?? 'https://notlar.im').toString();
 const dateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
     year: 'numeric',
     month: 'long',
@@ -67,6 +69,7 @@ const shortDateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
     lang={lang}
     altLangUrl={altLangUrl}
     ogSlug={post.id}
+    schema={blogPosting(post, postUrl)}
 >
     <article
         data-pagefind-body
