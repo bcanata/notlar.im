@@ -57,13 +57,13 @@ Benim Caprover üzerinde denediğim, Docker üzerinde çalışan uygulamaları b
 
 - **[archivebox](https://hub.docker.com/r/archivebox/archivebox)**
 
-![](https://i.imgur.com/p6wK6KM.png)archivebox arayüzü
+![](../../assets/blog/self-hosting/homelab.png)archivebox arayüzü
 Uygulama caprover'ın uygulamaları arasında yer almıyor, Docker Hub'dan kurulum yaptım. [web.archive.org](http://web.archive.org/) sitesi gibi çalışıyor ve bir sitenin o tarihteki kaydını almanızı sağlıyor. Sitenin HTML olarak, PDF olarak, düz metin olarak vs. kaydını alabiliyor, silinmeye karşı saklayabiliyorsunuz. Aynı zamanda yer imlerimde bulunan önemli yazıları silinmeye karşı burada saklıyorum.
 *Environment* değeri olarak *ALLOW_ROOT = true;* belirlemek gerekiyor, bir de container içindeki /data klasörünü kalıcı bir klasöre bağlamanız gerekli.
 
 - [**bitwarden_rs**](https://github.com/dani-garcia/bitwarden_rs)
 
-![](https://web.archive.org/web/20230814010711im_/https://bitwarden.com/images/hero.webp)
+![](../../assets/blog/self-hosting/bitwarden-hero.webp)
 Açık kaynak şifre yöneticisi [*Bitwarden*](https://bitwarden.com/)'ın çok daha az kaynak gerektirecek şekilde *Rust* üzerine port edilmiş hali. Şifrelerinizi başkasının eline teslim etmeden güvenli bir şekilde saklamanızı sağlıyor. Sizden başka birinin de kullanmasını istiyorsanız üyelik kısmını da açık bırakabiliyorsunuz. *LastPass* planlarında değişiklik yapıp çeşitli kısıtlamalar getirince oradaki hesabımı silip buraya geçtim. Diğer şifre yöneticilerden aldığınız yedekleri kolaylıkla buraya aktarabiliyorsunuz.
 
 İlk kurulumda *Environment* değerleri arasına eklenmemesine rağmen *SIGNUPS_ALLOWED* değerine *false* verirseniz yeni üyelik eklenmesini engelliyor. Ayrıca *ADMIN_TOKEN* değerine de "**openssl rand -base64 48**" komutu ile oluşturacağınız 48 karakter bir base64 değeri girerseniz, bu değer ile *https://bitwarden.adresiniz/admin* bağlantısından admin paneline giriş yapabilirsiniz. Yine container içindeki /data klasörünü kalıcı bir klasöre bağlamanız gerekiyor.
@@ -78,7 +78,7 @@ Ayrıca yapılan değişikliklerin silinmemesi için */var/lib/ghost/content* kl
 
 - [shiori](https://hub.docker.com/r/radhifadlillah/shiori)
 
-![](https://web.archive.org/web/20241202202333im_/https://raw.githubusercontent.com/go-shiori/shiori/master/docs/readme/cover.png)
+![](../../assets/blog/self-hosting/shiori-cover.png)
 Shiori bir yer imi yöneticisi, [Pocket](https://getpocket.com/)'a alternatif olarak yazılmış bir uygulama. Caprover üzerinde bulunmuyor, ben Docker Hub üzerinden kurdum. Yer imlerimi kategorileyip arşiv oluşturabileceğim bir servis ararken oluşturdum ancak bu beklentimi pek karşılamadı.
 
 *Environment* değerlerinde *SHIORI_DIR* değerine */data* değeri vererek ve */data* klasörünü kalıcı bir klasöre bağlayarak kullanabiliyorsunuz.
@@ -95,7 +95,7 @@ Visual Studio Code'un browser üzerinden çalışan sürümü. Caprover'ın uygu
 
 - [heimdall](https://github.com/linuxserver/Heimdall)
 
-![](https://web.archive.org/web/20230611033504im_/https://i.redd.it/s12vfnfgk3y41.png)
+![](../../assets/blog/self-hosting/selfhosted-reddit.png)
 Bütün bu uygulamaları kurdunuz, peki nasıl ulaşacaksınız? Burada *Heimdall* devreye giriyor. Docker üzerinde barındırdığınız uygulamaları buraya ekleyip, bir ana sayfa veya panel gibi kullanıyorsunuz. Rtorrent gibi bazı uygulamalardan indirme/gönderme hızı gibi bilgileri de çekiyor.
 
 Caprover'ın kendi uygulamaları arasında yok ama Docker Hub'dan *linuxserver/heimdall* imajını çekerek kullanabilirsiniz. Tek gereken, container'ı yeniden başlatınca bilgilerin silinmemesi için /config klasörünü kalıcı bir klasöre bağlamak.

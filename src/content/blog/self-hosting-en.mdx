@@ -64,7 +64,7 @@ Below I'll list Docker-based apps I've tried on Caprover. You can run most of th
 
 - **[archivebox](https://hub.docker.com/r/archivebox/archivebox)**
 
-![](https://i.imgur.com/p6wK6KM.png)
+![](../../assets/blog/self-hosting/homelab.png)
 *archivebox UI*
 
 Not in Caprover's app store; I installed from Docker Hub. Works like [web.archive.org](http://web.archive.org/) — lets you snapshot a site at a given date. Saves the page as HTML, PDF, plain text, etc. — protects against deletion. I also save important bookmarks here to protect them from going away.
@@ -73,7 +73,7 @@ Set *ALLOW_ROOT = true* as an *Environment* value, and bind the container's /dat
 
 - [**bitwarden_rs**](https://github.com/dani-garcia/bitwarden_rs)
 
-![](https://web.archive.org/web/20230814010711im_/https://bitwarden.com/images/hero.webp)
+![](../../assets/blog/self-hosting/bitwarden-hero.webp)
 
 The open-source password manager [*Bitwarden*](https://bitwarden.com/) ported to *Rust* to require fewer resources. Stores your passwords securely without handing them to someone else. If you want others to use it too, you can leave signups open. When *LastPass* started restricting its plans I deleted my account there and moved here. You can easily import backups from other password managers.
 
@@ -89,7 +89,7 @@ To keep changes from being wiped, also bind */var/lib/ghost/content* to a persis
 
 - [shiori](https://hub.docker.com/r/radhifadlillah/shiori)
 
-![](https://web.archive.org/web/20241202202333im_/https://raw.githubusercontent.com/go-shiori/shiori/master/docs/readme/cover.png)
+![](../../assets/blog/self-hosting/shiori-cover.png)
 
 Shiori is a bookmark manager, written as an alternative to [Pocket](https://getpocket.com/). Not in Caprover's store; I installed from Docker Hub. I was looking for something to categorise my bookmarks and build an archive, but this didn't quite meet my expectations.
 
@@ -107,7 +107,7 @@ A browser-based version of VS Code. Install from Caprover's apps and use it dire
 
 - [heimdall](https://github.com/linuxserver/Heimdall)
 
-![](https://web.archive.org/web/20230611033504im_/https://i.redd.it/s12vfnfgk3y41.png)
+![](../../assets/blog/self-hosting/selfhosted-reddit.png)
 
 You've installed all these apps — how do you find them? That's where *Heimdall* comes in. You register the apps you host on Docker into it and use it as a homepage or panel. It also pulls upload/download rates from apps like rtorrent.
 

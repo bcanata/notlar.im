@@ -23,6 +23,11 @@ export default defineConfig({
      */
     adapter: cloudflare({
         platformProxy: { enabled: true },
+        // Localized content images (src/assets/blog/**) are optimized by
+        // sharp AT BUILD TIME; the Workers runtime never sees sharp. Only
+        // prerendered pages can use astro:assets — SSR pages (library) serve
+        // plain <img> from R2 and are unaffected.
+        imageService: 'compile',
     }),
     i18n: {
         defaultLocale: 'tr',
@@ -49,6 +54,14 @@ export default defineConfig({
         '/notlar/bisiklet-android-ve-iphone-uygulamalari': '/blog/bisiklet-uygulamalari',
         '/en/blog/cycling-mobile-apps-en': '/en/blog/cycling-apps',
         '/en/notlar/cycling-mobile-apps-en': '/en/blog/cycling-apps',
+        // Tag consolidation (2026-07): redundant tags were dropped from posts
+        // that already carried the surviving tag; keep the thin old tag pages
+        // redirecting to their survivors.
+        '/t/telsiz': '/t/amator-telsiz',
+        '/t/hosting': '/t/self-hosting',
+        '/t/e-okuyucu': '/t/kindle',
+        '/en/t/radio': '/en/t/amateur-radio',
+        '/en/t/e-reader': '/en/t/kindle',
     },
     integrations: [
         mdx(),

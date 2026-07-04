@@ -21,8 +21,6 @@ const DICT = {
         nav_about: 'Ben Kimim?',
         nav_rss: 'RSS',
 
-        home_tagline:
-            'Yazılım, amatör telsiz, bisiklet ve karşıma çıkan diğer şeyler üzerine kısa notlar. Buğra Canata.',
         home_kicker: 'Buğra Canata',
         home_hero:
             'Yazılım, amatör telsiz, bisiklet ve karşıma çıkan diğer şeyler üzerine kısa notlar.',
@@ -131,8 +129,6 @@ const DICT = {
         nav_about: 'About',
         nav_rss: 'RSS',
 
-        home_tagline:
-            'Short notes on software, amateur radio, cycling, and other things that catch my eye. Buğra Canata.',
         home_kicker: 'Buğra Canata',
         home_hero:
             'Short notes on software, amateur radio, cycling, and other things that catch my eye.',
