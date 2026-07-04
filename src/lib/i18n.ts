@@ -29,6 +29,7 @@ const DICT = {
 
         meta_updated: 'güncellendi',
         meta_note: 'not',
+        toc_title: 'İçindekiler',
         meta_ai_long: 'Yapay zekâ ile üretildi',
         meta_ai_short: 'YZ',
 
@@ -138,6 +139,7 @@ const DICT = {
 
         meta_updated: 'updated',
         meta_note: 'note',
+        toc_title: 'Contents',
         meta_ai_long: 'Produced with AI assistance',
         meta_ai_short: 'AI',
 

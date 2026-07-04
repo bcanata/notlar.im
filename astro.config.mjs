@@ -6,6 +6,7 @@ import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeLazyImages from './src/lib/rehype-img.mjs';
 
 // Canonical site URL. Used by sitemap + RSS to emit absolute links.
 const SITE = 'https://notlar.im';
@@ -94,6 +95,7 @@ export default defineConfig({
          * is styled in src/styles/global.css to fade in on heading hover.
          */
         rehypePlugins: [
+            rehypeLazyImages,
             rehypeSlug,
             [
                 rehypeAutolinkHeadings,

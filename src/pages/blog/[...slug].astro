@@ -1,6 +1,7 @@
 ---
 import Page from '../../layouts/Page.astro';
 import AiBadge from '../../components/AiBadge.astro';
+import Toc from '../../components/Toc.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import readingTime from 'reading-time';
 import { tagSlug } from '../../lib/tags';
@@ -47,7 +48,7 @@ interface Props {
     altLangUrl?: string;
 }
 const { post, newer, older, related, minutes, altLangUrl } = Astro.props as Props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 const lang = 'tr' as const;
 const postUrl = new URL(`/blog/${post.id}`, Astro.site ?? 'https://notlar.im').toString();
 const dateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
@@ -117,6 +118,7 @@ const shortDateFmt = new Intl.DateTimeFormat(t(lang, 'date_locale'), {
                 </ul>
             )}
         </header>
+        <Toc headings={headings} lang={lang} />
         <div class="prose">
             <Content />
         </div>

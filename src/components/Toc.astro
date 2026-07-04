@@ -1,0 +1,70 @@
+---
+/*
+ * Collapsed table of contents for posts. Renders nothing under 3 entries —
+ * short posts don't need navigation. Consumes the `headings` array that
+ * `render(post)` already returns (depths 2–3; anchor ids come from
+ * rehype-slug). A closed <details> keeps the single-column 65ch layout calm
+ * instead of a sidebar. `data-pagefind-ignore` keeps the duplicate heading
+ * text out of search sub-results.
+ */
+import type { MarkdownHeading } from 'astro';
+import { t, type Lang } from '../lib/i18n';
+
+interface Props {
+    headings: MarkdownHeading[];
+    lang: Lang;
+}
+const { headings, lang } = Astro.props;
+const entries = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{entries.length >= 3 && (
+    <details class="toc" data-pagefind-ignore>
+        <summary>{t(lang, 'toc_title')}</summary>
+        <ul>
+            {entries.map((h) => (
+                <li class={h.depth === 3 ? 'toc-sub' : undefined}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+            ))}
+        </ul>
+    </details>
+)}
+
+<style is:global>
+    .toc {
+        margin-bottom: 2.5rem;
+        border: 1px solid var(--color-rule);
+        border-radius: 8px;
+        padding: 0.6rem 1rem;
+        font-size: 0.875rem;
+        background: var(--color-paper-soft);
+    }
+    .toc summary {
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--color-ink-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.75rem;
+    }
+    .toc ul {
+        margin: 0.75rem 0 0.25rem;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    .toc .toc-sub {
+        padding-left: 1.25rem;
+    }
+    .toc a {
+        color: var(--color-ink-soft);
+        text-decoration: none;
+    }
+    .toc a:hover {
+        color: var(--color-accent);
+        text-decoration: underline;
+    }
+</style>

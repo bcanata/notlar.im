@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
 /*
- * Fraunces — variable serif used for headlines + wordmark. Loaded with
- * Latin-Extended subset so Turkish glyphs (ğ ş ı İ ç ö ü) render. Body
- * stays on the system sans stack.
+ * Fraunces — variable serif used for headlines + wordmark. Self-hosted via
+ * Fontsource (bundled + hashed by Vite; no render-blocking third-party CSS,
+ * no fonts.gstatic.com connection). The `opsz` variant carries the optical
+ * size + weight axes we use (`font-optical-sizing: auto`, wght 400–600);
+ * the SOFT axis was never set in CSS, so it's dropped. Latin-Extended
+ * subset loads via unicode-range so Turkish glyphs (ğ ş ı İ ç ö ü) render.
+ * Body stays on the system sans stack.
  */
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400..700,30..100&display=swap&subset=latin-ext");
+@import "@fontsource-variable/fraunces/opsz.css";
 
 /*
  * Theme tokens. Warm paper palette — cream + warm charcoal + rust accent —
@@ -19,7 +23,7 @@
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", Times, serif;
+  --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", Times, serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
 
