@@ -1,0 +1,37 @@
+---
+title: 'Amatör Telsiz Röle: An Android App'
+date: '2024-03-29T00:00:00.000Z'
+updated: '2024-04-03T00:00:00.000Z'
+tags:
+  - amateur-radio
+  - software
+description: Development notes on the Android app I built with React Native + Expo as an alternative to amatortelsizcilik.com.tr and @telsizbot.
+lang: en
+translationKey: amator-telsiz-role-app
+ai: true
+---
+
+An Android app available [on the Google Play Store](https://play.google.com/store/apps/details?id=com.tr.amatortelsizcilik) — the name means "amateur radio repeater" in Turkish. Built with React Native on Expo. It uses the same database as amatortelsizcilik.com.tr and the [@telsizbot](https://t.me/telsizbot) bot on Telegram. For now it lists VHF, UHF and crossband repeaters.
+
+Initially it displayed things as a simple table. The 29 March 2024 update added a dark mode and viewing repeaters on a map.
+
+## Suggestions received and to-dos
+
+**Features**
+
+- [x] Add filtering and search to the repeater list.
+- [x] Swipe gestures instead of next/previous page buttons.
+- [x] Dark mode will follow the phone's setting automatically.
+- [ ] Add a repeater detail page. Tapping a repeater will show the rest of its details and its location.
+- [ ] Report-an-error + submit-a-new-repeater buttons on the repeater detail pages.
+- [ ] Callsign lookup via QRZ could be added.
+- [x] Move the database into SQLite so it works offline.
+- [ ] An iOS version could be made. Requires buying a developer account.
+
+**Issues**
+
+- [ ] Location apparently isn't updating — I think it saves a fixed one to the list.
+
+## 3 April 2024 update
+
+I removed the SQLite database — it was causing problems. For now the app fetches the data from the Laravel-powered amatortelsizcilik.com.tr API and caches it for 24 hours. There were also some minor design updates.
